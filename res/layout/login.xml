@@ -1,0 +1,80 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context="com.example.new_peer.MainActivity"
+    tools:ignore="MergeRootFrame" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="50dp"
+        android:src="@drawable/login" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="-10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="15dp"
+        android:alpha="0.5"
+        android:background="@android:color/darker_gray"
+        android:rotation="90" />
+
+    <EditText
+        android:id="@+id/username"
+        style="@style/styleName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="170dp"
+        android:hint="Username"
+        android:singleLine="true"
+        android:textColor="#000000"
+        />
+
+    <TextView
+        android:id="@+id/errorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/username"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/username"
+        android:layout_below="@+id/imageView1" 
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ff0000"
+        android:gravity="center_horizontal"/>
+
+    <Button
+        android:id="@+id/login"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_above="@+id/errorText"
+        android:layout_alignLeft="@+id/errorText"
+        android:layout_alignRight="@+id/errorText"
+        android:text="Login"
+        android:textColor="#FFffff" />
+
+    <EditText
+        android:id="@+id/passwordField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/login"
+        android:layout_below="@+id/username"
+        android:ems="10"
+        android:inputType="textPassword" 
+        android:hint="Password"
+        android:textColor="#000000">
+
+        <requestFocus />
+    </EditText>
+
+</RelativeLayout>
