@@ -82,11 +82,12 @@ containing a value of this type.
         public static final int icon=0x7f020008;
         public static final int info=0x7f020009;
         public static final int login=0x7f02000a;
-        public static final int perfr=0x7f02000b;
-        public static final int questions=0x7f02000c;
-        public static final int quiz=0x7f02000d;
-        public static final int rectangle=0x7f02000e;
-        public static final int theme=0x7f02000f;
+        public static final int loginbg=0x7f02000b;
+        public static final int perfr=0x7f02000c;
+        public static final int questions=0x7f02000d;
+        public static final int quiz=0x7f02000e;
+        public static final int rectangle=0x7f02000f;
+        public static final int theme=0x7f020010;
     }
     public static final class id {
         public static final int Help=0x7f08001b;

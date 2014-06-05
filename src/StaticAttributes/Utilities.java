@@ -5,7 +5,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
@@ -84,5 +88,37 @@ public class Utilities {
 		}
 		return Buf;
 	}
-	
+	public static void cleanBuffer(DatagramSocket s)
+	{
+		try {
+			// 1 second
+			s.setSoTimeout(10000);
+		} catch (SocketException e1) {
+			e1.printStackTrace();
+		}
+		while(true)
+		{
+			byte[] b  = new byte[Utilities.MAX_BUFFER_SIZE];
+			DatagramPacket p = new DatagramPacket(b, b.length);
+			try {
+				s.receive(p);
+				System.out.println("Got 1!!!!!!!!!!!!!!!!!!!!!!!");
+			}
+			catch( SocketTimeoutException e1)
+			{
+				// This exception occurs when there are no packets for the specified timeout period.
+				// Buffer is clean!!
+				try {
+					s.setSoTimeout(0); // infinite timeout (blocking)
+				} catch (SocketException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return;
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
