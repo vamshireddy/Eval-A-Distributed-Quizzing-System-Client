@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CarouselDemo</string>
+    <string name="action_hindi">Hindi</string>
+   <string name="action_english">English</string>
+   <string name="aboutus">About Us</string>
+   <string name="Help">Help</string>
+    
 </resources>

@@ -2,83 +2,98 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#ffffff"
+    android:background="@drawable/loginbg"
     android:orientation="vertical" >
 
     <TextView
         android:id="@+id/textView1"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_width="700dp"
+        android:layout_height="70dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="General Instructions"
+        android:textSize="35sp"
         android:gravity="center"
-        android:textColor="#000000"
+        android:textColor="#f0145a"
          />
 
     <TextView
         android:id="@+id/Instr1"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="35dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
+        android:layout_marginLeft="60dp"
         android:layout_below="@+id/textView1"
         android:text="TextView" 
-        android:gravity="center"
-        android:textColor="#000000"/>
+      
+         android:textSize="25sp"
+        android:textColor="#4aba8d"/>
 
     <TextView
         android:id="@+id/Instr2"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="35dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
+         android:layout_marginLeft="60dp"
         android:layout_below="@+id/Instr1"
         android:text="TextView" 
-        android:gravity="center"
-        android:textColor="#000000"/>
+       
+         android:textSize="25sp"
+        android:textColor="#4aba8d"/>
 
     <TextView
         android:id="@+id/Instr3"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="35dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/Instr2"
+         android:layout_marginLeft="60dp"
         android:text="TextView"
-        android:gravity="center"
-        android:textColor="#000000"/>
+         android:textSize="25sp"
+        
+        android:textColor="#4aba8d"/>
 
     <TextView
         android:id="@+id/Instr4"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="35dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/Instr3"
+         android:layout_marginLeft="60dp"
         android:text="TextView"
-        android:gravity="center"
-        android:textColor="#000000"/>
+        
+         android:textSize="25sp"
+        android:textColor="#4aba8d"/>
 
     <Button
         android:id="@+id/leader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
         android:layout_alignRight="@+id/textView1"
         android:layout_below="@+id/Instr4"
-        android:layout_marginTop="79dp"
+        android:layout_marginRight="229dp"
+        android:layout_marginTop="33dp"
+        android:background="@drawable/draw"
         android:gravity="center"
         android:textColor="#000000"
-        android:text="Leader" />
+        android:text="Leader" 
+         android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/errorBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/leader"
-        android:text="" />
+         android:layout_marginLeft="60dp"
+        android:layout_marginTop="22dp"
+        android:text="Message"
+        android:textColor="#0fa9f0"
+        android:textSize="30sp" />
 
 </RelativeLayout>
