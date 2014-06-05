@@ -105,10 +105,12 @@ public class Quiz extends Activity implements OnClickListener {
 			System.out.println("Packet received!!!"+" grp req is "+lpp.grpNameRequest);
 			if( lpp.granted == true )
 			{
+				leader.setEnabled(false);
 				leader.setText("You are Leader now!");
 			}
 			else
 			{
+				leader.setEnabled(false);
 				errorMsg.setText("You have not been selected as a leader :D , Better luck next time :P ");
 				errorMsg.setVisibility(View.VISIBLE);
 			}
