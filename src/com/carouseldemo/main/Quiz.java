@@ -42,7 +42,7 @@ public class Quiz extends Activity implements OnClickListener {
 		leader.setOnClickListener(this);
 		setInstructions();
 		try {
-			sock.setSoTimeout(3000);
+			sock.setSoTimeout(1000);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,7 +53,7 @@ public class Quiz extends Activity implements OnClickListener {
 		System.out.println("I am clicked!!");
 		// TODO Clear the socket timeout before going to the next activity
 		LeaderPacket lp = new LeaderPacket(QuizAttributes.studentID);
-		lp.granted = false;
+		lp.granted  = false;
 		Packet p = new Packet(111222, false, false, false,Utilities.serialize(lp),false, true);
 		byte[] packet_bytes = Utilities.serialize(p);
 		DatagramPacket leader_pack = new DatagramPacket(packet_bytes, packet_bytes.length,Utilities.serverIP, Utilities.servPort);
@@ -64,27 +64,46 @@ public class Quiz extends Activity implements OnClickListener {
 			e.printStackTrace();
 		}
 		
-		byte[] by = new byte[Utilities.MAX_BUFFER_SIZE];
-		
-		DatagramPacket packy = new DatagramPacket(by, by.length);
-		
-		try {
-			sock.receive(packy);
-		}
-		catch( SocketTimeoutException e1)
+		Packet pyy = null;
+		while( true )
 		{
-			return;
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			return;
+			byte[] by = new byte[Utilities.MAX_BUFFER_SIZE];
+			DatagramPacket packy = new DatagramPacket(by, by.length);
+			try
+			{
+				sock.receive(packy);
+			}
+			catch( SocketTimeoutException e1)
+			{
+				System.out.println("HEYYYYYYYYYYYYYYY!!!!!!!!!!!!!!!!!!!!!!!!!!. I am timed out!!!");
+				return;
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+				return;
+			}
+			pyy = (Packet)Utilities.deserialize(by);
+			if( pyy.seq_no == 121441 )
+			{
+				break;
+			}
+			else
+			{
+				continue;
+			}
 		}
 		
-		p = (Packet)Utilities.deserialize(by);
-		if( p.leader_req_packet == true )
+		System.out.println("Packet received!!!"+"  Leader packet is "+pyy.leader_req_packet);
+		System.out.println("Packet received!!!"+"  auth pack is "+pyy.auth_packet);
+		System.out.println("Packet received!!!"+" seq no is "+pyy.seq_no);
+		System.out.println("Packet received!!!"+" probe is is "+pyy.probe_packet);
+		if( pyy.leader_req_packet == true )
 		{
-			lp = (LeaderPacket)Utilities.deserialize(p.data);
-			if( lp.granted == true )
+			LeaderPacket lpp = (LeaderPacket)Utilities.deserialize(pyy.data);
+			System.out.println("Packet received!!!"+" granted is "+lpp.granted);
+			System.out.println("Packet received!!!"+" group name is "+lpp.groupName);
+			System.out.println("Packet received!!!"+" grp req is "+lpp.grpNameRequest);
+			if( lpp.granted == true )
 			{
 				leader.setText("You are Leader now!");
 			}
