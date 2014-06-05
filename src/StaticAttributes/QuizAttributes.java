@@ -1,5 +1,9 @@
 package StaticAttributes;
 
+import java.util.ArrayList;
+
+import com.example.peerbased.Leader;
+
 public class QuizAttributes {
 	public static byte noOfOnlineStudents;
 	public static byte noOfLeaders;
@@ -7,6 +11,8 @@ public class QuizAttributes {
 	public static byte noOfRounds;
 	public static String subject;
 	public static String studentID;
+	public static String studentName;
+	public static ArrayList<Leader> selectedLeaders;
 	static
 	{
 		noOfOnlineStudents = -1;
@@ -15,5 +21,6 @@ public class QuizAttributes {
 		noOfRounds = -1;
 		subject = "";
 		studentID = "";
+		selectedLeaders = null;
 	}
 }

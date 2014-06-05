@@ -4,15 +4,25 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class LeaderPacket implements Serializable {
-	static final long serialVersionUID = 1242L;
+	public static final long serialVersionUID = 1242L;
 	public String uID;
+	public String uName;
 	public boolean granted;
 	public boolean grpNameRequest;
 	public boolean selectedLeadersList;
-	public ArrayList<String> leaders;
+	public ArrayList<Leader> leaders;
 	public String groupName;
-	public LeaderPacket(String l) {
+	
+	public LeaderPacket() {
 		granted = false;
-		uID = l;
+		grpNameRequest = false;
+		selectedLeadersList = false;
+		leaders = null;
+		uID = "";
+		groupName = "";
+	}
+	public LeaderPacket(boolean t)
+	{
+		granted = t;
 	}
 }

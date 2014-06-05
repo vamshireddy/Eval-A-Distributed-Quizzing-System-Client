@@ -160,6 +160,8 @@ public class Login extends Activity implements OnClickListener {
 	    	  AuthPacket auth_pack = (AuthPacket) Utilities.deserialize(recvd_pack.data);
 	    	  if( auth_pack.grantAccess == true )
 	    	  {
+	    		    QuizAttributes.studentID = uID; 	// Fetch uid from textBox
+	    		    QuizAttributes.studentName = auth_pack.studentName;	// Fetch name from the received packet
 	    		    errorText.setText("");
 	    		    Intent i = new Intent(this, MainActivity.class);
 	    			startActivity(i);	

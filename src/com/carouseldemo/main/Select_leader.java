@@ -1,6 +1,11 @@
 package com.carouseldemo.main;
 
 
+import java.util.ArrayList;
+
+import com.example.peerbased.Leader;
+
+import StaticAttributes.QuizAttributes;
 import android.widget.ArrayAdapter;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -16,8 +21,9 @@ import android.widget.Toast;
 public class Select_leader extends ListActivity  implements OnClickListener {
 	
 	
-	ArrayAdapter<String> leaders;
-	String subject[] = {"Select your Leader","leader1", "leader2", "leader3", "leader4", "leader5"};
+	ArrayAdapter<String> leaderAdapter;
+	//ArrayList<String> selectedLeaders;
+	String subject[];
 	ProgressDialog pd1;
 	int counter1 = 0;
 	Handler h1;
@@ -27,9 +33,19 @@ public class Select_leader extends ListActivity  implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
-     
-        leaders = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, subject);
-		setListAdapter(leaders);
+
+        // Get the leaders list from the static class
+        ArrayList<Leader> leaders = QuizAttributes.selectedLeaders;
+        subject = new String[leaders.size()];
+        
+        // Iterate through the leader list and make a String array of leader names
+        for(int i=0;i<subject.length;i++)
+        {
+        	subject[i] = new String(leaders.get(i).name);
+        }
+        leaderAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, subject);
+		setListAdapter(leaderAdapter);
+		
 		 pd1 = new ProgressDialog(this);
 	        pd1.setProgress(0);
 	    
