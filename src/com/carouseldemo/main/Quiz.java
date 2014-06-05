@@ -12,7 +12,7 @@ import com.example.peerbased.Packet;
 
 import StaticAttributes.QuizAttributes;
 import android.app.Activity;
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -122,10 +122,10 @@ public class Quiz extends Activity implements OnClickListener {
 	}
 	public void setInstructions()
 	{
-		instruction1.setText("There are "+QuizAttributes.noOfOnlineStudents+" Students online!");
-		instruction2.setText("The Quiz consists of "+QuizAttributes.noOfRounds+" rounds!");
-		instruction3.setText("The Subject of this quiz session is "+QuizAttributes.subject);
-		instruction4.setText("There would be "+QuizAttributes.noOfLeaders+" leaders and Each group has "+
+		instruction1.setText("--->There are "+QuizAttributes.noOfOnlineStudents+" Students online!");
+		instruction2.setText("--->The Quiz consists of "+QuizAttributes.noOfRounds+" rounds!");
+		instruction3.setText("--->The Subject of this quiz session is "+QuizAttributes.subject);
+		instruction4.setText("--->There would be "+QuizAttributes.noOfLeaders+" leaders and Each group has "+
 				QuizAttributes.sizeOfGroup+" students");
 	}
 }
