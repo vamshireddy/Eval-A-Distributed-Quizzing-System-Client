@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 	<array name="entries">
-		<item>@drawable/quiz</item>		
+			
 		<item>@drawable/perfr</item> 		
 		<item>@drawable/assgn</item>		
 		<item>@drawable/file</item>
@@ -9,7 +9,7 @@
 		<item>@drawable/changepwd</item>						
 	</array>	
 	<array name="names">
-	    <item>quiz</item>
+	   
 	    <item>performance</item>
 	    <item>assignment</item>
 	    <item>files</item>

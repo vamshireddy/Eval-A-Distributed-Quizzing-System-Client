@@ -1,6 +1,10 @@
 package com.carouseldemo.main;
 import StaticAttributes.*;
 import com.example.peerbased.*;
+
+
+
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -9,6 +13,9 @@ import android.content.Intent;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,6 +54,70 @@ public class Login extends Activity implements OnClickListener {
 		socket = SocketHandler.authSocket;
 		
     }
+	
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_search :
+                openHindi();
+                return true;
+            case R.id.action_settings:
+                 openEnglish();
+                return true;
+            case R.id.aboutus :
+            	openAboutus();
+            	return true;
+            case R.id.Help :
+            	openHelp();
+            	return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    
+	private void openHelp() {
+		// TODO Auto-generated method stub
+		Intent i;
+		i= new Intent(this,Aboutus.class);
+		startActivity(i);
+		
+		
+	}
+
+
+	private void openAboutus() {
+		// TODO Auto-generated method stub
+		Intent i;
+		i= new Intent(this,Aboutus.class);
+		startActivity(i);
+		
+	}
+
+
+	private void openEnglish() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	private void openHindi() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	
+	
 	public void onClick(View v) 
 	{
 		  uID = userID.getText().toString();

@@ -66,11 +66,10 @@ class QuizListen extends Thread
 public class MainActivity extends Activity {
 	
 	TextView txt;
-	ProgressDialog pd1;
+	
 	public static MainActivity staticAct;
 	DatagramSocket sock;
-	int counter1 = 0;
-	Handler h1;
+	
 	String Performance[] = {"Your individual Performance", "Your Overall Performance"};
 	
     /** Called when the activity is first created. */
@@ -85,32 +84,7 @@ public class MainActivity extends Activity {
           q.start();
           
           txt=(TextView)findViewById(R.id.item_text);
-          pd1 = new ProgressDialog(this);
-          pd1.setProgress(0);
-      
-           h1 = new Handler()
-           {
-
-  		  @Override
-  		      public void handleMessage(Message msg) 
-  		      {
-  			      super.handleMessage(msg);
-  			      if(counter1>10)
-  			       {
-  				       pd1.dismiss();
-  				       Intent x = new Intent(getApplicationContext(), Quiz.class);
-  				       startActivity(x);
-  			        }
-  			      else
-  			       {
-  				       counter1++;
-  				       pd1.incrementProgressBy(1);
-  				       h1.sendEmptyMessageDelayed(0, 200);
-  			        }
-  			
-  		         }
-      	
-             };
+    
          
         
         final Carousel carousel = (Carousel)findViewById(R.id.carousel);
@@ -131,9 +105,8 @@ public class MainActivity extends Activity {
     				
     				s=((CarouselItem)parent.getChildAt(position)).getName();
     				
-    				if(s.equals("quiz"))
-    					t=1;
-    				else if(s.equals("questions"))
+    				
+    			   if(s.equals("questions"))
     					t=2;
     				else if(s.equals("performance"))
     					t=3;
@@ -147,13 +120,7 @@ public class MainActivity extends Activity {
     				
     				switch(t)
     				{
-    				case 1:    pd1.setTitle("Please Wait for few moments . . . ");
-    				            pd1.setMessage("After this, a new quiz will start.");
-    		            		pd1.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-    				            h1.sendEmptyMessage(0);
-    				            pd1.show();
-    				            
-    				            break;
+    				
     					
     				case 2:     
     					        i = new Intent(MainActivity.this,Questions.class);
@@ -218,23 +185,22 @@ public class MainActivity extends Activity {
 		        final TextView txt = (TextView)(findViewById(R.id.selected_item));
 		        
 				switch(position){
-				case 0:
-					txt.setText("QUIZ");
 				
-					break;
-				case 1:
+				
+				
+				case 0:
 					txt.setText("PERFORMANCE");
 					break;
-				case 2:
+				case 1:
 					txt.setText("ASSIGNMENTS");
 					break;
-				case 3:
+				case 2:
 					txt.setText("FILES");
 					break;
-				case 4:
+				case 3:
 					txt.setText("QUESTIONS");
 					break;
-				case 5:
+				case 4:
 					txt.setText("CHANGE PASSWORD");
 					break;
 				}
