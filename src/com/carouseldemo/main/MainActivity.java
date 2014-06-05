@@ -2,25 +2,20 @@ package com.carouseldemo.main;
 
 import com.example.peerbased.*;
 import StaticAttributes.*;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-
 import com.carouseldemo.controls.Carousel;
 import com.carouseldemo.controls.CarouselAdapter;
 import com.carouseldemo.controls.CarouselAdapter.OnItemClickListener;
 import com.carouseldemo.controls.CarouselAdapter.OnItemSelectedListener;
 import com.carouseldemo.controls.CarouselItem;
-
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -123,7 +118,7 @@ public class MainActivity extends Activity {
     				
     					
     				case 2:     
-    					        i = new Intent(MainActivity.this,Questions.class);
+    					        i = new Intent(MainActivity.this,ViewPagerStyle1Activity.class);
     						    startActivity(i);
     						    break;
     					
@@ -189,19 +184,25 @@ public class MainActivity extends Activity {
 				
 				
 				case 0:
-					txt.setText("PERFORMANCE");
+					txt.setTypeface(null, Typeface.BOLD|Typeface.ITALIC);
+					txt.setText("Performance");
+					
 					break;
 				case 1:
-					txt.setText("ASSIGNMENTS");
+					txt.setTypeface(null, Typeface.BOLD|Typeface.ITALIC);
+					txt.setText("Assignments");
 					break;
 				case 2:
-					txt.setText("FILES");
+					txt.setTypeface(null, Typeface.BOLD|Typeface.ITALIC);
+					txt.setText("Files");
 					break;
 				case 3:
-					txt.setText("QUESTIONS");
+					txt.setTypeface(null, Typeface.BOLD|Typeface.ITALIC);
+					txt.setText("Questions");
 					break;
 				case 4:
-					txt.setText("CHANGE PASSWORD");
+					txt.setTypeface(null, Typeface.BOLD|Typeface.ITALIC);
+					txt.setText("Change Password");
 					break;
 				}
 				
