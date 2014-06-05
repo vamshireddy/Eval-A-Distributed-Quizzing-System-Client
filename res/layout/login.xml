@@ -3,7 +3,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/theme"
+    android:background="@drawable/try5"
     tools:context="com.example.new_peer.MainActivity"
     tools:ignore="MergeRootFrame" >
 
@@ -14,31 +14,23 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="50dp"
-        android:src="@drawable/login" />
+        android:src="@drawable/login_button" />
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="-10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="15dp"
-        android:alpha="0.5"
-        android:background="@android:color/darker_gray"
-        android:rotation="90" />
+   
 
     <EditText
         android:id="@+id/username"
-        style="@style/styleName"
+      
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:ems="10"
         android:layout_marginBottom="20dp"
         android:layout_marginRight="170dp"
         android:hint="Username"
         android:singleLine="true"
-        android:textColor="#000000"
+        android:textColor="#ffffff"
         />
 
     <TextView
@@ -73,7 +65,7 @@
         android:ems="10"
         android:inputType="textPassword" 
         android:hint="Password"
-        android:textColor="#000000">
+        android:textColor="#ffffff">
 
         <requestFocus />
     </EditText>

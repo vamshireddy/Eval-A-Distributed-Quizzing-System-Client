@@ -196,6 +196,7 @@ public class Quiz extends Activity implements OnClickListener {
 			Packet packetRcvd = (Packet)Utilities.deserialize(b);
 			if( packetRcvd.leader_req_packet == true )
 			{
+<<<<<<< HEAD
 				LeaderPacket lpRecvd = (LeaderPacket)Utilities.deserialize(packetRcvd.data);
 				if( packetRcvd.seq_no == 121441 && lpRecvd.grpNameRequest == true )
 				{
@@ -220,6 +221,16 @@ public class Quiz extends Activity implements OnClickListener {
 			else
 			{
 				continue;
+=======
+				leader.setEnabled(false);
+				leader.setText("You are Leader now!");
+			}
+			else
+			{
+				leader.setEnabled(false);
+				errorMsg.setText("You have not been selected as a leader :D , Better luck next time :P ");
+				errorMsg.setVisibility(View.VISIBLE);
+>>>>>>> 3d5ab580ad7d05264640c490c144d6c12787b856
 			}
 		}*/
 	}
