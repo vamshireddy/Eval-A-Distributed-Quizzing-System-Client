@@ -40,7 +40,7 @@ class QuizListen extends Thread
 				e.printStackTrace();
 			}
 			Packet p = (Packet)Utilities.deserialize(b);
-			if( p.seq_no == 101010 && p.bcast == true )
+			if( p.seq_no == PacketSequenceNos.QUIZ_START_BCAST_SERVER_SEND && p.bcast == true )
 			{
 				ParameterPacket pp = (ParameterPacket)Utilities.deserialize(p.data);
 				QuizAttributes.noOfLeaders = pp.noOfLeaders;

@@ -8,9 +8,7 @@ import com.example.peerbased.*;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import android.content.Intent;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.Menu;
@@ -29,7 +27,6 @@ public class Login extends Activity implements OnClickListener {
 	private Button login;
 	private EditText passwordBox,userID;
 	private TextView errorText;
-	private int sendSeqNo,rcvdSeqNo;
 	private DatagramSocket socket;
 	private String uID;
 	private String password;
@@ -49,8 +46,6 @@ public class Login extends Activity implements OnClickListener {
 		errorText = (TextView)findViewById(R.id.errorText);
 		// Set the Visibility of errorBox to false
 		errorText.setVisibility(View.INVISIBLE);
-		sendSeqNo = 1;
-		rcvdSeqNo = 0;
 		socket = SocketHandler.authSocket;
 		
     }
@@ -121,43 +116,49 @@ public class Login extends Activity implements OnClickListener {
 	public void onClick(View v) 
 	{
 		  uID = userID.getText().toString();
+		  /*
+		   * Initialize the Quiz attribute, so that every class could access it
+		   */
 		  QuizAttributes.studentID = uID;
-		  password = passwordBox.getText().toString();
-		  sendAuthPacket(sendSeqNo);
-		  sendSeqNo++;
 		  
+		  password = passwordBox.getText().toString();
+		  
+		  if( uID == null || password == null || uID == "" || password == "" )
+		  {
+			  /*
+			   * Invalid inputs
+			   */
+			  errorText.setVisibility(View.VISIBLE);
+	    	  errorText.setText("Please Enter a valid Username or Password");
+			  return;
+		  }
+		  
+		  /*
+		   * Send out the request
+		   */
+		  sendAuthPacket();
 		  
 		  Packet recvd_pack = null;
-			 
 			  
 		  byte[] by = new byte[Utilities.MAX_BUFFER_SIZE];
 		  DatagramPacket packy = new DatagramPacket(by, by.length);
-		  try {
+		  try
+		  {
 			  socket.receive(packy);
 		  }
 		  catch (IOException e) 
 		  {
-			  errorText.setText("Please try again!");
+			  errorText.setText("Your request couldn't be processed at this moment. Please try again!");
+			  errorText.setVisibility(View.VISIBLE);
 			  return;
 		  }
 			  
 		  recvd_pack = (Packet)Utilities.deserialize(by);
-		      
-		  if( rcvdSeqNo == 0 || recvd_pack.seq_no > rcvdSeqNo )
-		  {
-			  rcvdSeqNo = recvd_pack.seq_no;
-		    	//  break;
-		  }
-		  else
-		  {
-			  System.out.println("Redundant packet "+recvd_pack.seq_no);
-		    	 // continue;
-			  return;
-		  }
 		  
-		 if( recvd_pack.auth_packet == true )
+		 if( recvd_pack.auth_packet == true && recvd_pack.seq_no == PacketSequenceNos.AUTHENTICATION_SEND_SERVER )
 		 {
 	    	  AuthPacket auth_pack = (AuthPacket) Utilities.deserialize(recvd_pack.data);
+	    	  
 	    	  if( auth_pack.grantAccess == true )
 	    	  {
 	    		    QuizAttributes.studentID = uID; 	// Fetch uid from textBox
@@ -182,7 +183,6 @@ public class Login extends Activity implements OnClickListener {
 	    		  		errorText.setText("Please check your username and password");
 	    		  	}
 	    	  }
-
 	      }
 	      else
 	      {
@@ -190,21 +190,15 @@ public class Login extends Activity implements OnClickListener {
 	    	  errorText.setText("Invalid request format");
 	      }
 	}
-	private void sendAuthPacket(int seq)
+	private void sendAuthPacket()
 	{
 		AuthPacket ap = new AuthPacket(uID,password,false,false);
-	    // Store the serialized object as a string in the data field of Packet object
-	    Packet p = new Packet(seq,true,false,false,Utilities.serialize(ap));
-		
-		try {
-			
-	      byte[] packet_buf = Utilities.serialize(p);
-	      
-	      DatagramPacket packet = new DatagramPacket(packet_buf, packet_buf.length, InetAddress.getByName("192.168.1.113"), Utilities.authServerPort);
-	      
-	      socket.send(packet);
-	      
-	      System.out.println("Sent request for authentication.");
+	    Packet p = new Packet(PacketSequenceNos.AUTHENTICATION_SEND_CLIENT,true,false,false,Utilities.serialize(ap));
+		try
+		{
+			byte[] packet_buf = Utilities.serialize(p);
+		    DatagramPacket packet = new DatagramPacket(packet_buf, packet_buf.length, Utilities.serverIP, Utilities.authServerPort); 
+		    socket.send(packet);
 		}
 		catch (Exception e)
 		{

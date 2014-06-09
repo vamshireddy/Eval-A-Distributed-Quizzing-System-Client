@@ -5,5 +5,11 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry exported="true" kind="lib" path="/home/vamshi/AndroidWorkspace/appcompat_v7/libs/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="/home/vamshi/adt-bundle-linux-x86_64-20140321/sdk/platforms/android-19/android.jar">
+		<accessrules>
+			<accessrule kind="nonaccessible" pattern="com/android/internal/**"/>
+		</accessrules>
+	</classpathentry>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

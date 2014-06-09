@@ -11,18 +11,22 @@ public class Packet implements Serializable{
 	public boolean probe_packet;	// Used when the packet is used for probing the status of the android devices (students)
 	public boolean param_packet;
 	public boolean leader_req_packet;
+	public boolean team_selection_packet;
+	public boolean group_name_selection_packet;
 	public byte[] data;			// This holds a serialized object of the class according to the flags set above.
 
 	private Packet()
 	{
 		// Initialize the fields to defaults
 		seq_no = 0;
-		leader_req_packet = false;
 		auth_packet = false;
 		bcast = false;
 		probe_packet = false;
 		data = null;
 		param_packet = false;
+		leader_req_packet = false;
+		team_selection_packet  = false;
+		group_name_selection_packet = false;
 	}
 	public Packet(int seq_no, boolean auth, boolean bcast, boolean probe, byte[] data) {
 		this();

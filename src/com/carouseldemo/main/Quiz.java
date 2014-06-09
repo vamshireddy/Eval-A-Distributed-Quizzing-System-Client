@@ -45,7 +45,7 @@ class QuizListen1 extends Thread
 			{
 				System.out.println("Its a leader packet");
 				LeaderPacket lpRecvd = (LeaderPacket)Utilities.deserialize(packetRcvd.data);
-				if( packetRcvd.seq_no == 121221 && lpRecvd.grpNameRequest == true )
+				if( packetRcvd.seq_no == PacketSequenceNos.GROUP_SERVER_SEND && lpRecvd.grpNameRequest == true )
 				{
 					System.out.println("Its a grp name");
 					// Go to the leaders display page
@@ -55,7 +55,7 @@ class QuizListen1 extends Thread
 					Quiz.staticAct.finish();
 					break;
 				}
-				else if(  packetRcvd.seq_no == 121441 && lpRecvd.selectedLeadersList == true )
+				else if(  packetRcvd.seq_no == PacketSequenceNos.SELECTED_LEADERS_SERVER_SEND && lpRecvd.LeadersListBroadcast == true )
 				{
 					System.out.println("Its an online aaaa");
 					QuizAttributes.selectedLeaders = lpRecvd.leaders;
@@ -114,7 +114,7 @@ public class Quiz extends Activity implements OnClickListener {
 		lp.uID = QuizAttributes.studentID;
 		lp.uName = QuizAttributes.studentName;
 		lp.granted  = false;
-		Packet p = new Packet(111222, false, false, false,Utilities.serialize(lp),false, true);
+		Packet p = new Packet(PacketSequenceNos.LEADER_REQ_CLIENT_SEND, false, false, false,Utilities.serialize(lp),false, true);
 		byte[] packet_bytes = Utilities.serialize(p);
 		DatagramPacket leader_pack = new DatagramPacket(packet_bytes, packet_bytes.length,Utilities.serverIP, Utilities.servPort);
 		
@@ -135,7 +135,8 @@ public class Quiz extends Activity implements OnClickListener {
 			}
 			catch( SocketTimeoutException e1)
 			{
-				System.out.println("HEYYYYYYYYYYYYYYY!!!!!!!!!!!!!!!!!!!!!!!!!!. I am timed out!!!");
+				errorMsg.setText("Your request has been timed out! Try again");
+				errorMsg.setVisibility(View.VISIBLE);
 				return;
 			}
 			catch (IOException e) {
@@ -143,7 +144,7 @@ public class Quiz extends Activity implements OnClickListener {
 				return;
 			}
 			pyy = (Packet)Utilities.deserialize(by);
-			if( pyy.leader_req_packet == true && pyy.seq_no == 121441 )
+			if( pyy.leader_req_packet == true && pyy.seq_no == PacketSequenceNos.LEADER_REQ_SERVER_SEND )
 			{
 				break;
 			}
@@ -165,14 +166,15 @@ public class Quiz extends Activity implements OnClickListener {
 		{
 			System.out.println("You are Leader now!");
 			leader.setText("You are Leader now!");
-			leader.setEnabled(false);
+			errorMsg.setText("");
+		//	leader.setEnabled(false);
 		}
 		else
 		{
 			System.out.println("You have not been selected as a leader :D , Better luck next time :P ");
-			errorMsg.setText("You have not been selected as a leader :D , Better luck next time :P ");
+			errorMsg.setText("Sorry, You have not been selected as a leader.");
 			errorMsg.setVisibility(View.VISIBLE);
-			leader.setEnabled(false);
+		//	leader.setEnabled(false);
 		}
 		try {
 			sock.setSoTimeout(0);

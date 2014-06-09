@@ -12,30 +12,40 @@
         android:layout_alignParentTop="true"
         android:src="@drawable/greatleader" />
 
-    <Button
-        android:id="@+id/submit"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
-        android:layout_alignRight="@+id/groupname"
-        android:layout_below="@+id/groupname"
-        android:layout_marginRight="38dp"
-        android:layout_marginTop="100dp"
-        android:text="Submit"
-         android:textSize="30sp"
-        android:textColor="#FFffff" />
-
     <EditText
         android:id="@+id/groupname"
         android:layout_width="300dp"
         android:layout_height="80dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="61dp"
-        android:layout_marginTop="92dp"
-        android:ems="10"
-        android:hint="group name"
+        android:layout_marginRight="81dp"
+        android:layout_marginTop="152dp"
+        android:ems="8"
+        android:hint="Enter your group name."
         android:singleLine="true"
         android:textColor="#000000"
-         android:textSize="30sp" />
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_alignLeft="@+id/groupname"
+        android:layout_below="@+id/groupname"
+        android:layout_marginLeft="33dp"
+        android:layout_marginTop="40dp"
+        android:text="Submit"
+        android:textColor="#FFffff"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/errorText"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:textColor="#000000"
+        android:layout_alignLeft="@+id/submit"
+        android:layout_alignRight="@+id/submit"
+        android:layout_below="@+id/submit" />
 
 </RelativeLayout>

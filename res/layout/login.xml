@@ -40,11 +40,11 @@
         android:layout_alignLeft="@+id/username"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/username"
-        android:layout_below="@+id/imageView1" 
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#ff0000"
+        android:layout_below="@+id/imageView1"
         android:gravity="center_horizontal"
-        android:textSize="15sp"/>
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ffffff"
+        android:textSize="15sp" />
 
     <Button
         android:id="@+id/login"
