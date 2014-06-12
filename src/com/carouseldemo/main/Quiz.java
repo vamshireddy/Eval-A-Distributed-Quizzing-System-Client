@@ -14,6 +14,7 @@ import com.example.peerbased.ParameterPacket;
 import StaticAttributes.QuizAttributes;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Paint.Join;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -78,6 +79,7 @@ class QuizListen1 extends Thread
 
 public class Quiz extends Activity implements OnClickListener {
 	public static Quiz staticAct;
+	Button skipButton;
 	Button leader;
 	TextView instruction1,instruction2,instruction3,instruction4;
 	DatagramSocket sock;
@@ -94,11 +96,14 @@ public class Quiz extends Activity implements OnClickListener {
 		instruction2 = (TextView)findViewById(R.id.Instr2);
 		instruction3 = (TextView)findViewById(R.id.Instr3);
 		instruction4 = (TextView)findViewById(R.id.Instr4);
+		skipButton = (Button)findViewById(R.id.skipBut);
 		errorMsg = (TextView)findViewById(R.id.errorBox);
 		errorMsg.setVisibility(View.INVISIBLE);
 		leader=(Button)findViewById(R.id.leader);
 		leader.setOnClickListener(this);
+		skipButton.setOnClickListener(this);
 		setInstructions();
+		
 		try {
 			sock.setSoTimeout(1000);
 		} catch (SocketException e) {
@@ -108,6 +113,15 @@ public class Quiz extends Activity implements OnClickListener {
     }
 	public void onClick(View v) 
 	{   
+		if( v.getId() == R.id.skipBut )
+		{
+			leader.setEnabled(false);
+			skipButton.setEnabled(false);
+			sock.close();
+			QuizListen1 q = new QuizListen1();
+			q.run();// Normal method call
+			return;
+		}
 		System.out.println("I am clicked!!");
 		// TODO Clear the socket timeout before going to the next activity
 		LeaderPacket lp = new LeaderPacket();
@@ -146,6 +160,7 @@ public class Quiz extends Activity implements OnClickListener {
 			pyy = (Packet)Utilities.deserialize(by);
 			if( pyy.leader_req_packet == true && pyy.seq_no == PacketSequenceNos.LEADER_REQ_SERVER_SEND )
 			{
+				leader.setEnabled(false);
 				break;
 			}
 			else
@@ -154,27 +169,23 @@ public class Quiz extends Activity implements OnClickListener {
 			}
 		}
 		
-		System.out.println("Packet received!!!"+"  Leader packet is "+pyy.leader_req_packet);
-		System.out.println("Packet received!!!"+"  auth pack is "+pyy.auth_packet);
-		System.out.println("Packet received!!!"+" seq no is "+pyy.seq_no);
-		System.out.println("Packet received!!!"+" probe is is "+pyy.probe_packet);
 		LeaderPacket lpp = (LeaderPacket)Utilities.deserialize(pyy.data);
-		System.out.println("Packet received!!!"+" granted is "+lpp.granted);
-		System.out.println("Packet received!!!"+" group name is "+lpp.groupName);
-		System.out.println("Packet received!!!"+" grp req is "+lpp.grpNameRequest);
+
 		if( lpp.granted == true )
 		{
 			System.out.println("You are Leader now!");
 			leader.setText("You are Leader now!");
-			errorMsg.setText("");
-		//	leader.setEnabled(false);
+			errorMsg.setText("Please wait untill the leader session expires.");
+			leader.setEnabled(false);
+			skipButton.setEnabled(false);
 		}
 		else
 		{
-			System.out.println("You have not been selected as a leader :D , Better luck next time :P ");
+			//System.out.println("You have not been selected as a leader :D , Better luck next time :P ");
 			errorMsg.setText("Sorry, You have not been selected as a leader.");
 			errorMsg.setVisibility(View.VISIBLE);
-		//	leader.setEnabled(false);
+			leader.setEnabled(false);
+			skipButton.setEnabled(false);
 		}
 		try {
 			sock.setSoTimeout(0);
@@ -182,9 +193,10 @@ public class Quiz extends Activity implements OnClickListener {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		System.out.println("---------------- I am after the function!!!-------------------");
 		QuizListen1 q = new QuizListen1();
 		q.start();
+		System.out.println("---------------- I am after the function!!!-------------------");
+
 		/*while( true )
 		{
 			byte[] b = new byte[Utilities.MAX_BUFFER_SIZE];

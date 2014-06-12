@@ -66,7 +66,7 @@
           </activity>
         
                 <activity
-              android:name="com.carouseldemo.main.Team"
+              android:name="com.carouseldemo.main.Team_details"
               android:label="@string/app_name" >
           </activity>
         

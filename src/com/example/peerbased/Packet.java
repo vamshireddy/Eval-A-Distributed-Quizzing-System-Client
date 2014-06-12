@@ -15,7 +15,7 @@ public class Packet implements Serializable{
 	public boolean group_name_selection_packet;
 	public byte[] data;			// This holds a serialized object of the class according to the flags set above.
 
-	private Packet()
+	public Packet()
 	{
 		// Initialize the fields to defaults
 		seq_no = 0;

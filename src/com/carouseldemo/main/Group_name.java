@@ -11,6 +11,7 @@ import java.net.SocketTimeoutException;
 import com.example.peerbased.GroupNameSelectionPacket;
 import com.example.peerbased.LeaderPacket;
 import com.example.peerbased.Packet;
+import com.example.peerbased.SelectedGroupPacket;
 
 import StaticAttributes.PacketSequenceNos;
 import StaticAttributes.QuizAttributes;
@@ -29,7 +30,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.view.*;
 
 
-public class Group_name extends Activity implements View.OnClickListener 
+public class Group_name extends Activity implements View.OnClickListener
 {
 	Button btn;
 	EditText name;
@@ -51,93 +52,126 @@ public class Group_name extends Activity implements View.OnClickListener
     }
 	public void onClick(View v) 
 	{
-		AlertDialog.Builder ad = new AlertDialog.Builder(this);
-		ad.setTitle("Your Group Name is "+name.getText().toString());
-		ad.setMessage("Press OK to confirm");
-		ad.setPositiveButton("OK", new OnClickListener() 
+		error.setVisibility(View.VISIBLE);
+		/*Toast t = Toast.makeText(getBaseContext(), "Successfully Submitted...", 1000);
+		t.show();
+		dialog.dismiss();
+		
+		// Send the group name request packet to the server.*/
+		
+		System.out.println("CLICKED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		GroupNameSelectionPacket gnsp = new GroupNameSelectionPacket(name.getText().toString(), QuizAttributes.studentID, QuizAttributes.studentName);
+		
+		Packet p = new Packet(PacketSequenceNos.GROUP_REQ_CLIENT_SEND, false, false, false, Utilities.serialize(gnsp),false, true);
+		p.group_name_selection_packet = true;
+		
+		byte[] bytes = Utilities.serialize(p);
+		
+		DatagramPacket pack = new DatagramPacket(bytes, bytes.length,Utilities.serverIP, Utilities.servPort);
+		
+	
+		
+		try {
+			sock.send(pack);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			sock.setSoTimeout(1000);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			error.setVisibility(View.VISIBLE);
+			e.printStackTrace();
+		}	
+		
+		while( true )	
+		{
+			byte[] b = new byte[Utilities.MAX_BUFFER_SIZE];
+			DatagramPacket packy  =  new DatagramPacket(b, b.length);
+			try {
+					sock.receive(packy);
+			}
+			catch( SocketTimeoutException e1 )
 			{
-				public void onClick(DialogInterface dialog, int which) 
+				error.setText("Please try again!");
+				error.setVisibility(View.VISIBLE);
+				return;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			Packet packet = (Packet)Utilities.deserialize(b);
+			
+			error.setText(""+packet.seq_no+" "+packet.group_name_selection_packet);
+			
+			if( packet.seq_no == PacketSequenceNos.GROUP_REQ_SERVER_ACK && packet.group_name_selection_packet == true )
+			{
+				gnsp = (GroupNameSelectionPacket)Utilities.deserialize(packet.data);
+				if( gnsp.accepted == true )
 				{
-					/*Toast t = Toast.makeText(getBaseContext(), "Successfully Submitted...", 1000);
-					t.show();
-					dialog.dismiss();
-					
-					// Send the group name request packet to the server.*/
-					
-					GroupNameSelectionPacket gnsp = new GroupNameSelectionPacket(name.getText().toString(), QuizAttributes.studentID, QuizAttributes.studentName);
-					
-					Packet p = new Packet(PacketSequenceNos.GROUP_REQ_CLIENT_SEND, false, false, false, Utilities.serialize(gnsp),false, true);
-					p.group_name_selection_packet = true;
-					
-					byte[] bytes = Utilities.serialize(p);
-					
-					DatagramPacket pack = new DatagramPacket(bytes, bytes.length,Utilities.serverIP, Utilities.servPort);
-					
-					try {
-						sock.send(pack);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					try {
-						sock.setSoTimeout(3000);
-					} catch (SocketException e) {
-						// TODO Auto-generated catch block
-						error.setText("Request timed out!. Try again");
-						error.setVisibility(View.VISIBLE);
-						e.printStackTrace();
-					}
-					
-					byte[] b = new byte[Utilities.MAX_BUFFER_SIZE];
-					DatagramPacket packy  =  new DatagramPacket(b, b.length);
-					try {
-						sock.receive(packy);
-					}
-					catch( SocketTimeoutException e1 )
-					{
-						error.setText("Please try again!");
-						error.setVisibility(View.VISIBLE);
+					System.out.println("I got the reply from server!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+						run();
 						return;
-					}
-					catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					Packet packet = (Packet)Utilities.deserialize(b);
-					if( packet.seq_no == PacketSequenceNos.GROUP_REQ_SERVER_ACK && packet.group_name_selection_packet == true )
-					{
-						gnsp = (GroupNameSelectionPacket)Utilities.deserialize(packet.data);
-						if( gnsp.accepted == true )
-						{
-							Intent i = new Intent(Group_name.this,Team.class);
-							startActivity(i);
-						}
-						else
-						{
-							error.setText("Unknown Error!");
-							error.setVisibility(View.VISIBLE);
-							return;
-						}
-					}
 				}
-			});
-		
-		
-		ad.setNegativeButton("Cancel", new OnClickListener()
-			{
-				
-				public void onClick(DialogInterface dialog, int which) 
+				else
 				{
-					Toast t = Toast.makeText(getBaseContext(), "Select the Group Name", 1000);
-					t.show();
-					dialog.dismiss();
-					
+						error.setText("Unknown Error!");
+						return;
 				}
-			});
+			}
+			else
+			{
+				continue;
+			}
+		}
 		
-		ad.show();
+	}
+	
+	public void run()
+	{
 		
+		while( true )
+		{
+			System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			byte[] by = new byte[Utilities.MAX_BUFFER_SIZE];
+			DatagramPacket packy = new DatagramPacket(by, by.length);
+			System.out.println("");
+			error.setText("WWWWWWWWWWAITTING!!!!!!!!!!!!");
+			try
+			{
+				sock.receive(packy);
+			}
+			catch( SocketTimeoutException e1)
+			{
+				continue;
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+				continue;
+			}
+			
+			error.setText("RECEIVED!!!!!!!!!!!!!");
+			error.setVisibility(View.VISIBLE);
+			Packet pyy = (Packet)Utilities.deserialize(by);
+			
+			if( pyy.team_selection_packet == true && pyy.seq_no == PacketSequenceNos.FORMED_GROUP_SERVER_SEND )
+			{
+				System.out.println("RECEIVED!!!!!!!!!!!!!");
+				SelectedGroupPacket sgp = (SelectedGroupPacket)Utilities.deserialize(pyy.data);
+				QuizAttributes.leader = sgp.leader;
+				QuizAttributes.groupMembers = sgp.team;
+				QuizAttributes.groupName = sgp.groupName;
+				Intent i = new Intent(this,Team_details.class);
+				startActivity(i);
+				break;
+			}
+			else
+			{
+				continue;
+			}
+		}
 	}
 }

@@ -1,8 +1,9 @@
 package StaticAttributes;
 
+import com.carouseldemo.main.*;
 import java.util.ArrayList;
 
-import com.example.peerbased.Leader;
+import com.example.peerbased.*;
 
 public class QuizAttributes {
 	public static byte noOfOnlineStudents;
@@ -13,6 +14,9 @@ public class QuizAttributes {
 	public static String studentID;
 	public static String studentName;
 	public static ArrayList<Leader> selectedLeaders;
+	public static ArrayList<Student> groupMembers;
+	public static Student leader;
+	public static String groupName;
 	static
 	{
 		noOfOnlineStudents = -1;
@@ -22,5 +26,7 @@ public class QuizAttributes {
 		subject = "";
 		studentID = "";
 		selectedLeaders = null;
+		groupMembers = null;
+		leader = null;
 	}
 }

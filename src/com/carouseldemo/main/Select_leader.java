@@ -12,6 +12,7 @@ import com.example.peerbased.GroupNameSelectionPacket;
 import com.example.peerbased.Leader;
 import com.example.peerbased.LeaderPacket;
 import com.example.peerbased.Packet;
+import com.example.peerbased.SelectedGroupPacket;
 import com.example.peerbased.TeamSelectPacket;
 
 import StaticAttributes.PacketSequenceNos;
@@ -104,6 +105,8 @@ public class Select_leader extends ListActivity  implements OnClickListener {
 		
 		String selectedLeaderID = null;
 		
+
+		
 		for(int i=0;i<leaders.size();i++)
 		{
 			Leader lead = leaders.get(i);
@@ -130,51 +133,103 @@ public class Select_leader extends ListActivity  implements OnClickListener {
 		}
 		
 		try {
-			sock.setSoTimeout(3000);
+			sock.setSoTimeout(1000);
 		} catch (SocketException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		
-		byte[] b = new byte[Utilities.MAX_BUFFER_SIZE];
-		DatagramPacket packy  =  new DatagramPacket(b, b.length);
-		
-		try
+		while( true )
 		{
-			sock.receive(packy);
-		}
-		catch( SocketTimeoutException e1 )
-		{
-			return;
-		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.exit(0);
-		}
-		
-		Packet packet = (Packet)Utilities.deserialize(b);
-		if( packet.seq_no == PacketSequenceNos.TEAM_REQ_SERVER_ACK && packet.team_selection_packet == true )
-		{
-			TeamSelectPacket tspReply = (TeamSelectPacket)Utilities.deserialize(packet.data);
-			if( tspReply.accepted == true )
+			byte[] b = new byte[Utilities.MAX_BUFFER_SIZE];
+			DatagramPacket packyy  =  new DatagramPacket(b, b.length);
+			
+			try
 			{
-				Intent i = new Intent(getApplicationContext(),Team.class);
-				startActivity(i);
+				sock.receive(packyy);
 			}
-			else if( tsp.accepted == false )
+			catch( SocketTimeoutException e1 )
 			{
-				error.setText("The Selected group is full, Please try another one.");
-				error.setVisibility(View.VISIBLE);
 				return;
 			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.exit(0);
+			}
+			
+			Packet packet = (Packet)Utilities.deserialize(b);
+			
+			System.out.println("PACCCCCKKKKKKKYYYY IS HERE!!!");
+			
+			if( packet.seq_no == PacketSequenceNos.TEAM_REQ_SERVER_ACK && packet.team_selection_packet == true )
+			{
+				TeamSelectPacket tspReply = (TeamSelectPacket)Utilities.deserialize(packet.data);
+				if( tspReply.accepted == true )
+				{
+					getTeam();
+					return;
+				}
+				else if( tsp.accepted == false )
+				{
+					error.setText("The Selected group is full, Please try another one.");
+					error.setVisibility(View.VISIBLE);
+					return;
+				}
+			}
+			else
+			{
+				continue;
+			}
 		}
+		
 		
 		/*pd1.setTitle("Please Wait for few moments . . . ");
 		pd1.setMessage("After this you will get your team.");
 		pd1.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		h1.sendEmptyMessage(0);
 		pd1.show();*/	
+	}
+	
+	private void getTeam()
+	{
+		while( true )
+		{
+			System.out.println("LISTENNNNNNNNNNNN");
+			byte[] by = new byte[Utilities.MAX_BUFFER_SIZE];
+			DatagramPacket packy = new DatagramPacket(by, by.length);
+			try
+			{
+				sock.receive(packy);
+			}
+			catch( SocketTimeoutException e1)
+			{
+				continue;
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+				return;
+			}
+			System.out.println("RECEIVED!~!~~~~~~~!!!!");
+			Packet pyy = (Packet)Utilities.deserialize(by);
+
+			if( pyy.team_selection_packet == true && pyy.seq_no == PacketSequenceNos.FORMED_GROUP_SERVER_SEND )
+			{
+				SelectedGroupPacket sgp = (SelectedGroupPacket)Utilities.deserialize(pyy.data);
+				System.out.println("teammem : "+sgp.team.size());
+				System.out.println("grpname : "+sgp.groupName);
+				System.out.println("leadername : "+sgp.leader.name);
+				QuizAttributes.leader = sgp.leader;
+				QuizAttributes.groupMembers = sgp.team;
+				QuizAttributes.groupName = sgp.groupName;
+				Intent i = new Intent(this,Team_details.class);
+				startActivity(i);
+				break;
+			}
+			else
+			{
+				continue;
+			}
+		}
 	}
 
 	public void onClick(View v) {

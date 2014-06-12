@@ -38,6 +38,9 @@ public class Login extends Activity implements OnClickListener {
 		setContentView(R.layout.login);
 		StrictMode.enableDefaults();
 		
+		// Create a thread to listen for the server's error messages;
+		
+		
     	userID=(EditText)findViewById(R.id.username);
     	// Set the student name in static attribute class, so that every other class can access it
 		passwordBox=(EditText)findViewById(R.id.passwordField);
