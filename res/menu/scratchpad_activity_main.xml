@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+     <item
+        android:id="@+id/back"
+        android:orderInCategory="100"
+        android:title="Back"
+        android:showAsAction="always"
+        />
+    <item
+        android:id="@+id/reset"
+        android:orderInCategory="100"
+        android:title="Reset"
+        android:showAsAction="ifRoom|withText"
+        android:icon="@drawable/refresh"/> 
+   
+</menu>

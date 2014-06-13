@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 
 public class Packet implements Serializable{
-	static final long serialVersionUID = 42L;
+	public static final long serialVersionUID = 42L;
 	public int seq_no; 			// This will be the packet identifier
 	public boolean auth_packet;	// This flag will be set, if the packet is used for authentication of student or teacher
 	public boolean bcast;			// This flag will be set, if the packet is a broadcast packet . Usually set by the sender
@@ -13,9 +13,10 @@ public class Packet implements Serializable{
 	public boolean leader_req_packet;
 	public boolean team_selection_packet;
 	public boolean group_name_selection_packet;
+	public boolean quizPacket;
 	public byte[] data;			// This holds a serialized object of the class according to the flags set above.
 
-	public Packet()
+	private Packet()
 	{
 		// Initialize the fields to defaults
 		seq_no = 0;

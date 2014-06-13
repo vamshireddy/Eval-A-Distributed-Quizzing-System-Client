@@ -91,8 +91,10 @@ public class Utilities {
 	}
 	public static void cleanBuffer(DatagramSocket s)
 	{
+		int a = 2;
 		try {
 			// 1 second
+			a = s.getSoTimeout();
 			s.setSoTimeout(10000);
 		} catch (SocketException e1) {
 			e1.printStackTrace();
@@ -110,7 +112,7 @@ public class Utilities {
 				// This exception occurs when there are no packets for the specified timeout period.
 				// Buffer is clean!!
 				try {
-					s.setSoTimeout(0); // infinite timeout (blocking)
+					s.setSoTimeout(a);
 				} catch (SocketException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@drawable/mcq">
+
+      <EditText
+          android:id="@+id/option2"
+          android:layout_width="350dp"
+          android:layout_height="50dp"
+          android:layout_alignParentLeft="true"
+          android:layout_below="@+id/option1"
+          android:layout_marginLeft="63dp"
+          android:background="@android:drawable/editbox_background"
+          android:ems="10"
+          android:hint="option 2" />
+
+      <EditText
+          android:id="@+id/option3"
+          android:layout_width="350dp"
+          android:layout_height="50dp"
+          android:layout_alignLeft="@+id/option2"
+          android:layout_below="@+id/option2"
+          android:background="@android:drawable/editbox_background"
+          android:ems="10"
+          android:hint="option 3" />
+
+      <EditText
+          android:id="@+id/option1"
+          android:layout_width="350dp"
+          android:layout_height="50dp"
+          android:layout_alignLeft="@+id/option2"
+          android:layout_centerVertical="true"
+          android:background="@android:drawable/editbox_background"
+          android:ems="10"
+          android:hint="option 1" />
+
+      <EditText
+          android:id="@+id/option4"
+          android:layout_width="350dp"
+          android:layout_height="50dp"
+          android:layout_alignLeft="@+id/option3"
+          android:layout_below="@+id/option3"
+          android:background="@android:drawable/editbox_background"
+          android:ems="10"
+          android:hint="option 4" />
+
+     
+      <EditText
+          android:id="@+id/question"
+          android:layout_width="800dp"
+          android:layout_height="100dp"
+          android:layout_alignParentTop="true"
+          android:layout_centerHorizontal="true"
+          android:layout_marginTop="36dp"
+          android:background="@android:drawable/editbox_background"
+          android:ems="10"
+          android:hint="your question" >
+
+          <requestFocus />
+      </EditText>
+
+      <Button
+          android:id="@+id/submit"
+           android:background="@drawable/draw"
+          android:layout_width="150dp"
+          android:layout_height="50dp"
+          android:layout_alignRight="@+id/question"
+          android:layout_alignTop="@+id/option2"
+          android:layout_marginRight="151dp"
+          android:layout_marginTop="24dp"
+          android:textSize="20sp"
+          android:text="Submit" />
+
+</RelativeLayout>

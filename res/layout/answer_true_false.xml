@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android1="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@drawable/answerbg1">
+
+     <RadioGroup
+         android1:id="@+id/radioGroup1"
+         android1:layout_width="wrap_content"
+         android1:layout_height="wrap_content"
+         android1:layout_below="@+id/textView1"
+         android1:layout_marginTop="61dp"
+         android1:layout_toRightOf="@+id/button1"
+         android1:layout_marginLeft="90dp" >
+
+         <RadioButton
+             android1:id="@+id/true1"
+             android1:layout_width="wrap_content"
+             android1:layout_height="40dp"
+             android1:text="True"
+             android1:textColor="#4bb498"
+             android1:textSize="20sp" />
+
+         <RadioButton
+             android1:id="@+id/false1"
+             android1:layout_width="wrap_content"
+             android1:layout_height="40dp"
+             android1:text="Flase"
+             android1:textColor="#4bb498"
+             android1:textSize="20sp" />
+
+     </RadioGroup>
+
+     <TextView
+         android1:id="@+id/textView1"
+         android1:layout_width="wrap_content"
+         android1:layout_height="50dp"
+         android1:layout_alignParentTop="true"
+        
+         android1:layout_marginLeft="30dp"
+         android1:layout_marginTop="55dp"
+         android1:layout_toRightOf="@+id/radioGroup1"
+         android1:text="question given by the leader"
+         android1:textColor="#0b6693"
+         android1:textSize="25sp" />
+
+     <Button
+         android1:id="@+id/button2"
+         android1:layout_width="100dp"
+         android1:layout_height="50dp"
+         android1:layout_alignRight="@+id/textView1"
+         android1:layout_below="@+id/radioGroup1"
+         android1:layout_marginRight="94dp"
+         android1:layout_marginTop="40dp"
+         android1:background="@drawable/draw"
+         android1:text="Submit"
+         android1:textColor="#ffffff" />
+
+</RelativeLayout>

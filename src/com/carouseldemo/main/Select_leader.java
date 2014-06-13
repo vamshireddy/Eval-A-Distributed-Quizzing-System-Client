@@ -167,6 +167,7 @@ public class Select_leader extends ListActivity  implements OnClickListener {
 				if( tspReply.accepted == true )
 				{
 					getTeam();
+					System.out.println("Getting team!!!");
 					return;
 				}
 				else if( tsp.accepted == false )

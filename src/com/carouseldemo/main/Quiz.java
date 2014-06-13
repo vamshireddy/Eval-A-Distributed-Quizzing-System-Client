@@ -79,7 +79,7 @@ class QuizListen1 extends Thread
 
 public class Quiz extends Activity implements OnClickListener {
 	public static Quiz staticAct;
-	Button skipButton;
+	//Button skipButton;
 	Button leader;
 	TextView instruction1,instruction2,instruction3,instruction4;
 	DatagramSocket sock;
@@ -96,15 +96,15 @@ public class Quiz extends Activity implements OnClickListener {
 		instruction2 = (TextView)findViewById(R.id.Instr2);
 		instruction3 = (TextView)findViewById(R.id.Instr3);
 		instruction4 = (TextView)findViewById(R.id.Instr4);
-		skipButton = (Button)findViewById(R.id.skipBut);
+//		skipButton = (Button)findViewById(R.id.skipBut);
 		errorMsg = (TextView)findViewById(R.id.errorBox);
 		errorMsg.setVisibility(View.INVISIBLE);
 		leader=(Button)findViewById(R.id.leader);
 		leader.setOnClickListener(this);
-		skipButton.setOnClickListener(this);
+		//skipButton.setOnClickListener(this);
 		setInstructions();
 		
-		try {
+		try { 
 			sock.setSoTimeout(1000);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
@@ -113,7 +113,7 @@ public class Quiz extends Activity implements OnClickListener {
     }
 	public void onClick(View v) 
 	{   
-		if( v.getId() == R.id.skipBut )
+		/*if( v.getId() == R.id.skipBut )
 		{
 			leader.setEnabled(false);
 			skipButton.setEnabled(false);
@@ -121,7 +121,7 @@ public class Quiz extends Activity implements OnClickListener {
 			QuizListen1 q = new QuizListen1();
 			q.run();// Normal method call
 			return;
-		}
+		}*/
 		System.out.println("I am clicked!!");
 		// TODO Clear the socket timeout before going to the next activity
 		LeaderPacket lp = new LeaderPacket();
@@ -177,7 +177,7 @@ public class Quiz extends Activity implements OnClickListener {
 			leader.setText("You are Leader now!");
 			errorMsg.setText("Please wait untill the leader session expires.");
 			leader.setEnabled(false);
-			skipButton.setEnabled(false);
+			//skipButton.setEnabled(false);
 		}
 		else
 		{
@@ -185,7 +185,7 @@ public class Quiz extends Activity implements OnClickListener {
 			errorMsg.setText("Sorry, You have not been selected as a leader.");
 			errorMsg.setVisibility(View.VISIBLE);
 			leader.setEnabled(false);
-			skipButton.setEnabled(false);
+			//skipButton.setEnabled(false);
 		}
 		try {
 			sock.setSoTimeout(0);

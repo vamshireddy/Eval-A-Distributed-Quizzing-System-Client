@@ -159,8 +159,15 @@ public class Group_name extends Activity implements View.OnClickListener
 			
 			if( pyy.team_selection_packet == true && pyy.seq_no == PacketSequenceNos.FORMED_GROUP_SERVER_SEND )
 			{
-				System.out.println("RECEIVED!!!!!!!!!!!!!");
+				System.out.println("RD!!!!!!!!!!!!!");
+				
 				SelectedGroupPacket sgp = (SelectedGroupPacket)Utilities.deserialize(pyy.data);
+				error.setText(""+sgp.team.size()+" "+sgp.leader.name+":"+sgp.groupName);
+				if( sgp.leader == null || sgp.team == null || sgp.groupName == null )
+				{
+					error.setText("NULL RCD!!");
+					return;
+				}
 				QuizAttributes.leader = sgp.leader;
 				QuizAttributes.groupMembers = sgp.team;
 				QuizAttributes.groupName = sgp.groupName;

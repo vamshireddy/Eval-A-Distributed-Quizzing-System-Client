@@ -70,7 +70,34 @@
               android:label="@string/app_name" >
           </activity>
         
-                
+                <activity
+              android:name="com.carouseldemo.main.Non_leader_question"
+              android:label="@string/app_name" >
+          </activity>
+        
+                <activity
+              android:name="com.carouseldemo.main.Leader_question"
+              android:label="@string/app_name" >
+          </activity>
+          
+               <activity
+              android:name="com.carouseldemo.main.Multiple_choice"
+              android:label="@string/app_name" >
+          </activity>
+        
+    <activity
+              android:name="com.carouseldemo.main.One_word"
+              android:label="@string/app_name" >
+          </activity>
+          <activity
+              android:name="com.carouseldemo.main.True_false"
+              android:label="@string/app_name" >
+          </activity>
+        
+          <activity
+              android:name="com.carouseldemo.main.SimpleCommonPage"
+              android:label="@string/app_name" >
+          </activity>
         
 
     </application>
