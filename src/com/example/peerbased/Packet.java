@@ -28,6 +28,7 @@ public class Packet implements Serializable{
 		leader_req_packet = false;
 		team_selection_packet  = false;
 		group_name_selection_packet = false;
+		quizPacket = false;
 	}
 	public Packet(int seq_no, boolean auth, boolean bcast, boolean probe, byte[] data) {
 		this();

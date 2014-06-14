@@ -10,4 +10,11 @@ public class ResponsePacket implements Serializable{
 	public String answer;
 	public boolean result;
 	public boolean ack;
+	public ResponsePacket(int quesSeq, String UID, String ques, String ans, boolean res, boolean ack) {
+		questionSequenceNo = quesSeq;
+		uID = UID;
+		question = ques;
+		result = res;
+		this.ack = ack;
+	}
 }

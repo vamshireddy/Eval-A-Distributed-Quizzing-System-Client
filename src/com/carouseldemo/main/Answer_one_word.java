@@ -34,5 +34,6 @@ public class Answer_one_word extends Activity implements OnClickListener
 	{   
 	  
 		String ans = answer.getText().toString();
+		
     }
 }

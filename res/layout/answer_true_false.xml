@@ -58,4 +58,16 @@
          android1:text="Submit"
          android1:textColor="#ffffff" />
 
+     <TextView
+         android1:id="@+id/errorBoxy"
+         android1:layout_width="wrap_content"
+         android1:layout_height="wrap_content"
+         android1:layout_alignLeft="@+id/radioGroup1"
+         android1:layout_alignParentBottom="true"
+         android1:layout_alignRight="@+id/textView1"
+         android1:layout_below="@+id/button2"
+         android1:textSize="40dp"
+         android1:gravity="center"
+         android1:text="" />
+
 </RelativeLayout>

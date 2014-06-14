@@ -58,6 +58,7 @@ class Listener extends Thread
 					QuestionAttributes.answer = qp.correctAnswerOption;
 					QuestionAttributes.options = qp.options;
 					QuestionAttributes.level = qp.level;
+					QuestionAttributes.questionSeqNo = qp.questionSeqNo;
 					QuestionAttributes.questionType = qp.questionType;
 					if(  qp.questionType == 1 )
 					{
