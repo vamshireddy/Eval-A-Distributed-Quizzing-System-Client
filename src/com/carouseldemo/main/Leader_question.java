@@ -31,7 +31,6 @@ public class Leader_question extends Activity  implements OnClickListener
     }
 	public void onClick(View v)     //actions performed after  buttons are clicked.
 	{   
-		 
 		 Intent i;
 			switch (v.getId())
 			{

@@ -2,6 +2,7 @@ package com.carouseldemo.main;
 
 
 import java.io.IOException;
+import StaticAttributes.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import com.example.peerbased.Packet;
@@ -37,44 +38,44 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
         option3 = (EditText)findViewById(R.id.option3);
         option4 = (EditText)findViewById(R.id.option4);
         sock = StaticAttributes.SocketHandler.normalSocket;
+        /*
+         * Fill the details
+         */
+        question.setText(QuestionAttributes.question);
+        option1.setText(QuestionAttributes.options[0]);
+        option2.setText(QuestionAttributes.options[1]);
+        option3.setText(QuestionAttributes.options[2]);
+        option4.setText(QuestionAttributes.options[3]);
+        /*
+         * Add level too!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO
+         */
         btn.setOnClickListener(this);
     }
 	public void onClick(View v)     //actions performed after change password button is clicked.
 	{   
-	  
-		String[] options = new String[4];
-		String ques = question.getText().toString();
-		String answer = "";
-		
-		options[0] = option1.getText().toString();
-		options[1] = option2.getText().toString();
-		options[2] = option3.getText().toString();
-		options[3] = option4.getText().toString();
-
-		RadioGroup g = (RadioGroup) findViewById(R.id.radioGroup1);
+		String answer;
+		RadioGroup g = (RadioGroup)findViewById(R.id.radioGroup1);
 		 
 		      switch (g.getCheckedRadioButtonId())
 		       {
 		            case R.id.radio1 :
-		            	  answer = options[0];
+		            	  answer = option1.getText().toString();
 		                  break;
 		 
 		            case R.id.radio2 :
-		            	 answer = options[1];
+		            	 answer = option2.getText().toString();
 		                  break;
 		
 		             case R.id.radio3 :
-		            	 answer = options[2];
+		            	 answer = option3.getText().toString();
 			              break;
 			
 		            case R.id.radio4 :
-		            	 answer = options[3];
+		            	 answer = option4.getText().toString();
 			              break;
 		        }
 		/*
 		 * Now send the question to teacher
 		 */
-
-		
      }
 }

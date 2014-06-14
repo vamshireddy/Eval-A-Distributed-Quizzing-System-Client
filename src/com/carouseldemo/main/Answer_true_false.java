@@ -1,5 +1,6 @@
 package com.carouseldemo.main;
 
+import StaticAttributes.QuestionAttributes;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,14 +24,14 @@ public class Answer_true_false extends Activity implements OnClickListener
         question=(TextView)findViewById(R.id.textView1);
         btn=(Button)findViewById(R.id.button2);
         
-        
+        question.setText(QuestionAttributes.question);
        
         btn.setOnClickListener(this);
     }
 	public void onClick(View v)     //actions performed after change password button is clicked.
 	{   
 	  
-		int answer;
+		String answer;
 		
 		RadioGroup g = (RadioGroup) findViewById(R.id.radioGroup1);
 		 
@@ -38,11 +39,11 @@ public class Answer_true_false extends Activity implements OnClickListener
 		       {
 		            case R.id.true1 :
 	
-                          answer=1;
+                          answer="true";
 		                  break;
 		 
 		            case R.id.false1 :
-			              answer=0;
+			              answer="false";
 		                  break;
 		
 		             

@@ -116,17 +116,19 @@ public class Multiple_choice extends Activity implements android.view.View.OnCli
 				
 				DatagramPacket pack = new DatagramPacket(bytes, bytes.length, Utilities.serverIP, Utilities.servPort);
 				
+				try {
+					System.out.println("Sending!");
+					sock.send(pack);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.out.println("sent!");
+				/*
+				 * Now wait for the authentication of the packet
+				 */
 				while( true )
 				{
-					try {
-						sock.send(pack);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					/*
-					 * Now wait for the authentication of the packet
-					 */
 					byte[] by = new byte[Utilities.MAX_BUFFER_SIZE];
 					DatagramPacket packy = new DatagramPacket(by, by.length);
 					try
@@ -135,44 +137,53 @@ public class Multiple_choice extends Activity implements android.view.View.OnCli
 					}
 					catch( SocketTimeoutException e )
 					{
-						break;
+						continue;
 					}
 					catch (IOException e)
 					{
 						e.printStackTrace();
 						System.exit(0);
 					}
+					System.out.println("WAHHH!");
 					/*
 					 * Packet is received from Teacher
 					 */
-					Packet recvpack = (Packet)Utilities.deserialize(bytes);
+					Packet recvpack = (Packet)Utilities.deserialize(by);
 					if( recvpack.seq_no == PacketSequenceNos.QUIZ_QUESTION_PACKET_SERVER_ACK && recvpack.quizPacket == true )
 					{
+						System.out.println("Its a ques packet");
 						QuestionPacket qpack = (QuestionPacket) Utilities.deserialize(recvpack.data);
 						
 						if( qpack.questionAuthenticated == true )
 						{
+							 System.out.println("ITS CORRECT");
 							/*
 							 * Question is accepted by teacher
 							 */
 							Toast t1 = Toast.makeText(this, "Question Accepted by teacher", 2000);
 							t1.show();
-						    Intent i=new Intent(this,Non_leader_question.class);
+							System.out.println("GOINGGGGGGGGGGGGGG");
+						    Intent i=new Intent(this,SimpleCommonPage.class);
 						    startActivity(i);
+						    break;
 						}
 						else
 						{
 							/*
 							 * Question is rejected by teacher
 							 */
+							 System.out.println("ITS NOT CORRECT");
 							Toast t1 = Toast.makeText(this, "Question rejected by teacher", 2000);
 							t1.show();
+							System.out.println("BACK!!!!!!!!!!!!");
 							Intent i=new Intent(this,Leader_question.class);
 						    startActivity(i);
+						    break;
 						}
 					}
 					else
 					{
+						 System.out.println("Noooooo!");
 						continue;
 					}
 				} 	

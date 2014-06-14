@@ -3,73 +3,89 @@
     xmlns:android1="http://schemas.android.com/apk/res/android"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:background="@drawable/answerbg1">
+    android:layout_height="match_parent"
+    android:background="@drawable/answerbg1" >
 
-     <RadioGroup
-         android1:id="@+id/radioGroup1"
-         android1:layout_width="wrap_content"
-         android1:layout_height="wrap_content"
-         android1:layout_below="@+id/textView1"
-         android1:layout_marginTop="61dp"
-         android1:layout_toRightOf="@+id/button1"
-         android1:layout_marginLeft="90dp" >
+    <TextView
+        android1:id="@+id/textView1"
+        android1:layout_width="wrap_content"
+        android1:layout_height="100dp"
+        android1:layout_alignParentLeft="true"
+        android1:layout_alignParentRight="true"
+        android1:layout_alignParentTop="true"
+        android1:gravity="center"
+        android1:text="Here is your Question!"
+        android1:textColor="#0b6693"
+        android1:textSize="40sp" />
 
-         <RadioButton
-             android1:id="@+id/radio1"
-             android1:layout_width="wrap_content"
-             android1:layout_height="40dp"
-             android1:text="option1"
-             android1:textColor="#4bb498"
-             android1:textSize="20sp" />
+    <RadioGroup
+        android1:id="@+id/radioGroup1"
+        android1:layout_width="wrap_content"
+        android1:layout_height="wrap_content"
+        android1:layout_centerHorizontal="true"
+        android1:layout_centerVertical="true" >
 
-         <RadioButton
-             android1:id="@+id/radio2"
-             android1:layout_width="wrap_content"
-             android1:layout_height="40dp"
-             android1:text="option2"
-             android1:textColor="#4bb498"
-             android1:textSize="20sp" />
+        <RadioButton
+            android1:id="@+id/radio3"
+            android1:layout_width="wrap_content"
+            android1:layout_height="40dp"
+            android1:gravity="center"
+            android1:text="option3"
+            android1:textColor="#4bb498"
+            android1:textSize="20sp" />
 
-         <RadioButton
-             android1:id="@+id/radio3"
-             android1:layout_width="wrap_content"
-             android1:layout_height="40dp"
-             android1:text="option3"
-             android1:textColor="#4bb498"
-             android1:textSize="20sp" />
+        <RadioButton
+            android1:id="@+id/radio2"
+            android1:layout_width="wrap_content"
+            android1:layout_height="40dp"
+            android1:layout_marginRight="166dp"
+            android1:gravity="center"
+            android1:text="option2"
+            android1:textColor="#4bb498"
+            android1:textSize="20sp" />
 
-         <RadioButton
-             android1:id="@+id/radio4"
-             android1:layout_width="wrap_content"
-             android1:layout_height="40dp"
-             android1:text="option4"
-             android1:textColor="#4bb498"
-             android1:textSize="20sp" />
-     </RadioGroup>
+        <RadioButton
+            android1:id="@+id/radio4"
+            android1:layout_width="wrap_content"
+            android1:layout_height="40dp"
+            android1:gravity="center"
+            android1:text="option4"
+            android1:textColor="#4bb498"
+            android1:textSize="20sp" />
 
-     <Button
-         android1:id="@+id/submit"
-         android1:layout_width="100dp"
-         android1:layout_height="50dp"
-         android1:layout_alignBottom="@+id/radioGroup1"
-         android1:layout_centerHorizontal="true"
-         android1:layout_marginBottom="49dp"
-         android1:background="@drawable/draw"
-         android1:text="Submit"
-         android1:textColor="#ffffff" />
+        <RadioButton
+            android1:id="@+id/radio1"
+            android1:layout_width="wrap_content"
+            android1:layout_height="40dp"
+            android1:gravity="center"
+            android1:text="option1"
+            android1:textColor="#4bb498"
+            android1:textSize="20sp" />
 
-     <TextView
-         android1:id="@+id/textView1"
-         android1:layout_width="wrap_content"
-         android1:layout_height="50dp"
-         android1:layout_alignParentTop="true"
-        
-         android1:layout_marginLeft="30dp"
-         android1:layout_marginTop="55dp"
-         android1:layout_toRightOf="@+id/radioGroup1"
-         android1:text="question given by the leader"
-         android1:textColor="#0b6693"
-         android1:textSize="25sp" />
+    </RadioGroup>
+
+    <Button
+        android1:id="@+id/submit"
+        android1:layout_width="100dp"
+        android1:layout_height="50dp"
+        android1:layout_alignLeft="@+id/radioGroup1"
+        android1:layout_alignRight="@+id/radioGroup1"
+        android1:layout_below="@+id/radioGroup1"
+        android1:layout_marginTop="29dp"
+        android1:background="@drawable/draw"
+        android1:text="Submit"
+        android1:textColor="#ffffff" />
+
+    <TextView
+        android1:id="@+id/textView2"
+        android1:layout_width="wrap_content"
+        android1:layout_height="wrap_content"
+        android1:layout_alignParentBottom="true"
+        android1:layout_alignParentLeft="true"
+        android1:layout_alignParentRight="true"
+        android1:layout_below="@+id/submit"
+        android1:gravity="center"
+        android1:textSize="30dp"
+        android1:text="TextView" />
 
 </RelativeLayout>

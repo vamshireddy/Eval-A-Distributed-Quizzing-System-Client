@@ -82,6 +82,7 @@ class QuizStartPacketListener extends Thread
 					 */
 					Intent i= new Intent(Team_details.staticVar,Leader_question.class);
 					Team_details.staticVar.startActivity(i);
+					break;
 					
 				}
 				else if( qip.activeGroupName.equals(QuizAttributes.groupName) )
@@ -91,6 +92,7 @@ class QuizStartPacketListener extends Thread
 					 */
 					Intent i=new Intent(Team_details.staticVar,SimpleCommonPage.class);
 					Team_details.staticVar.startActivity(i);
+					break;
 				}
 				else
 				{
@@ -99,6 +101,7 @@ class QuizStartPacketListener extends Thread
 					 */
 					Intent i=new Intent(Team_details.staticVar,SimpleCommonPage.class);
 					Team_details.staticVar.startActivity(i);
+					break;
 				}
 			}
 			else

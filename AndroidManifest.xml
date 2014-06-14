@@ -84,6 +84,18 @@
               android:name="com.carouseldemo.main.Multiple_choice"
               android:label="@string/app_name" >
           </activity>
+           <activity
+              android:name="com.carouseldemo.main.Answer_multiple_choice"
+              android:label="@string/app_name" >
+          </activity>
+           <activity
+              android:name="com.carouseldemo.main.Answer_one_word"
+              android:label="@string/app_name" >
+          </activity>
+           <activity
+              android:name="com.carouseldemo.main.Answer_true_false"
+              android:label="@string/app_name" >
+          </activity>
         
     <activity
               android:name="com.carouseldemo.main.One_word"

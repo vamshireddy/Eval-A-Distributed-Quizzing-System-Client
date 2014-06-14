@@ -94,31 +94,37 @@ public class One_word extends Activity implements OnClickListener
 				Packet recvpack = (Packet)Utilities.deserialize(bytes);
 				if( recvpack.seq_no == PacketSequenceNos.QUIZ_QUESTION_PACKET_SERVER_ACK && recvpack.quizPacket == true )
 				{
+					System.out.println("Its a ques packet");
 					QuestionPacket qpack = (QuestionPacket) Utilities.deserialize(recvpack.data);
 					
 					if( qpack.questionAuthenticated == true )
 					{
+						 System.out.println("ITS CORRECT");
 						/*
 						 * Question is accepted by teacher
 						 */
 						Toast t1 = Toast.makeText(this, "Question Accepted by teacher", 2000);
 						t1.show();
-					    Intent i=new Intent(this,Non_leader_question.class);
+					    Intent i=new Intent(this,SimpleCommonPage.class);
 					    startActivity(i);
+					    break;
 					}
 					else
 					{
 						/*
 						 * Question is rejected by teacher
 						 */
+						 System.out.println("ITS NOT CORRECT");
 						Toast t1 = Toast.makeText(this, "Question rejected by teacher", 2000);
 						t1.show();
 						Intent i=new Intent(this,Leader_question.class);
 					    startActivity(i);
+					    break;
 					}
 				}
 				else
 				{
+					 System.out.println("Noooooo!");
 					continue;
 				}
 		} 	

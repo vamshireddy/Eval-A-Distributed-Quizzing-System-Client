@@ -1,5 +1,6 @@
 package com.carouseldemo.main;
 
+import StaticAttributes.QuestionAttributes;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,14 +26,13 @@ public class Answer_one_word extends Activity implements OnClickListener
         btn=(Button)findViewById(R.id.button2);
         answer=(EditText)findViewById(R.id.answer);
         
+        question.setText(QuestionAttributes.question);
        
         btn.setOnClickListener(this);
     }
 	public void onClick(View v)     //actions performed after change password button is clicked.
 	{   
 	  
-		String answer;
-		
-		
-     }
+		String ans = answer.getText().toString();
+    }
 }

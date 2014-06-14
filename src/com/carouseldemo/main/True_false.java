@@ -40,8 +40,7 @@ public class True_false extends Activity  implements OnClickListener
         question = (EditText)findViewById(R.id.question);
         sock = StaticAttributes.SocketHandler.normalSocket;
         t1.setOnClickListener(this);
-        f1.setOnClickListener(this);
-        
+        f1.setOnClickListener(this);     
     }
 	public void onClick(View v)     //actions performed after change password button is clicked.
 	{
@@ -85,14 +84,16 @@ public class True_false extends Activity  implements OnClickListener
 			DatagramPacket pack = new DatagramPacket(bytes, bytes.length, Utilities.serverIP, Utilities.servPort);
 			try {
 				sock.send(pack);
-				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			 System.out.println("APcket sendtTT !!");
+			System.out.println("APcket sendtTT !!");
+			System.out.println("Waiting for packy! - bahar");
+			int aa;
 			try {
-				sock.setSoTimeout(3000);
+				aa = sock.getSoTimeout();
+				System.out.println("TImeout : "+aa);
 			} catch (SocketException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -103,12 +104,12 @@ public class True_false extends Activity  implements OnClickListener
 				/*
 				 * Now wait for the authentication of the packet
 				 */
+				System.out.println("Waiting for packy!");
 				byte[] byR = new byte[Utilities.MAX_BUFFER_SIZE];
 				DatagramPacket packyR = new DatagramPacket(byR, byR.length);
 				try
 				{
 					sock.receive(packyR);
-				
 				}
 				catch( SocketTimeoutException e )
 				{
@@ -117,6 +118,7 @@ public class True_false extends Activity  implements OnClickListener
 				}
 				catch (IOException e)
 				{
+					System.out.println("Expecpton !!");
 					e.printStackTrace();
 					System.exit(0);
 				}
@@ -140,6 +142,7 @@ public class True_false extends Activity  implements OnClickListener
 						t1.show();
 					    Intent i=new Intent(this,SimpleCommonPage.class);
 					    startActivity(i);
+					    break;
 					}
 					else
 					{
@@ -151,6 +154,7 @@ public class True_false extends Activity  implements OnClickListener
 						t1.show();
 						Intent i=new Intent(this,Leader_question.class);
 					    startActivity(i);
+					    break;
 					}
 				}
 				else
