@@ -4,7 +4,7 @@ Quizing-System-Client
 Client Code for Classroom Quizing System on Android
 
 * ABOUT THE PROJECT
-  * This project was Develeloped by me and my team mates for IIT Bombay. It is mainly focussed on the student's interaction in the classroom.
+  * This project was Develeloped by me and my team mates for IIT Bombay. It is mainly focussed on student's interaction in the classroom.
   To help the teacher in the classroom evaluating the students about the material he/she taught we have designed an Networked Application which runs distributedly on the AAKASH Tablets
   and interact with the teacher.
 
