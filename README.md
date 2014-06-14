@@ -5,8 +5,7 @@ Client Code for Classroom Quizing System on Android
 
 * ABOUT THE PROJECT
   * This project was Develeloped by me and my team mates for IIT Bombay. It is mainly focussed on student's interaction in the classroom.
-  To help the teacher in the classroom evaluating the students about the material he/she taught we have designed an Networked Application which runs distributedly on the AAKASH Tablets
-  and interact with the teacher.
+  To help the teacher in the classroom evaluating the students regarding the material he/she has taught, we have designed a Networked Application which runs distributedly on the AAKASH Tablets. Students form groups and can ask questions to other groups. These questions will go through the teacher and gets authenticated. The Authenticated questions will be shown to all other people in the classroom and they can start answering. The answers are recorded on the server and marks are alloted accordingly.
 
 * COMPONENTS OF THE APPLICATION
   * We have used an Access point for connecting all the tablets and the Server.
