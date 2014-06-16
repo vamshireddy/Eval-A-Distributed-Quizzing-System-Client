@@ -53,12 +53,14 @@ public class Answer_true_false extends Activity implements OnClickListener
 		            case R.id.true1 :
 	
                           answer="true";
-                          System.out.println("trueeeyyy prssed!!!!!!!!!!!!!!!!!!!!!1");
+                          Toast t1 = Toast.makeText(this, "Pressed true", 2000);
+  						  t1.show();
 		                  break;
 		 
 		            case R.id.false1 :
 			              answer="false";
-			              System.out.println("falseyyyy pressed!!!!!!!!!!!!!!!!!!!!!1");
+			              Toast t2 = Toast.makeText(this, "Pressed false", 2000);
+						  t2.show();
 		                  break;
 		        }
 		System.out.println("Answer is "+answer);
@@ -121,18 +123,31 @@ public class Answer_true_false extends Activity implements OnClickListener
 						/*
 						 * Correct answer
 						 */
+						Intent i=new Intent(this,SimpleCommonPageForLeader.class);
+						i.putExtra("result", "correct");
+					    startActivity(i);
+					    Toast t1 = Toast.makeText(this, "Your Answer is right!", 2000);
+						t1.show();
+					    break;
 					}
 					else if( rpack.result == false )
 					{
 						/*
 						 * Wrong answer
 						 */
+						Intent i=new Intent(this,SimpleCommonPageForLeader.class);
+						i.putExtra("result", "wrong");
+					    startActivity(i);
+					    Toast t1 = Toast.makeText(this, "Your Answer is wrong!", 2000);
+						t1.show();
+					    break;
 					}
 					btn.setEnabled(false);
 				}
 				else
 				{
 					System.out.println("Error!!");
+					continue;
 				}
 			}
 			else
