@@ -141,7 +141,7 @@ public class True_false extends Activity  implements OnClickListener
 						 */
 						Toast t1 = Toast.makeText(this, "Question Accepted by teacher", 2000);
 						t1.show();
-					    Intent i=new Intent(this,SimpleCommonPage.class);
+					    Intent i=new Intent(this,SimpleCommonPageForLeader.class);
 					    startActivity(i);
 					    break;
 					}

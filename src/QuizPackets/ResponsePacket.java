@@ -13,6 +13,7 @@ public class ResponsePacket implements Serializable{
 	public ResponsePacket(int quesSeq, String UID, String ques, String ans, boolean res, boolean ack) {
 		questionSequenceNo = quesSeq;
 		uID = UID;
+		answer = ans;
 		question = ques;
 		result = res;
 		this.ack = ack;

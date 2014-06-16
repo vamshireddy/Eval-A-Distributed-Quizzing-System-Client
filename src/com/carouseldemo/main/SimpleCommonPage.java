@@ -46,7 +46,7 @@ class Listener extends Thread
 			}
 			System.out.println("WAHHH!");
 			
-			 // Packet is received from Teacher
+			 // Packet is received from Teacher (Server)
 			 
 			Packet recvpack = (Packet)Utilities.deserialize(by);
 			if( recvpack.seq_no == PacketSequenceNos.QUIZ_QUESTION_BROADCAST_SERVER_SEND && recvpack.quizPacket == true)

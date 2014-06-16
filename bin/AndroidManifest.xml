@@ -110,7 +110,10 @@
               android:name="com.carouseldemo.main.SimpleCommonPage"
               android:label="@string/app_name" >
           </activity>
-        
+        <activity
+              android:name="com.carouseldemo.main.SimpleCommonPageForLeader"
+              android:label="@string/app_name" >
+          </activity>
 
     </application>
 </manifest> 

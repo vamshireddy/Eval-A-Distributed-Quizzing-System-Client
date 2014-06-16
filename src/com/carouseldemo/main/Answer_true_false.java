@@ -53,13 +53,13 @@ public class Answer_true_false extends Activity implements OnClickListener
 		            case R.id.true1 :
 	
                           answer="true";
+                          System.out.println("trueeeyyy prssed!!!!!!!!!!!!!!!!!!!!!1");
 		                  break;
 		 
 		            case R.id.false1 :
 			              answer="false";
+			              System.out.println("falseyyyy pressed!!!!!!!!!!!!!!!!!!!!!1");
 		                  break;
-		
-		             
 		        }
 		System.out.println("Answer is "+answer);
 		ResponsePacket rp = new ResponsePacket(QuestionAttributes.questionSeqNo, QuizAttributes.studentID,
@@ -67,6 +67,8 @@ public class Answer_true_false extends Activity implements OnClickListener
 		
 		Packet p = new Packet(PacketSequenceNos.QUIZ_RESPONSE_CLIENT_SEND, false, false, false, Utilities.serialize(rp));
 		p.quizPacket = true;
+		
+		System.out.println("qp is "+p.quizPacket+" p.seq : "+p.seq_no+" rp.ans "+rp.answer);
 		
 		byte bytes[] = Utilities.serialize(p);
 		

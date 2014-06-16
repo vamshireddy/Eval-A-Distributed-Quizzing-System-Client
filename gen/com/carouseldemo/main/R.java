@@ -109,16 +109,16 @@ containing a value of this type.
         public static final int try9=0x7f02001d;
     }
     public static final class id {
-        public static final int Help=0x7f09003b;
+        public static final int Help=0x7f09003c;
         public static final int Instr1=0x7f09002c;
         public static final int Instr2=0x7f09002d;
         public static final int Instr3=0x7f09002e;
         public static final int Instr4=0x7f09002f;
-        public static final int aboutus=0x7f09003a;
-        public static final int action_search=0x7f090038;
-        public static final int action_settings=0x7f090039;
+        public static final int aboutus=0x7f09003b;
+        public static final int action_search=0x7f090039;
+        public static final int action_settings=0x7f09003a;
         public static final int answer=0x7f09000a;
-        public static final int back=0x7f09003c;
+        public static final int back=0x7f09003d;
         public static final int button1=0x7f09000b;
         public static final int button2=0x7f090009;
         public static final int button3=0x7f09001a;
@@ -139,7 +139,7 @@ containing a value of this type.
         public static final int item_image=0x7f090018;
         public static final int item_text=0x7f090019;
         public static final int leader=0x7f090031;
-        public static final int listview_background_shape=0x7f090037;
+        public static final int listview_background_shape=0x7f090038;
         public static final int login=0x7f09001c;
         public static final int nwpwd=0x7f09002a;
         public static final int oldpwd=0x7f09002b;
@@ -153,10 +153,10 @@ containing a value of this type.
         public static final int radio2=0x7f090004;
         public static final int radio3=0x7f090003;
         public static final int radio4=0x7f090005;
-        public static final int radioButton1=0x7f090036;
-        public static final int radioButton2=0x7f090035;
+        public static final int radioButton1=0x7f090037;
+        public static final int radioButton2=0x7f090036;
         public static final int radioGroup1=0x7f090002;
-        public static final int reset=0x7f09003d;
+        public static final int reset=0x7f09003e;
         public static final int second_tab=0x7f090016;
         public static final int second_text=0x7f090021;
         public static final int selected_item=0x7f09001e;
@@ -166,6 +166,7 @@ containing a value of this type.
         public static final int tableRow1=0x7f090014;
         public static final int textView1=0x7f090001;
         public static final int textView2=0x7f090008;
+        public static final int textViewLeaderSCP=0x7f090035;
         public static final int third_tab=0x7f090017;
         public static final int third_text=0x7f090022;
         public static final int true1=0x7f09000c;
@@ -196,9 +197,10 @@ containing a value of this type.
         public static final int quiz=0x7f030014;
         public static final int selectleader=0x7f030015;
         public static final int simplecommonpage=0x7f030016;
-        public static final int team=0x7f030017;
-        public static final int team_details=0x7f030018;
-        public static final int true_false=0x7f030019;
+        public static final int simplecommonpageforleader=0x7f030017;
+        public static final int team=0x7f030018;
+        public static final int team_details=0x7f030019;
+        public static final int true_false=0x7f03001a;
     }
     public static final class menu {
         public static final int main=0x7f080000;
