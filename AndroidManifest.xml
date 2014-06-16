@@ -111,9 +111,24 @@
               android:label="@string/app_name" >
           </activity>
         <activity
-              android:name="com.carouseldemo.main.SimpleCommonPageForLeader"
+              android:name="com.carouseldemo.main.SimpleQuizStartPage"
               android:label="@string/app_name" >
           </activity>
-
+          <activity
+              android:name="com.carouseldemo.main.ActiveTeamAnsWait"
+              android:label="@string/app_name" >
+          </activity>
+          <activity
+              android:name="com.carouseldemo.main.ActiveTeamQuesWait"
+              android:label="@string/app_name" >
+          </activity>
+          <activity
+              android:name="com.carouseldemo.main.OtherGroupPage"
+              android:label="@string/app_name" >
+          </activity>
+		<activity
+              android:name="com.carouseldemo.main.AnswerResultPage"
+              android:label="@string/app_name" >
+          </activity>
     </application>
 </manifest> 

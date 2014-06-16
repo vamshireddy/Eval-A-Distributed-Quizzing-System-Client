@@ -163,7 +163,7 @@ public class Multiple_choice extends Activity implements android.view.View.OnCli
 							Toast t1 = Toast.makeText(this, "Question Accepted by teacher", 2000);
 							t1.show();
 							System.out.println("GOINGGGGGGGGGGGGGG");
-						    Intent i=new Intent(this,SimpleCommonPage.class);
+						    Intent i=new Intent(this,ActiveTeamAnsWait.class);
 						    startActivity(i);
 						    break;
 						}
