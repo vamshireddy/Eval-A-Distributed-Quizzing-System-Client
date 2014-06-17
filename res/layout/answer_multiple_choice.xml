@@ -7,7 +7,7 @@
     android:background="@drawable/answerbg1" >
 
     <TextView
-        android1:id="@+id/textView1"
+        android1:id="@+id/ans_mul_question"
         android1:layout_width="wrap_content"
         android1:layout_height="100dp"
         android1:layout_alignParentLeft="true"
@@ -26,11 +26,11 @@
         android1:layout_centerVertical="true" >
 
         <RadioButton
-            android1:id="@+id/radio3"
+            android1:id="@+id/radio1"
             android1:layout_width="wrap_content"
             android1:layout_height="40dp"
             android1:gravity="center"
-            android1:text="option3"
+            android1:text="option1"
             android1:textColor="#4bb498"
             android1:textSize="20sp" />
 
@@ -45,6 +45,15 @@
             android1:textSize="20sp" />
 
         <RadioButton
+            android1:id="@+id/radio3"
+            android1:layout_width="wrap_content"
+            android1:layout_height="40dp"
+            android1:gravity="center"
+            android1:text="option3"
+            android1:textColor="#4bb498"
+            android1:textSize="20sp" />
+
+        <RadioButton
             android1:id="@+id/radio4"
             android1:layout_width="wrap_content"
             android1:layout_height="40dp"
@@ -53,39 +62,29 @@
             android1:textColor="#4bb498"
             android1:textSize="20sp" />
 
-        <RadioButton
-            android1:id="@+id/radio1"
-            android1:layout_width="wrap_content"
-            android1:layout_height="40dp"
-            android1:gravity="center"
-            android1:text="option1"
-            android1:textColor="#4bb498"
-            android1:textSize="20sp" />
-
     </RadioGroup>
 
-    <Button
-        android1:id="@+id/submit"
-        android1:layout_width="100dp"
-        android1:layout_height="50dp"
-        android1:layout_alignLeft="@+id/radioGroup1"
-        android1:layout_alignRight="@+id/radioGroup1"
-        android1:layout_below="@+id/radioGroup1"
-        android1:layout_marginTop="29dp"
-        android1:background="@drawable/draw"
-        android1:text="Submit"
-        android1:textColor="#ffffff" />
-
     <TextView
-        android1:id="@+id/textView2"
+        android1:id="@+id/error_ansMul"
         android1:layout_width="wrap_content"
         android1:layout_height="wrap_content"
         android1:layout_alignParentBottom="true"
         android1:layout_alignParentLeft="true"
         android1:layout_alignParentRight="true"
-        android1:layout_below="@+id/submit"
+        android1:layout_below="@+id/radioGroup1"
         android1:gravity="center"
-        android1:textSize="30dp"
-        android1:text="TextView" />
+        android1:text=""
+        android1:textColor="#000000"
+        android1:textSize="30dp" />
+
+    <Button
+        android1:id="@+id/submit_ans_mul"
+        android1:layout_width="wrap_content"
+        android1:layout_height="wrap_content"
+        android1:layout_alignBaseline="@+id/error_ansMul"
+        android1:layout_alignBottom="@+id/error_ansMul"
+        android1:layout_alignLeft="@+id/radioGroup1"
+        android1:layout_marginLeft="31dp"
+        android1:text="submit" />
 
 </RelativeLayout>

@@ -48,6 +48,7 @@ class WaitScreen extends Thread
 		}
 		Intent i= new Intent(Team_details.staticVar,SimpleQuizStartPage.class);
 		Team_details.staticVar.startActivity(i);
+		Team_details.staticVar.finish();
 	}
 }
 

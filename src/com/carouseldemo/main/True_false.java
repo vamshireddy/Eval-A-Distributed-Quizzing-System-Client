@@ -28,7 +28,7 @@ public class True_false extends Activity  implements OnClickListener
 {
 	
 	RadioButton t1,f1;
-	EditText question;
+	EditText question_tf;
 	DatagramSocket sock;
     /** Called when the activity is first created. */
     @Override
@@ -38,7 +38,7 @@ public class True_false extends Activity  implements OnClickListener
         setContentView(R.layout.true_false);
         t1=(RadioButton)findViewById(R.id.radioButton1);
         f1=(RadioButton)findViewById(R.id.radioButton2);
-        question = (EditText)findViewById(R.id.question);
+        question_tf = (EditText)findViewById(R.id.questiontf);
         sock = StaticAttributes.SocketHandler.normalSocket;
         t1.setOnClickListener(this);
         f1.setOnClickListener(this);     
@@ -50,7 +50,7 @@ public class True_false extends Activity  implements OnClickListener
 		 String[] options = {"true","false"};
 		 
 		 // Get question from the question textbox
-		 ques = question.getText().toString();
+		 ques = question_tf.getText().toString();
 		 /*
 		  * Check which one is pressed ( true or false )
 		  */
@@ -143,6 +143,7 @@ public class True_false extends Activity  implements OnClickListener
 						t1.show();
 					    Intent i=new Intent(this,ActiveTeamAnsWait.class);
 					    startActivity(i);
+					    finish();
 					    break;
 					}
 					else
@@ -155,6 +156,7 @@ public class True_false extends Activity  implements OnClickListener
 						t1.show();
 						Intent i=new Intent(this,Leader_question.class);
 					    startActivity(i);
+					    finish();
 					    break;
 					}
 				}

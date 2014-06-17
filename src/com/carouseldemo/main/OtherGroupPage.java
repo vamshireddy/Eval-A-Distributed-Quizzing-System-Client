@@ -67,16 +67,19 @@ class OtherGroupListener extends Thread
 					{
 						Intent i = new Intent(OtherGroupPage.staticAct, Answer_multiple_choice.class);
 						OtherGroupPage.staticAct.startActivity(i);
+						OtherGroupPage.staticAct.finish();
 					}
 					else if(  qp.questionType == 2 )
 					{
 						Intent i = new Intent(OtherGroupPage.staticAct, Answer_true_false.class);
 						OtherGroupPage.staticAct.startActivity(i);
+						OtherGroupPage.staticAct.finish();
 					}
 					else if(  qp.questionType == 3 )
 					{
 						Intent i = new Intent(OtherGroupPage.staticAct, Answer_one_word.class);
 						OtherGroupPage.staticAct.startActivity(i);
+						OtherGroupPage.staticAct.finish();
 					}
 					break;
 				}

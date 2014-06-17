@@ -67,6 +67,7 @@ class QuizStartPacketListener1 extends Thread
 					 */
 					Intent i= new Intent(AnswerResultPage.staticVar,Leader_question.class);
 					AnswerResultPage.staticVar.startActivity(i);
+					AnswerResultPage.staticVar.finish();
 					break;
 					
 				}
@@ -77,6 +78,7 @@ class QuizStartPacketListener1 extends Thread
 					 */
 					Intent i=new Intent(AnswerResultPage.staticVar,ActiveTeamQuesWait.class);
 					AnswerResultPage.staticVar.startActivity(i);
+					AnswerResultPage.staticVar.finish();
 					break;
 				}
 				else

@@ -5,33 +5,60 @@
     android:orientation="vertical" 
     android:background="@drawable/fillup">
 
-    <EditText
-        android:id="@+id/fillupq"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="50dp"
-        android:background="@android:drawable/editbox_background"
-        android:ems="10"
-        android:hint="Type the question here..."
-        android:inputType="text" />
-    <EditText
-        android:id="@+id/fillupa"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="200dp"
-        android:background="@android:drawable/editbox_background"
-        android:ems="10"
-        android:hint="Type the answer here..."
-        android:inputType="text" />
-
     <Button
         android:id="@+id/button1"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/fillupa"
-        android:layout_marginTop="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:text="Button" />
+
+     <TextView
+         android:id="@+id/textView1"
+         android:layout_width="wrap_content"
+         android:layout_height="40dp"
+         android:layout_above="@+id/question"
+         android:layout_alignParentLeft="true"
+         android:layout_alignParentRight="true"
+         android:gravity="center"
+         android:text="Enter your question, answer and press submit."
+         android:textColor="#FFFFFF"
+         android:textSize="25dp" />
+
+     <TextView
+         android:id="@+id/error_fillup"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignLeft="@+id/fillupa"
+         android:layout_alignRight="@+id/fillupa"
+         android:layout_below="@+id/fillupa"
+         android:layout_marginTop="14dp"
+         android:gravity="center"
+         android:textColor="#FFFFFF"
+         android:text="" />
+
+     <EditText
+         android:id="@+id/fillupa"
+         android:layout_width="250dp"
+         android:layout_height="50dp"
+         android:layout_above="@+id/button1"
+         android:layout_centerHorizontal="true"
+         android:layout_marginBottom="16dp"
+         android:background="@android:drawable/editbox_background"
+         android:ems="10"
+         android:hint="Enter the correct answer..."
+         android:inputType="text" />
+
+     <EditText
+         android:id="@+id/fillupq"
+         android:layout_width="500dp"
+         android:layout_height="60dp"
+         android:layout_above="@+id/fillupa"
+         android:layout_centerHorizontal="true"
+         android:background="@android:drawable/editbox_background"
+         android:ems="10"
+         android:hint="Enter your question here..."
+         android:inputType="text" />
 
 </RelativeLayout>

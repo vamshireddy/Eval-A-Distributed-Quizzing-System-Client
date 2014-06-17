@@ -66,6 +66,7 @@ class QuizStartPacketListener2 extends Thread
 					 */
 					Intent i= new Intent(ActiveTeamAnsWait.staticVar,Leader_question.class);
 					ActiveTeamAnsWait.staticVar.startActivity(i);
+					ActiveTeamAnsWait.staticVar.finish();
 					break;
 					
 				}
@@ -76,6 +77,7 @@ class QuizStartPacketListener2 extends Thread
 					 */
 					Intent i=new Intent(ActiveTeamAnsWait.staticVar,ActiveTeamQuesWait.class);
 					ActiveTeamAnsWait.staticVar.startActivity(i);
+					ActiveTeamAnsWait.staticVar.finish();
 					break;
 				}
 				else
@@ -85,6 +87,7 @@ class QuizStartPacketListener2 extends Thread
 					 */
 					Intent i=new Intent(ActiveTeamAnsWait.staticVar,OtherGroupPage.class);
 					ActiveTeamAnsWait.staticVar.startActivity(i);
+					ActiveTeamAnsWait.staticVar.finish();
 					break;
 				}
 			}

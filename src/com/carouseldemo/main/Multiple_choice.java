@@ -3,6 +3,7 @@ package com.carouseldemo.main;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 import com.example.peerbased.Packet;
@@ -19,6 +20,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class Multiple_choice extends Activity implements android.view.View.OnClickListener
@@ -63,129 +65,120 @@ public class Multiple_choice extends Activity implements android.view.View.OnCli
 		 options[1]=choice2;
 		 options[2]=choice3;
 		 options[3]=choice4;
-		
-		
-		 AlertDialog.Builder ad = new AlertDialog.Builder(this);
-			ad.setTitle("Choose an option");
+		 
+		 
+		 String correctOption=null;
+		 RadioGroup g = (RadioGroup) findViewById(R.id.correctOption_Rg);
+		 
+	     switch (g.getCheckedRadioButtonId())
+	     {
+	            case R.id.radio1 :
+	            	correctOption = options[0];
+	                  break;
+	            case R.id.radio2 :
+	            	correctOption = options[1];
+	                  break;
+	            case R.id.radio3 :
+	            	correctOption = options[2];
+	                  break;
+	            case R.id.radio4 :
+	            	correctOption = options[3];
+	                  break;
+	     }
+		 
+		 QuestionPacket qp = new QuestionPacket(QuizAttributes.groupName, (byte)1);
+		 qp.correctAnswerOption = correctOption;
+		 qp.options = options;
+		 qp.question = question1;
+		 
+		 Packet p = new Packet(PacketSequenceNos.QUIZ_QUESTION_PACKET_CLIENT_SEND, false, false, false, Utilities.serialize(qp));
+		 p.quizPacket = true;
+		 
+		 byte[] bytes = Utilities.serialize(p);
 			
-			ad.setSingleChoiceItems(options, -1, new DialogInterface.OnClickListener() 
+			DatagramPacket pack = new DatagramPacket(bytes, bytes.length, Utilities.serverIP, Utilities.servPort);
+			try {
+				sock.send(pack);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("APcket sendtTT !!");
+			System.out.println("Waiting for packy! - bahar");
+			int aa;
+			try {
+				aa = sock.getSoTimeout();
+				System.out.println("TImeout : "+aa);
+			} catch (SocketException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			while( true )
 			{
-				
-				public void onClick(DialogInterface dialog, int which) 
-				{
-					
-					Toast t = Toast.makeText(getBaseContext(), "You selected "+options[which], 2000);
-					t.show();
-					if(options[which].equals(choice1))
-					{
-						correctoption = options[0];
-					}
-					else if(options[which].equals(choice2))
-					{
-						correctoption = options[1];
-					}
-					else if(options[which].equals(choice3))
-					{
-						correctoption = options[2];
-					}
-					else if(options[which].equals(choice4))
-					{
-						correctoption = options[3];					
-					}
-					
-					dialog.dismiss();					
-				}
-
-			
-			
-			});
-			ad.show();
-			
-			 Toast t = Toast.makeText(this, "Question submitted successfully", 2000);
-			 t.show();
-			 
-				QuestionPacket qp = new QuestionPacket(QuizAttributes.groupName, (byte)1);
-				qp.question = question1;
-				qp.correctAnswerOption = correctoption;
-				qp.options = options;
-				
-				Packet p = new Packet(PacketSequenceNos.QUIZ_QUESTION_PACKET_CLIENT_SEND, false, false, false, Utilities.serialize(qp));
-				p.quizPacket = true;
-				
-				byte[] bytes = Utilities.serialize(p);
-				
-				DatagramPacket pack = new DatagramPacket(bytes, bytes.length, Utilities.serverIP, Utilities.servPort);
-				
-				try {
-					System.out.println("Sending!");
-					sock.send(pack);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				System.out.println("sent!");
 				/*
 				 * Now wait for the authentication of the packet
 				 */
-				while( true )
+				System.out.println("Waiting for packy!");
+				byte[] byR = new byte[Utilities.MAX_BUFFER_SIZE];
+				DatagramPacket packyR = new DatagramPacket(byR, byR.length);
+				try
 				{
-					byte[] by = new byte[Utilities.MAX_BUFFER_SIZE];
-					DatagramPacket packy = new DatagramPacket(by, by.length);
-					try
+					sock.receive(packyR);
+				}
+				catch( SocketTimeoutException e )
+				{
+					System.out.println("Timeout!~");
+					continue;
+				}
+				catch (IOException e)
+				{
+					System.out.println("Expecpton !!");
+					e.printStackTrace();
+					System.exit(0);
+				}
+				System.out.println("Packet ques receveived!!!!!!!!");
+				/*
+				 * Packet is received from Teacher
+				 */
+				Packet recvpack = (Packet)Utilities.deserialize(byR);
+				if( recvpack.seq_no == PacketSequenceNos.QUIZ_QUESTION_PACKET_SERVER_ACK && recvpack.quizPacket == true )
+				{
+					System.out.println("Its a ques packet");
+					QuestionPacket qpack = (QuestionPacket) Utilities.deserialize(recvpack.data);
+					
+					if( qpack.questionAuthenticated == true )
 					{
-						sock.receive(packy);
-					}
-					catch( SocketTimeoutException e )
-					{
-						continue;
-					}
-					catch (IOException e)
-					{
-						e.printStackTrace();
-						System.exit(0);
-					}
-					System.out.println("WAHHH!");
-					/*
-					 * Packet is received from Teacher
-					 */
-					Packet recvpack = (Packet)Utilities.deserialize(by);
-					if( recvpack.seq_no == PacketSequenceNos.QUIZ_QUESTION_PACKET_SERVER_ACK && recvpack.quizPacket == true )
-					{
-						System.out.println("Its a ques packet");
-						QuestionPacket qpack = (QuestionPacket) Utilities.deserialize(recvpack.data);
-						
-						if( qpack.questionAuthenticated == true )
-						{
-							 System.out.println("ITS CORRECT");
-							/*
-							 * Question is accepted by teacher
-							 */
-							Toast t1 = Toast.makeText(this, "Question Accepted by teacher", 2000);
-							t1.show();
-							System.out.println("GOINGGGGGGGGGGGGGG");
-						    Intent i=new Intent(this,ActiveTeamAnsWait.class);
-						    startActivity(i);
-						    break;
-						}
-						else
-						{
-							/*
-							 * Question is rejected by teacher
-							 */
-							 System.out.println("ITS NOT CORRECT");
-							Toast t1 = Toast.makeText(this, "Question rejected by teacher", 2000);
-							t1.show();
-							System.out.println("BACK!!!!!!!!!!!!");
-							Intent i=new Intent(this,Leader_question.class);
-						    startActivity(i);
-						    break;
-						}
+						 System.out.println("ITS CORRECT");
+						/*
+						 * Question is accepted by teacher
+						 */
+						Toast t1 = Toast.makeText(this, "Question Accepted by teacher", 2000);
+						t1.show();
+					    Intent i=new Intent(this,ActiveTeamAnsWait.class);
+					    startActivity(i);
+					    finish();
+					    break;
 					}
 					else
 					{
-						 System.out.println("Noooooo!");
-						continue;
+						/*
+						 * Question is rejected by teacher
+						 */
+						 System.out.println("ITS NOT CORRECT");
+						Toast t1 = Toast.makeText(this, "Question rejected by teacher", 2000);
+						t1.show();
+						Intent i=new Intent(this,Leader_question.class);
+					    startActivity(i);
+					    finish();
+					    break;
 					}
-				} 	
+				}
+				else
+				{
+					 System.out.println("Noooooo!");
+					continue;
+				}
+			}
 	}
 }

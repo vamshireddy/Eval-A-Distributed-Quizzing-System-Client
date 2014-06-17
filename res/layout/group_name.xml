@@ -27,7 +27,7 @@
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/submit"
+        android:id="@+id/submitGrpName"
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:layout_alignLeft="@+id/groupname"

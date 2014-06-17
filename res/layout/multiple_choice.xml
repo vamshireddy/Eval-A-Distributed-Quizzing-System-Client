@@ -2,75 +2,131 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="@drawable/mcq">
+    android:background="@drawable/binary"
+    android:orientation="vertical" >
 
-      <EditText
-          android:id="@+id/option2"
-          android:layout_width="350dp"
-          android:layout_height="50dp"
-          android:layout_alignParentLeft="true"
-          android:layout_below="@+id/option1"
-          android:layout_marginLeft="63dp"
-          android:background="@android:drawable/editbox_background"
-          android:ems="10"
-          android:hint="option 2" />
+    <EditText
+        android:id="@+id/option3"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/option2"
+        android:layout_below="@+id/option2"
+        android:background="@android:drawable/editbox_background"
+        android:ems="10"
+        android:hint="Enter Option 4"
+        android:textColor="#000000" />
 
-      <EditText
-          android:id="@+id/option3"
-          android:layout_width="350dp"
-          android:layout_height="50dp"
-          android:layout_alignLeft="@+id/option2"
-          android:layout_below="@+id/option2"
-          android:background="@android:drawable/editbox_background"
-          android:ems="10"
-          android:hint="option 3" />
+    <EditText
+        android:id="@+id/option4"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/option3"
+        android:layout_below="@+id/option3"
+        android:background="@android:drawable/editbox_background"
+        android:ems="10"
+        android:hint="Enter Option 3"
+        android:textColor="#000000" />
 
-      <EditText
-          android:id="@+id/option1"
-          android:layout_width="350dp"
-          android:layout_height="50dp"
-          android:layout_alignLeft="@+id/option2"
-          android:layout_centerVertical="true"
-          android:background="@android:drawable/editbox_background"
-          android:ems="10"
-          android:hint="option 1" />
+    <EditText
+        android:id="@+id/option2"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/option1"
+        android:layout_below="@+id/option1"
+        android:background="@android:drawable/editbox_background"
+        android:ems="10"
+        android:hint="Enter Option 2"
+        android:textColor="#000000" />
 
-      <EditText
-          android:id="@+id/option4"
-          android:layout_width="350dp"
-          android:layout_height="50dp"
-          android:layout_alignLeft="@+id/option3"
-          android:layout_below="@+id/option3"
-          android:background="@android:drawable/editbox_background"
-          android:ems="10"
-          android:hint="option 4" />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_above="@+id/question"
+        android:layout_alignLeft="@+id/question"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/question"
+        android:gravity="center"
+        android:text="Enter your question, select the correct option and press submit."
+        android:textColor="#FFFFFF"
+        android:textSize="25dp"
+        android:textStyle="" />
 
-     
-      <EditText
-          android:id="@+id/question"
-          android:layout_width="800dp"
-          android:layout_height="100dp"
-          android:layout_alignParentTop="true"
-          android:layout_centerHorizontal="true"
-          android:layout_marginTop="36dp"
-          android:background="@android:drawable/editbox_background"
-          android:ems="10"
-          android:hint="your question" >
+    <EditText
+        android:id="@+id/option1"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/question"
+        android:layout_centerVertical="true"
+        android:background="@android:drawable/editbox_background"
+        android:ems="10"
+        android:hint="Enter Option 1"
+        android:textColor="#000000" >
 
-          <requestFocus />
-      </EditText>
+        <requestFocus />
+    </EditText>
 
-      <Button
-          android:id="@+id/submit"
-           android:background="@drawable/draw"
-          android:layout_width="150dp"
-          android:layout_height="50dp"
-          android:layout_alignRight="@+id/question"
-          android:layout_alignTop="@+id/option2"
-          android:layout_marginRight="151dp"
-          android:layout_marginTop="24dp"
-          android:textSize="20sp"
-          android:text="Submit" />
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_alignRight="@+id/question"
+        android:layout_alignTop="@+id/option2"
+        android:layout_marginRight="97dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/draw"
+        android:text="Submit"
+        android:textColor="#000000"
+        android:textSize="20sp" />
+
+    <RadioGroup
+        android:id="@+id/correctOption_Rg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/option4"
+        android:layout_alignTop="@+id/option1"
+        android:layout_toRightOf="@+id/option3" >
+
+        <RadioButton
+            android:id="@+id/radio1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+/>
+
+        <RadioButton
+            android:id="@+id/radio2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:paddingTop="15dp"
+            android:paddingBottom="15dp" />
+
+        <RadioButton
+            android:id="@+id/radio3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:paddingTop="15dp"
+            android:paddingBottom="15dp"/>
+
+        <RadioButton
+            android:id="@+id/radio4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/question"
+        android:layout_width="800dp"
+        android:layout_height="100dp"
+        android:layout_above="@+id/option1"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/textinputborder"
+        android:ems="10"
+        android:paddingLeft="10dp"
+        android:textColor="#FFFFFF" />
 
 </RelativeLayout>

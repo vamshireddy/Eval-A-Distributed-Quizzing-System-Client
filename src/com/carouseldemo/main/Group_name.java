@@ -43,7 +43,7 @@ public class Group_name extends Activity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.group_name);
        
-        btn=(Button)findViewById(R.id.submit);
+        btn=(Button)findViewById(R.id.submitGrpName);
         btn.setOnClickListener(this);
         name = (EditText)findViewById(R.id.groupname);
         sock = SocketHandler.normalSocket;
@@ -114,11 +114,13 @@ public class Group_name extends Activity implements View.OnClickListener
 				{
 					System.out.println("I got the reply from server!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 						run();
+						btn.setEnabled(false);
 						return;
 				}
 				else
 				{
 						error.setText("Unknown Error!");
+						btn.setEnabled(false);
 						return;
 				}
 			}
@@ -173,6 +175,7 @@ public class Group_name extends Activity implements View.OnClickListener
 				QuizAttributes.groupName = sgp.groupName;
 				Intent i = new Intent(this,Team_details.class);
 				startActivity(i);
+				finish();
 				break;
 			}
 			else

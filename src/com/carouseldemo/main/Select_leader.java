@@ -224,6 +224,7 @@ public class Select_leader extends ListActivity  implements OnClickListener {
 				QuizAttributes.groupName = sgp.groupName;
 				Intent i = new Intent(this,Team_details.class);
 				startActivity(i);
+				finish();
 				break;
 			}
 			else

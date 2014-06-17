@@ -34,6 +34,7 @@ public class Changepwd extends Activity implements OnClickListener
 			    Toast.makeText(this, "Password Changed", 1000).show();
 				Intent i = new Intent(this,MainActivity.class);     //directing to the student options page.
 				startActivity(i);
+				   finish();
 	        }
 		 else
 		    {

@@ -98,7 +98,7 @@ public class Login extends Activity implements OnClickListener {
 		Intent i;
 		i= new Intent(this,Aboutus.class);
 		startActivity(i);
-		
+		   finish();
 	}
 
 
@@ -169,6 +169,7 @@ public class Login extends Activity implements OnClickListener {
 	    		    errorText.setText("");
 	    		    Intent i = new Intent(this, MainActivity.class);
 	    			startActivity(i);	
+	    			finish();
 	    	  }
 	    	  else
 	    	  {

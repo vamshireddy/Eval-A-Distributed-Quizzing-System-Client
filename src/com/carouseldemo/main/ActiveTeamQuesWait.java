@@ -55,7 +55,8 @@ class ActiveGroupWaiter extends Thread
 			{
 				Intent i= new Intent(ActiveTeamQuesWait.staticVar,ActiveTeamAnsWait.class);
 				ActiveTeamQuesWait.staticVar.startActivity(i);
-				break;
+				ActiveTeamQuesWait.staticVar.finish();
+				return;
 			}
 			else
 			{
