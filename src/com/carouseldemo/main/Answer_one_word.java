@@ -41,7 +41,7 @@ public class Answer_one_word extends Activity implements OnClickListener
         question=(TextView)findViewById(R.id.textView1);
         btn=(Button)findViewById(R.id.button2);
         answer=(EditText)findViewById(R.id.answer);
-        error = (TextView)findViewById(R.id.error_fillup);
+        error = (TextView)findViewById(R.id.error_ans_one_word);
         question.setText(QuestionAttributes.question);
         sock = StaticAttributes.SocketHandler.normalSocket;
         btn.setOnClickListener(this);
@@ -85,6 +85,11 @@ public class Answer_one_word extends Activity implements OnClickListener
 			catch( SocketTimeoutException e )
 			{
 				System.out.println("Timeout!~");
+				if( error == null )
+				{
+					System.out.println("Its null!!!!!!!!!!");
+					break;
+				}
 				error.setText("Please try again!");
 				break;
 			}

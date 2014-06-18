@@ -47,4 +47,16 @@
          android1:text="Submit"
          android1:textColor="#ffffff" />
 
+     <TextView
+         android1:id="@+id/error_ans_one_word"
+         android1:layout_width="600dp"
+         android1:layout_height="wrap_content"
+         android1:layout_alignParentBottom="true"
+         android1:layout_alignParentLeft="true"
+         android1:layout_below="@+id/button2"
+         android1:layout_marginLeft="146dp"
+         android1:gravity = "center"
+         android1:textColor="#000000"
+         android1:text="" />
+
 </RelativeLayout>

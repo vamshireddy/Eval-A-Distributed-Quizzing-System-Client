@@ -81,10 +81,8 @@
         android1:id="@+id/submit_ans_mul"
         android1:layout_width="wrap_content"
         android1:layout_height="wrap_content"
-        android1:layout_alignBaseline="@+id/error_ansMul"
-        android1:layout_alignBottom="@+id/error_ansMul"
-        android1:layout_alignLeft="@+id/radioGroup1"
-        android1:layout_marginLeft="31dp"
+        android1:layout_centerVertical="true"
+        android1:layout_toRightOf="@+id/radioGroup1"
         android1:text="submit" />
 
 </RelativeLayout>
