@@ -1,15 +1,22 @@
 package com.carouseldemo.main;
 
 import com.example.peerbased.*;
+
 import StaticAttributes.*;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+
 import com.carouseldemo.controls.Carousel;
 import com.carouseldemo.controls.CarouselAdapter;
 import com.carouseldemo.controls.CarouselAdapter.OnItemClickListener;
 import com.carouseldemo.controls.CarouselAdapter.OnItemSelectedListener;
 import com.carouseldemo.controls.CarouselItem;
+
 import android.app.AlertDialog;
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -28,30 +35,81 @@ class QuizListen extends Thread
 	}
 	public void run()
 	{
+		try {
+			sock.setSoTimeout(1000);
+		} catch (SocketException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		boolean rcvd = false;
+		
 		while( true )
 		{
 			System.out.println("Started listening!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			
 			byte[] b = new byte[Utilities.MAX_BUFFER_SIZE];
 			DatagramPacket pack  =  new DatagramPacket(b, b.length);
+			
 			try {
 				sock.receive(pack);
-			} catch (IOException e) {
+			}
+			catch( SocketTimeoutException ste )
+			{
+				if( rcvd == true )
+				{
+					Intent i = new Intent(MainActivity.staticAct, Quiz.class);
+					MainActivity.staticAct.startActivity(i);
+					MainActivity.staticAct.finish();
+					break;
+				}
+				else
+				{
+					continue;
+				}
+			}
+			catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				System.exit(0);
 			}
+
 			Packet p = (Packet)Utilities.deserialize(b);
-			if( p.seq_no == PacketSequenceNos.QUIZ_START_BCAST_SERVER_SEND && p.bcast == true )
+			
+			if( p.type == PacketTypes.QUIZ_START )
 			{
-				ParameterPacket pp = (ParameterPacket)Utilities.deserialize(p.data);
-				QuizAttributes.noOfLeaders = pp.noOfLeaders;
-				QuizAttributes.noOfOnlineStudents = pp.noOfOnlineStudents;
-				QuizAttributes.noOfRounds = pp.noOfRounds;
-				QuizAttributes.sizeOfGroup = pp.sizeOfGroup;
-				QuizAttributes.subject = pp.subject;
-				Intent i = new Intent(MainActivity.staticAct, Quiz.class);
-				MainActivity.staticAct.startActivity(i);
-				MainActivity.staticAct.finish();
-				break;
+				if( rcvd == false )
+				{
+					ParameterPacket pp = (ParameterPacket)Utilities.deserialize(p.data);
+					QuizAttributes.noOfLeaders = pp.noOfLeaders;
+					QuizAttributes.noOfOnlineStudents = pp.noOfOnlineStudents;
+					QuizAttributes.noOfRounds = pp.noOfRounds;
+					QuizAttributes.sizeOfGroup = pp.sizeOfGroup;
+					QuizAttributes.subject = pp.subject;
+					rcvd = true;
+				}
+				
+				/*
+				 * Send the Ack back
+				 */
+				p.ack = true;
+				p.data = null;
+				byte[] ackPackbytes = Utilities.serialize(p);
+				DatagramPacket ackPack = new DatagramPacket(ackPackbytes, ackPackbytes.length, Utilities.serverIP, Utilities.servPort);
+				try {
+					sock.send(ackPack);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				continue;
+				/*
+				 * Now wait for socket timeout seconds and break
+				 */
+			} 
+			else
+			{
+				continue;
 			}
 		}
 	}

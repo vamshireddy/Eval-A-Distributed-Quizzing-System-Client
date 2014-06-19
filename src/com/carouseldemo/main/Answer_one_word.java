@@ -47,9 +47,27 @@ public class Answer_one_word extends Activity implements OnClickListener
         btn.setOnClickListener(this);
     }
 	public void onClick(View v)     //actions performed after change password button is clicked.
-	{   
-	  
+	{
+		/*
+		 * Disable the button in the start and enable it at the end of this function
+		 */
+		btn.setEnabled(false);
+		
 		String ans = answer.getText().toString();
+		
+		if( answer == null || ans.equals("") )
+		{
+			/*
+			 * None of the options are selected
+			 */
+			error.setText("Please select an Option");
+			/*
+			 * Make the button enabled
+			 */
+			btn.setEnabled(false);
+			return;
+		}
+		
 		ResponsePacket rp = new ResponsePacket(QuestionAttributes.questionSeqNo, QuizAttributes.studentID,
 				QuestionAttributes.question, ans, false, false);
 		
@@ -85,12 +103,12 @@ public class Answer_one_word extends Activity implements OnClickListener
 			catch( SocketTimeoutException e )
 			{
 				System.out.println("Timeout!~");
-				if( error == null )
-				{
-					System.out.println("Its null!!!!!!!!!!");
-					break;
-				}
 				error.setText("Please try again!");
+				
+				/*
+				 * Enable the button
+				 */
+				btn.setEnabled(false);
 				break;
 			}
 			catch (IOException e)

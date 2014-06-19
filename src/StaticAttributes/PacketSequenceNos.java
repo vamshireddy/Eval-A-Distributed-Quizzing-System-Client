@@ -32,4 +32,6 @@ public class PacketSequenceNos {
 	
 	public static final int QUIZ_RESPONSE_CLIENT_SEND = 12314123;
 	public static final int QUIZ_RESPONSE_SERVER_ACK = 21342154;
+	
+	public static final int LEADER_SCREEN_CHANGE = 12314312;
 }

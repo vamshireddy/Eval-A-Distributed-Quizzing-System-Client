@@ -16,6 +16,7 @@ import com.example.peerbased.SelectedGroupPacket;
 import com.example.peerbased.TeamSelectPacket;
 
 import StaticAttributes.PacketSequenceNos;
+import StaticAttributes.PacketTypes;
 import StaticAttributes.QuizAttributes;
 import StaticAttributes.SocketHandler;
 import StaticAttributes.Utilities;
@@ -32,9 +33,148 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+class Select_leader_listener extends Thread
+{
+	DatagramSocket sock;
+	Select_leader sel_leader_Act;
+	public Select_leader_listener(DatagramSocket sock) {
+		this.sock = sock;
+		sel_leader_Act = Select_leader.staticAct;
+	}
+	public void run()
+	{
+
+		try {
+			sock.setSoTimeout(2000);
+		} catch (SocketException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		boolean rcvd = false;
+
+		while( true )
+		{
+			System.out.println("Listening for screen changing packet!!!!!");
+			
+			byte[] b = new byte[Utilities.MAX_BUFFER_SIZE];
+			DatagramPacket pack  =  new DatagramPacket(b, b.length);
+			
+			try {
+				sock.receive(pack);
+			}
+			catch( SocketTimeoutException e )
+			{
+				if( rcvd == true )
+				{
+					/*
+					 * Go to next activity
+					 */
+					Intent i = new Intent(sel_leader_Act,Team_details.class);
+					sel_leader_Act.startActivity(i);
+					sel_leader_Act.finish();
+					break;
+				}
+				else
+				{
+					continue;
+				}
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.exit(0);
+			}
+			
+			/*
+			 * Packet is received!
+			 */
+			
+			Packet packetRcvd = (Packet)Utilities.deserialize(b);
+			
+			if( packetRcvd.type == PacketTypes.GROUP_DETAILS_MESSAGE && packetRcvd.ack == false )
+			{
+				if( rcvd == false )
+				{
+					SelectedGroupPacket sgp = (SelectedGroupPacket)Utilities.deserialize(packetRcvd.data);
+					if( sgp.leader == null || sgp.team == null || sgp.groupName == null )
+					{
+						System.exit(0);
+					}
+					QuizAttributes.leader = sgp.leader;
+					QuizAttributes.groupMembers = sgp.team;
+					QuizAttributes.groupName = sgp.groupName;
+					rcvd = true;
+				}
+				/*
+				 * Now send the ACK back
+				 */
+				packetRcvd.data = null;
+				packetRcvd.ack = true;
+				
+				byte[] ackPackbytes = Utilities.serialize(packetRcvd);
+				DatagramPacket ackPack = new DatagramPacket(ackPackbytes, ackPackbytes.length, Utilities.serverIP, Utilities.servPort);
+				try {
+					sock.send(ackPack);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				continue;
+				/*
+				 * Now wait for socket timeout seconds and break
+				 */
+			}
+			else
+			{
+				continue;
+			}
+		}
+	}
+//		while( true )
+//		{
+//			System.out.println("LISTENNNNNNNNNNNN");
+//			byte[] by = new byte[Utilities.MAX_BUFFER_SIZE];
+//			DatagramPacket packy = new DatagramPacket(by, by.length);
+//			try
+//			{
+//				sock.receive(packy);
+//			}
+//			catch( SocketTimeoutException e1)
+//			{
+//				continue;
+//			}
+//			catch (IOException e) {
+//				e.printStackTrace();
+//				return;
+//			}
+//			System.out.println("RECEIVED!~!~~~~~~~!!!!");
+//			Packet pyy = (Packet)Utilities.deserialize(by);
+//
+//			if( pyy.team_selection_packet == true && pyy.seq_no == PacketSequenceNos.FORMED_GROUP_SERVER_SEND )
+//			{
+//				SelectedGroupPacket sgp = (SelectedGroupPacket)Utilities.deserialize(pyy.data);
+//				System.out.println("teammem : "+sgp.team.size());
+//				System.out.println("grpname : "+sgp.groupName);
+//				System.out.println("leadername : "+sgp.leader.name);
+//				QuizAttributes.leader = sgp.leader;
+//				QuizAttributes.groupMembers = sgp.team;
+//				QuizAttributes.groupName = sgp.groupName;
+//				Intent i = new Intent(sel_leader_Act,Team_details.class);
+//				sel_leader_Act.startActivity(i);
+//				sel_leader_Act.finish();
+//				break;
+//			}
+//			else
+//			{
+//				continue;
+//			}
+//		}
+}
+
 public class Select_leader extends ListActivity  implements OnClickListener {
 	
-	
+	public static Select_leader staticAct;
 	ArrayAdapter<String> leaderAdapter;
 	ArrayList<Leader> leaders;
 	//ArrayList<String> selectedLeaders;
@@ -53,6 +193,7 @@ public class Select_leader extends ListActivity  implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selectleader);
         // Get the leaders list from the static class
+        staticAct = this;
         leaders = QuizAttributes.selectedLeaders;
         selection=(TextView)findViewById(R.id.selection);
         error = (TextView)findViewById(R.id.errorMsg);
@@ -166,7 +307,8 @@ public class Select_leader extends ListActivity  implements OnClickListener {
 				TeamSelectPacket tspReply = (TeamSelectPacket)Utilities.deserialize(packet.data);
 				if( tspReply.accepted == true )
 				{
-					getTeam();
+					error.setText("Your request is accepted. Please wait!");
+					new Select_leader_listener(sock).start();
 					System.out.println("Getting team!!!");
 					return;
 				}
@@ -190,50 +332,6 @@ public class Select_leader extends ListActivity  implements OnClickListener {
 		h1.sendEmptyMessage(0);
 		pd1.show();*/	
 	}
-	
-	private void getTeam()
-	{
-		while( true )
-		{
-			System.out.println("LISTENNNNNNNNNNNN");
-			byte[] by = new byte[Utilities.MAX_BUFFER_SIZE];
-			DatagramPacket packy = new DatagramPacket(by, by.length);
-			try
-			{
-				sock.receive(packy);
-			}
-			catch( SocketTimeoutException e1)
-			{
-				continue;
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-				return;
-			}
-			System.out.println("RECEIVED!~!~~~~~~~!!!!");
-			Packet pyy = (Packet)Utilities.deserialize(by);
-
-			if( pyy.team_selection_packet == true && pyy.seq_no == PacketSequenceNos.FORMED_GROUP_SERVER_SEND )
-			{
-				SelectedGroupPacket sgp = (SelectedGroupPacket)Utilities.deserialize(pyy.data);
-				System.out.println("teammem : "+sgp.team.size());
-				System.out.println("grpname : "+sgp.groupName);
-				System.out.println("leadername : "+sgp.leader.name);
-				QuizAttributes.leader = sgp.leader;
-				QuizAttributes.groupMembers = sgp.team;
-				QuizAttributes.groupName = sgp.groupName;
-				Intent i = new Intent(this,Team_details.class);
-				startActivity(i);
-				finish();
-				break;
-			}
-			else
-			{
-				continue;
-			}
-		}
-	}
-
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		

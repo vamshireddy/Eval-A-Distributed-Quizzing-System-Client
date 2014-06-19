@@ -84,6 +84,15 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
 				break;
 		}
 		
+		if( answer == null )
+		{
+			/*
+			 * None of the options are selected
+			 */
+			error.setText("Please select an Option");
+			return;
+		}
+		
 		ResponsePacket rp = new ResponsePacket(QuestionAttributes.questionSeqNo, QuizAttributes.studentID,
 				QuestionAttributes.question, answer, false, false);
 		

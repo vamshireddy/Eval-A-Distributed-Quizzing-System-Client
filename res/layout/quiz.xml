@@ -100,9 +100,10 @@
     <Button
         android:id="@+id/skipBut"
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/leader"
+        android:layout_alignTop="@+id/leader"
         android:layout_marginLeft="37dp"
         android:layout_toRightOf="@+id/leader"
         android:text="Skip" />
