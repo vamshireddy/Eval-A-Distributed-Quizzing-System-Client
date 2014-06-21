@@ -30,6 +30,7 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
 {
 	Button btn;
 	TextView question;
+	TextView marks;
 	RadioButton option1;
 	RadioButton option2;
 	RadioButton option3;
@@ -48,6 +49,7 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
         option2 = (RadioButton)findViewById(R.id.radio2);
         option3 = (RadioButton)findViewById(R.id.radio3);
         option4 = (RadioButton)findViewById(R.id.radio4);
+        marks = (TextView)findViewById(R.id.marksBox);
         error = (TextView)findViewById(R.id.error_ansMul);
         sock = StaticAttributes.SocketHandler.normalSocket;
         /*
@@ -58,6 +60,7 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
         option2.setText(QuestionAttributes.options[1]);
         option3.setText(QuestionAttributes.options[2]);
         option4.setText(QuestionAttributes.options[3]);
+        marks.setText("You will get "+QuestionAttributes.level+" marks for the correct answer");
         /*
          * Add level too!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO
          */
@@ -94,7 +97,7 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
 		}
 		
 		ResponsePacket rp = new ResponsePacket(QuestionAttributes.questionSeqNo, QuizAttributes.studentID,
-				QuestionAttributes.question, answer, false, false);
+				 answer, false, false);
 		
 		Packet p = new Packet(PacketSequenceNos.QUIZ_RESPONSE_CLIENT_SEND, false, false, false, Utilities.serialize(rp));
 		p.quizPacket = true;

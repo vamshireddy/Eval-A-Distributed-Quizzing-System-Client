@@ -13,9 +13,11 @@ import com.example.peerbased.Packet;
 
 import QuizPackets.QuestionPacket;
 import StaticAttributes.PacketSequenceNos;
+import StaticAttributes.PacketTypes;
 import StaticAttributes.Utilities;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,20 +26,25 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 public class True_false extends Activity  implements OnClickListener 
 {
 	
 	RadioButton t1,f1;
 	EditText question_tf;
 	DatagramSocket sock;
+	TextView error;
+	public static True_false staticVar;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.true_false);
+        staticVar = this;
         t1=(RadioButton)findViewById(R.id.radioButton1);
         f1=(RadioButton)findViewById(R.id.radioButton2);
+        error = (TextView)findViewById(R.id.errorTextinTrueAndFalse);
         question_tf = (EditText)findViewById(R.id.questiontf);
         sock = StaticAttributes.SocketHandler.normalSocket;
         t1.setOnClickListener(this);
@@ -75,6 +82,7 @@ public class True_false extends Activity  implements OnClickListener
 		 QuestionPacket qp = new QuestionPacket(QuizAttributes.groupName, (byte)2);
 		 qp.correctAnswerOption = ans;
 		 qp.options = options;
+		 qp.questionSeqNo = Utilities.quesSeqNo;
 		 qp.question = ques;
 		 
 		 Packet p = new Packet(PacketSequenceNos.QUIZ_QUESTION_PACKET_CLIENT_SEND, false, false, false, Utilities.serialize(qp));
@@ -82,90 +90,58 @@ public class True_false extends Activity  implements OnClickListener
 		 
 		 byte[] bytes = Utilities.serialize(p);
 			
-			DatagramPacket pack = new DatagramPacket(bytes, bytes.length, Utilities.serverIP, Utilities.servPort);
+			DatagramPacket sendPacky = new DatagramPacket(bytes, bytes.length, Utilities.serverIP, Utilities.servPort);
 			try {
-				sock.send(pack);
+				sock.send(sendPacky);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("APcket sendtTT !!");
-			System.out.println("Waiting for packy! - bahar");
-			int aa;
+			/*
+			 * Now get an ack from the sever
+			 */
+
+			byte[] b = new byte[Utilities.MAX_BUFFER_SIZE];
+			DatagramPacket pack  =  new DatagramPacket(b, b.length);
+			
 			try {
-				aa = sock.getSoTimeout();
-				System.out.println("TImeout : "+aa);
-			} catch (SocketException e1) {
+				sock.receive(pack);
+			}
+			catch( SocketTimeoutException e )
+			{
+				error.setText("Try again!");
+				return;
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				e.printStackTrace();
 			}
 			
-			while( true )
+			/*
+			 * ACK received
+			 */
+			Packet ackPack = (Packet)Utilities.deserialize(b);
+			if( ackPack.ack == true && ackPack.type == PacketTypes.QUESTION_ACK)
 			{
-				/*
-				 * Now wait for the authentication of the packet
-				 */
-				System.out.println("Waiting for packy!");
-				byte[] byR = new byte[Utilities.MAX_BUFFER_SIZE];
-				DatagramPacket packyR = new DatagramPacket(byR, byR.length);
-				try
+				QuestionPacket qprecvd = (QuestionPacket)Utilities.deserialize(ackPack.data);
+				
+				if( qprecvd.questionSeqNo == Utilities.quesSeqNo )
 				{
-					sock.receive(packyR);
-				}
-				catch( SocketTimeoutException e )
-				{
-					System.out.println("Timeout!~");
-					continue;
-				}
-				catch (IOException e)
-				{
-					System.out.println("Expecpton !!");
-					e.printStackTrace();
-					System.exit(0);
-				}
-				System.out.println("Packet ques receveived!!!!!!!!");
-				/*
-				 * Packet is received from Teacher
-				 */
-				Packet recvpack = (Packet)Utilities.deserialize(byR);
-				if( recvpack.seq_no == PacketSequenceNos.QUIZ_QUESTION_PACKET_SERVER_ACK && recvpack.quizPacket == true )
-				{
-					System.out.println("Its a ques packet");
-					QuestionPacket qpack = (QuestionPacket) Utilities.deserialize(recvpack.data);
-					
-					if( qpack.questionAuthenticated == true )
-					{
-						 System.out.println("ITS CORRECT");
-						/*
-						 * Question is accepted by teacher
-						 */
-						Toast t1 = Toast.makeText(this, "Question Accepted by teacher", 2000);
-						t1.show();
-					    Intent i=new Intent(this,ActiveTeamAnsWait.class);
-					    startActivity(i);
-					    finish();
-					    break;
-					}
-					else
-					{
-						/*
-						 * Question is rejected by teacher
-						 */
-						 System.out.println("ITS NOT CORRECT");
-						Toast t1 = Toast.makeText(this, "Question rejected by teacher", 2000);
-						t1.show();
-						Intent i=new Intent(this,Leader_question.class);
-					    startActivity(i);
-					    finish();
-					    break;
-					}
-				}
-				else
-				{
-					 System.out.println("Noooooo!");
-					continue;
+					/*
+					 * Check is the sequence number is same
+					 */
+					t1.setEnabled(false);
+					f1.setEnabled(false);
+					t1.setBackgroundColor(Color.RED);
+					f1.setBackgroundColor(Color.RED);
+					error.setText("sent!");
+					QuestionListener ql = new QuestionListener(this);
+					ql.start();
+					return;	
 				}
 			}
+			else
+			{
+				error.setText("Try again!");
+			}
 	}
-	
 }

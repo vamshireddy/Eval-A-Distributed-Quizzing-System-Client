@@ -103,7 +103,6 @@ public class Leader_question extends Activity  implements OnClickListener
 				startActivity(i);
 				break;
 			}
-			finish();
 	}
 
 }

@@ -69,7 +69,7 @@ public class Answer_one_word extends Activity implements OnClickListener
 		}
 		
 		ResponsePacket rp = new ResponsePacket(QuestionAttributes.questionSeqNo, QuizAttributes.studentID,
-				QuestionAttributes.question, ans, false, false);
+				 ans, false, false);
 		
 		Packet p = new Packet(PacketSequenceNos.QUIZ_RESPONSE_CLIENT_SEND, false, false, false, Utilities.serialize(rp));
 		p.quizPacket = true;

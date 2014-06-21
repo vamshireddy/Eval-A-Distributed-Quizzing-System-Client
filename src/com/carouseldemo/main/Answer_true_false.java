@@ -24,89 +24,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-class QuizStartPacketListenerTrueFalse extends Thread
-{
-	DatagramSocket sock;
-	public boolean running;
-	public QuizStartPacketListenerTrueFalse() {
-		running = true;
-		sock = StaticAttributes.SocketHandler.normalSocket;
-	}
-	public void run()
-	{
-		listenQuizStartPacket();
-	}
-    public void listenQuizStartPacket()
-    {
-    	try {
-			sock.setSoTimeout(1000);
-		} catch (SocketException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-    	while( running == true )
-		{
-			byte[] b = new byte[Utilities.MAX_BUFFER_SIZE];
-			DatagramPacket packyy  =  new DatagramPacket(b, b.length);
-			try
-			{
-				sock.receive(packyy);
-			}
-			catch( SocketTimeoutException e1 )
-			{
-				continue;
-			}
-			catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.exit(0);
-			}
-			
-			Packet packet = (Packet)Utilities.deserialize(b);
-			
-			if( packet.seq_no == PacketSequenceNos.QUIZ_INTERFACE_PACKET_SERVER_SEND && packet.quizPacket == true )
-			{
-				QuizInterfacePacket qip = (QuizInterfacePacket)Utilities.deserialize(packet.data);
-				if( qip.activeGroupName.equals(QuizAttributes.groupName) && qip.activeGroupLeaderID.equals(QuizAttributes.studentID))
-				{
-					/*
-					 * This student is a leader
-					 */
-					Intent i= new Intent(Answer_true_false.staticVar,Leader_question.class);
-					Answer_true_false.staticVar.startActivity(i);
-					Answer_true_false.staticVar.finish();
-					break;
-					
-				}
-				else if( qip.activeGroupName.equals(QuizAttributes.groupName) )
-				{
-					/*
-					 * This is a non-leader student of the active group
-					 */
-					Intent i=new Intent(Answer_true_false.staticVar,ActiveTeamQuesWait.class);
-					Answer_true_false.staticVar.startActivity(i);
-					Answer_true_false.staticVar.finish();
-					break;
-				}
-				else
-				{
-					/*
-					 * Other group students
-					 */
-					Intent i=new Intent(Answer_true_false.staticVar,OtherGroupPage.class);
-					Answer_true_false.staticVar.startActivity(i);
-					Answer_true_false.staticVar.finish();
-					break;
-				}
-			}
-			else
-			{
-				continue;
-			}
-		}
-    }
-}
-
 
 public class Answer_true_false extends Activity implements OnClickListener 
 {
@@ -114,7 +31,7 @@ public class Answer_true_false extends Activity implements OnClickListener
 	TextView question;
 	DatagramSocket sock;
 	TextView error;
-	QuizStartPacketListenerTrueFalse thread;
+	QuizStartPacketListener thread;
 	public static Answer_true_false staticVar;
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -134,13 +51,21 @@ public class Answer_true_false extends Activity implements OnClickListener
          * This will be stopped when the button is pressed ( Question is answered )
          * Else he will be redirected to the appropriate page on the next turn
          */
-        thread = new QuizStartPacketListenerTrueFalse();
+        thread = new QuizStartPacketListener(this);
         thread.start();
-        
     }
 	public void onClick(View v)     //actions performed after change password button is clicked.
 	{   
 		thread.running = false; 
+		/*
+		 * Sleep for 500ms so that the above  listening thread gets killed
+		 */
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		String answer = null;
 		
 		RadioGroup g = (RadioGroup) findViewById(R.id.radioGroup1);
@@ -172,7 +97,7 @@ public class Answer_true_false extends Activity implements OnClickListener
 		      
 		System.out.println("Answer is "+answer);
 		ResponsePacket rp = new ResponsePacket(QuestionAttributes.questionSeqNo, QuizAttributes.studentID,
-				QuestionAttributes.question, answer, false, false);
+				 answer, false, false);
 		
 		Packet p = new Packet(PacketSequenceNos.QUIZ_RESPONSE_CLIENT_SEND, false, false, false, Utilities.serialize(rp));
 		p.quizPacket = true;

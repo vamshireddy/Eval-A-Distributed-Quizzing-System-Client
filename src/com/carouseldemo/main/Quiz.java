@@ -38,6 +38,7 @@ class QuizListen1 extends Thread
 		}
 		
 		boolean rcvd = false;
+		
 		int activityFlag = -1;
 		
 		while( true )

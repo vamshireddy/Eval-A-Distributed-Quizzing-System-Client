@@ -76,7 +76,7 @@ class QuizListen extends Thread
 
 			Packet p = (Packet)Utilities.deserialize(b);
 			
-			if( p.type == PacketTypes.QUIZ_START )
+			if( p.type == PacketTypes.QUIZ_TURN_SCREEN )
 			{
 				if( rcvd == false )
 				{
@@ -88,7 +88,6 @@ class QuizListen extends Thread
 					QuizAttributes.subject = pp.subject;
 					rcvd = true;
 				}
-				
 				/*
 				 * Send the Ack back
 				 */

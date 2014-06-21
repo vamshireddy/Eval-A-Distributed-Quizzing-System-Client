@@ -186,6 +186,14 @@ public class Group_name extends Activity implements View.OnClickListener
         sock = SocketHandler.normalSocket;
         error = (TextView)findViewById(R.id.errorText);
 		error.setText("");
+		
+		try {
+			sock.setSoTimeout(1000);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
     }
 	public void onClick(View v) 
 	{

@@ -63,4 +63,18 @@
           android:textSize="25sp"
           android:textStyle="bold" />
 
+      <TextView
+          android:id="@+id/errorTextinTrueAndFalse"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentBottom="true"
+          android:layout_alignParentLeft="true"
+          android:layout_alignRight="@+id/questiontf"
+          android:layout_below="@+id/radioButton1"
+          android:layout_marginLeft="31dp"
+          android:layout_marginTop="28dp"
+          android:text="Medium Text"
+          android:gravity="center"
+          android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </RelativeLayout>

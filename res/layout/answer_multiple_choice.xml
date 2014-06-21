@@ -18,6 +18,33 @@
         android1:textColor="#0b6693"
         android1:textSize="40sp" />
 
+    <TextView
+        android1:id="@+id/error_ansMul"
+        android1:layout_width="wrap_content"
+        android1:layout_height="wrap_content"
+        android1:layout_alignParentBottom="true"
+        android1:layout_alignParentLeft="true"
+        android1:layout_alignParentRight="true"
+        android1:layout_below="@+id/radioGroup1"
+        android1:gravity="center"
+        android1:text=""
+        android1:textColor="#000000"
+        android1:textSize="30dp" />
+
+    <TextView
+        android1:id="@+id/marksBox"
+        android1:layout_width="wrap_content"
+        android1:layout_height="wrap_content"
+        android1:layout_above="@+id/radioGroup1"
+        android1:layout_alignParentLeft="true"
+        android1:layout_alignParentRight="true"
+        android1:layout_below="@+id/ans_mul_question"
+        android1:gravity="center"
+        android1:text="You will get 10 marks if you answer this"
+        android1:textAppearance="?android:attr/textAppearanceMedium"
+        android1:textColor="#111AFF"
+        android1:textSize="10dp" />
+
     <RadioGroup
         android1:id="@+id/radioGroup1"
         android1:layout_width="wrap_content"
@@ -61,21 +88,7 @@
             android1:text="option4"
             android1:textColor="#4bb498"
             android1:textSize="20sp" />
-
     </RadioGroup>
-
-    <TextView
-        android1:id="@+id/error_ansMul"
-        android1:layout_width="wrap_content"
-        android1:layout_height="wrap_content"
-        android1:layout_alignParentBottom="true"
-        android1:layout_alignParentLeft="true"
-        android1:layout_alignParentRight="true"
-        android1:layout_below="@+id/radioGroup1"
-        android1:gravity="center"
-        android1:text=""
-        android1:textColor="#000000"
-        android1:textSize="30dp" />
 
     <Button
         android1:id="@+id/submit_ans_mul"
