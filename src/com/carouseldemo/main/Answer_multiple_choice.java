@@ -36,6 +36,7 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
 	RadioButton option3;
 	RadioButton option4;
 	DatagramSocket sock;
+	QuizStartPacketListener thread;
 	TextView error;
 	
     @Override
@@ -65,9 +66,26 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
          * Add level too!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO
          */
         btn.setOnClickListener(this);
+        /*
+         * Start a thread to listen for screen changing packet
+         * This will be stopped when the button is pressed ( Question is answered )
+         * Else he will be redirected to the appropriate page on the next turn
+         */
+        thread = new QuizStartPacketListener(this);
+        thread.start();
     }
 	public void onClick(View v)     //actions performed after change password button is clicked.
 	{   
+		thread.running = false; 
+		/*
+		 * Sleep for 500ms so that the above  listening thread gets killed
+		 */
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		String answer = null;
 		RadioGroup g = (RadioGroup)findViewById(R.id.radioGroup1);
 		

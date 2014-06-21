@@ -37,6 +37,11 @@ public class quizEndPage extends Activity{
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_end_page);
+        
+        title = (TextView)findViewById(R.id.titleView);
+        attempted = (TextView)findViewById(R.id.attemptedView);
+        correct = (TextView)findViewById(R.id.correctView);
+        marks = (TextView)findViewById(R.id.marksView);
         if( QuizResults.marks < 30 )
         {
         	title.setText("You scored very low in this Quiz. Better luck next time.");
@@ -45,9 +50,10 @@ public class quizEndPage extends Activity{
         {
         	title.setText("Congrats! Your score is...");
         }
-        attempted.setText(QuizResults.noOfQuesAttempted);
-        correct.setText(QuizResults.noOfQuesCorrect);
-        marks.setText(QuizResults.marks);
+        System.out.println("Params are "+QuizResults.noOfQuesAttempted+" "+QuizResults.noOfQuesCorrect+" "+QuizResults.marks);
+        attempted.setText("Attempted Questions : "+QuizResults.noOfQuesAttempted+"");
+        correct.setText("Correct answers: "+QuizResults.noOfQuesCorrect+"");
+        marks.setText("Total Marks: "+QuizResults.marks+"");
         new ResultsWaitScreen(this).start();
     }
 }

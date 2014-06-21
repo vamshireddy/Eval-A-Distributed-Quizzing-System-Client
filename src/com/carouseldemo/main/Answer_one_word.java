@@ -32,6 +32,7 @@ public class Answer_one_word extends Activity implements OnClickListener
 	EditText answer;
 	TextView error;
 	DatagramSocket sock;
+	QuizStartPacketListener thread;
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
@@ -45,9 +46,26 @@ public class Answer_one_word extends Activity implements OnClickListener
         question.setText(QuestionAttributes.question);
         sock = StaticAttributes.SocketHandler.normalSocket;
         btn.setOnClickListener(this);
+        /*
+         * Start a thread to listen for screen changing packet
+         * This will be stopped when the button is pressed ( Question is answered )
+         * Else he will be redirected to the appropriate page on the next turn
+         */
+        thread = new QuizStartPacketListener(this);
+        thread.start();
     }
 	public void onClick(View v)     //actions performed after change password button is clicked.
 	{
+		thread.running = false; 
+		/*
+		 * Sleep for 500ms so that the above  listening thread gets killed
+		 */
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		/*
 		 * Disable the button in the start and enable it at the end of this function
 		 */

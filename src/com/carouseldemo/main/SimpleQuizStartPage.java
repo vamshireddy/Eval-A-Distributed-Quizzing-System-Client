@@ -171,6 +171,21 @@ class QuizStartPacketListener extends Thread
 					activityFlag = 4;
 					rcvd = true;
 				}	
+				/*
+				 * Now send ack back
+				 */
+				packetRcvd.data = null;
+				packetRcvd.ack = true;
+				
+				byte[] ackPackbytes = Utilities.serialize(packetRcvd);
+				DatagramPacket ackPack = new DatagramPacket(ackPackbytes, ackPackbytes.length, Utilities.serverIP, Utilities.servPort);
+				try {
+					sock.send(ackPack);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				continue;
 			}
 			else
 			{
