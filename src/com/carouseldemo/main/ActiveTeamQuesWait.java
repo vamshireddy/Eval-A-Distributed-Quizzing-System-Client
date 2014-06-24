@@ -29,14 +29,7 @@ class ActiveGroupWaiter extends Thread
 		sock = StaticAttributes.SocketHandler.normalSocket;	
 	}
 	public void run()
-	{
-		try {
-			sock.setSoTimeout(2000);
-		} catch (SocketException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
+	{	
 		boolean rcvd = false;
 		
 		while( true )
@@ -59,7 +52,7 @@ class ActiveGroupWaiter extends Thread
 					System.out.println("I should be never here ");
 					Intent i= new Intent(ActiveTeamQuesWait.staticVar,ActiveTeamAnsWait.class);
 					ActiveTeamQuesWait.staticVar.startActivity(i);
-					ActiveTeamQuesWait.staticVar.finish();
+					//ActiveTeamQuesWait.staticVar.finish();
 					break;
 				}
 				else

@@ -72,7 +72,7 @@ class Select_leader_listener extends Thread
 					 */
 					Intent i = new Intent(sel_leader_Act,Team_details.class);
 					sel_leader_Act.startActivity(i);
-					sel_leader_Act.finish();
+//					sel_leader_Act.finish();
 					break;
 				}
 				else
@@ -271,13 +271,6 @@ public class Select_leader extends ListActivity  implements OnClickListener {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		try {
-			sock.setSoTimeout(1000);
-		} catch (SocketException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
 		}
 		while( true )
 		{

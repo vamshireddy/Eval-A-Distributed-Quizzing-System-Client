@@ -29,13 +29,6 @@ class OtherGroupListener extends Thread
 	}
 	public void run()
 	{
-		try {
-			sock.setSoTimeout(2000);
-		} catch (SocketException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
 		boolean rcvd = false;
 		
 		int activityFlag = -1;
@@ -61,19 +54,19 @@ class OtherGroupListener extends Thread
 					{
 						Intent i = new Intent(OtherGroupPage.staticAct, Answer_multiple_choice.class);
 						OtherGroupPage.staticAct.startActivity(i);
-						OtherGroupPage.staticAct.finish();
+//						OtherGroupPage.staticAct.finish();
 					}
 					else if(  activityFlag == 2 )
 					{
 						Intent i = new Intent(OtherGroupPage.staticAct, Answer_true_false.class);
 						OtherGroupPage.staticAct.startActivity(i);
-						OtherGroupPage.staticAct.finish();
+//						OtherGroupPage.staticAct.finish();
 					}
 					else if(  activityFlag == 3 )
 					{
 						Intent i = new Intent(OtherGroupPage.staticAct, Answer_one_word.class);
 						OtherGroupPage.staticAct.startActivity(i);
-						OtherGroupPage.staticAct.finish();
+//						OtherGroupPage.staticAct.finish();
 					}
 					break;
 				}

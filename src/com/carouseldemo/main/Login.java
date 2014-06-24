@@ -1,13 +1,13 @@
 package com.carouseldemo.main;
 import StaticAttributes.*;
+
 import com.example.peerbased.*;
-
-
-
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.SocketException;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -40,6 +40,9 @@ public class Login extends Activity implements OnClickListener {
 		
 		// Create a thread to listen for the server's error messages;
 		
+		/*
+		 * Inititlaize the socket timeout to 1000
+		 */
 		
     	userID=(EditText)findViewById(R.id.username);
     	// Set the student name in static attribute class, so that every other class can access it
@@ -118,6 +121,12 @@ public class Login extends Activity implements OnClickListener {
 	
 	public void onClick(View v) 
 	{
+		try {
+			socket.setSoTimeout(1000);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		  uID = userID.getText().toString();
 		  /*
 		   * Initialize the Quiz attribute, so that every class could access it

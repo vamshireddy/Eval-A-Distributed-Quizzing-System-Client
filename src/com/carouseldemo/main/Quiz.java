@@ -30,12 +30,6 @@ class QuizListen1 extends Thread
 	}
 	public void run()
 	{
-		try {
-			sock.setSoTimeout(2000);
-		} catch (SocketException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
 		boolean rcvd = false;
 		
@@ -62,13 +56,13 @@ class QuizListen1 extends Thread
 					{
 						Intent i = new Intent(Quiz.staticAct, Group_name.class);
 						Quiz.staticAct.startActivity(i);
-						Quiz.staticAct.finish();
+//						Quiz.staticAct.finish();
 					}
 					else if ( activityFlag == 2 )
 					{
 						Intent i = new Intent(Quiz.staticAct, Select_leader.class);
 						Quiz.staticAct.startActivity(i);
-						Quiz.staticAct.finish();
+//						Quiz.staticAct.finish();
 					}
 					break;
 				}
@@ -168,13 +162,6 @@ public class Quiz extends Activity implements OnClickListener {
 		skipButton.setOnClickListener(this);
 		//skipButton.setOnClickListener(this);
 		setInstructions();
-		
-		try { 
-			sock.setSoTimeout(1000);
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
 	public void onClick(View v) 
 	{ 

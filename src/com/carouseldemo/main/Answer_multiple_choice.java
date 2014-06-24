@@ -150,6 +150,8 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
 			{
 				System.out.println("Timeout!~");
 				error.setText("Please try again!");
+				thread = new QuizStartPacketListener(this);
+			    thread.start();
 				break;
 			}
 			catch (IOException e)
@@ -177,7 +179,7 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
 						Intent i=new Intent(this,AnswerResultPage.class);
 						i.putExtra("result", "correct");
 					    startActivity(i);
-					    finish();
+					    //finish();
 					    Toast t1 = Toast.makeText(this, "Your Answer is right!", 2000);
 						t1.show();
 					    break;
@@ -190,7 +192,7 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
 						Intent i=new Intent(this,AnswerResultPage.class);
 						i.putExtra("result", "wrong");
 					    startActivity(i);
-					    finish();
+					    //finish();
 					    Toast t1 = Toast.makeText(this, "Your Answer is wrong!", 2000);
 						t1.show();
 					    break;

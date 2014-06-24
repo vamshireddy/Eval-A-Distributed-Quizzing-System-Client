@@ -32,16 +32,19 @@ class QuizListen extends Thread
 	DatagramSocket sock;
 	public QuizListen() {
 		sock = SocketHandler.normalSocket;
+		/*
+		 * InitialiZe the socket timeout
+		 */
+		try {
+			sock.setSoTimeout(1000);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(0);
+		}
 	}
 	public void run()
 	{
-		try {
-			sock.setSoTimeout(1000);
-		} catch (SocketException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
 		boolean rcvd = false;
 		
 		while( true )
@@ -58,9 +61,9 @@ class QuizListen extends Thread
 			{
 				if( rcvd == true )
 				{
+					System.out.println("I am going to HELLLL!!");
 					Intent i = new Intent(MainActivity.staticAct, Quiz.class);
 					MainActivity.staticAct.startActivity(i);
-					MainActivity.staticAct.finish();
 					break;
 				}
 				else
@@ -80,6 +83,7 @@ class QuizListen extends Thread
 			{
 				if( rcvd == false )
 				{
+					System.out.println("GOTCHAAA!");
 					ParameterPacket pp = (ParameterPacket)Utilities.deserialize(p.data);
 					QuizAttributes.noOfLeaders = pp.noOfLeaders;
 					QuizAttributes.noOfOnlineStudents = pp.noOfOnlineStudents;
@@ -100,6 +104,7 @@ class QuizListen extends Thread
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					System.exit(0);
 				}
 				continue;
 				/*
@@ -175,7 +180,7 @@ public class MainActivity extends Activity {
     				
     					
     				case 2:     
-    					        i = new Intent(MainActivity.this,ViewPagerStyle1Activity.class);
+    					        i = new Intent(MainActivity.this,Questions.class);
     						    startActivity(i);
     						    break;
     					
@@ -222,10 +227,6 @@ public class MainActivity extends Activity {
                                   break;
     				
     				}
-    					
-    				
-				
-    			   
 			}
         });
 

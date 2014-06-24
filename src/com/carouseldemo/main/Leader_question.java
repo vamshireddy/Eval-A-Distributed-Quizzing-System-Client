@@ -62,7 +62,7 @@ class CleanBuffers extends Thread
 
 
 public class Leader_question extends Activity  implements OnClickListener 
- {
+{
 	
 	Button mcq,truefalse,fill;
 	
@@ -91,16 +91,19 @@ public class Leader_question extends Activity  implements OnClickListener
 		    	//Toast.makeText(this, "You clicked multiple choice.", 1000).show();
 		    	 i = new Intent(this,Multiple_choice.class);
 				startActivity(i);
+//				finish();
 		        break;
 		    case R.id.button2:
 		    //	Toast.makeText(this, "You clicked true false questions.", 1000).show();
 		    	 i = new Intent(this,True_false.class);
 				startActivity(i);
+//				finish();
 				break;
 		    case R.id.button3:
 		    	//Toast.makeText(this, "You clicked one word questions.", 1000).show();
 		    	 i = new Intent(this,One_word.class);
 				startActivity(i);
+//				finish();
 				break;
 			}
 	}

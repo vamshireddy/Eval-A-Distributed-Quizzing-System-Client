@@ -131,6 +131,8 @@ public class Answer_true_false extends Activity implements OnClickListener
 			{
 				System.out.println("Timeout!~");
 				error.setText("Please try again!");
+				thread = new QuizStartPacketListener(this);
+			    thread.start();
 				break;
 			}
 			catch (IOException e)
@@ -157,7 +159,7 @@ public class Answer_true_false extends Activity implements OnClickListener
 						Intent i=new Intent(this,AnswerResultPage.class);
 						i.putExtra("result", "correct");
 					    startActivity(i);
-					    finish();
+					   // finish();
 					    break;
 					}
 					else if( rpack.result == false )
@@ -168,7 +170,7 @@ public class Answer_true_false extends Activity implements OnClickListener
 						Intent i=new Intent(this,AnswerResultPage.class);
 						i.putExtra("result", "wrong");
 					    startActivity(i);
-					    finish();
+					   // finish();
 					    break;
 					}
 					btn.setEnabled(false);

@@ -39,7 +39,7 @@ class QuestionListener extends Thread
 	public void run()
 	{
 		try {
-			sock.setSoTimeout(2000);
+			sock.setSoTimeout(Utilities.SCREEN_CHANGE_TIMEOUT);
 		} catch (SocketException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -69,13 +69,13 @@ class QuestionListener extends Thread
 					{
 						Intent i=new Intent(act,ActiveTeamAnsWait.class);
 						act.startActivity(i);
-						act.finish();
+//						act.finish();
 					}
 					else if ( activityFlag == 2 )
 					{
 						Intent i=new Intent(act,Leader_question.class);
 						act.startActivity(i);
-						act.finish();
+//						act.finish();
 					}
 					Utilities.quesSeqNo++;
 					break;

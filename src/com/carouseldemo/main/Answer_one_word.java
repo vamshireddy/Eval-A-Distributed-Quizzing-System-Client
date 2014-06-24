@@ -56,7 +56,7 @@ public class Answer_one_word extends Activity implements OnClickListener
     }
 	public void onClick(View v)     //actions performed after change password button is clicked.
 	{
-		thread.running = false; 
+		thread.running = false;
 		/*
 		 * Sleep for 500ms so that the above  listening thread gets killed
 		 */
@@ -127,6 +127,8 @@ public class Answer_one_word extends Activity implements OnClickListener
 				 * Enable the button
 				 */
 				btn.setEnabled(false);
+				thread = new QuizStartPacketListener(this);
+			    thread.start();
 				break;
 			}
 			catch (IOException e)
@@ -165,7 +167,7 @@ public class Answer_one_word extends Activity implements OnClickListener
 						Intent i=new Intent(this,AnswerResultPage.class);
 						i.putExtra("result", "wrong");
 					    startActivity(i);
-					    finish();
+					    //finish();
 					    Toast t1 = Toast.makeText(this, "Your Answer is wrong!", 2000);
 						t1.show();
 					    break;

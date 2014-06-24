@@ -1,5 +1,6 @@
 package com.carouseldemo.main;
 
+
 import android.app.Activity;
 import android.util.SparseArray;
 import android.view.LayoutInflater;

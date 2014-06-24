@@ -23,7 +23,7 @@ class ResultsWaitScreen extends Thread
 		}
 		Intent i= new Intent(act,MainActivity.class);
 		act.startActivity(i);
-		act.finish();
+//		act.finish();
 	}
 }
 

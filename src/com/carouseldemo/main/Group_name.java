@@ -35,13 +35,7 @@ class GroupNameListener extends Thread
 	public void run()
 	{
 		grpActivity = Group_name.staticVar;
-
-		try {
-			sock.setSoTimeout(2000);
-		} catch (SocketException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		
 		boolean rcvd = false;
 
 		while( true )
@@ -63,7 +57,7 @@ class GroupNameListener extends Thread
 					 */
 					Intent i = new Intent(grpActivity,Team_details.class);
 					grpActivity.startActivity(i);
-					grpActivity.finish();
+//					grpActivity.finish();
 					break;
 				}
 				else
@@ -187,13 +181,6 @@ public class Group_name extends Activity implements View.OnClickListener
         error = (TextView)findViewById(R.id.errorText);
 		error.setText("");
 		
-		try {
-			sock.setSoTimeout(1000);
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
     }
 	public void onClick(View v) 
 	{
@@ -224,14 +211,6 @@ public class Group_name extends Activity implements View.OnClickListener
 			sock.send(pack);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
-			sock.setSoTimeout(1000);
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			error.setVisibility(View.VISIBLE);
 			e.printStackTrace();
 		}	
 		

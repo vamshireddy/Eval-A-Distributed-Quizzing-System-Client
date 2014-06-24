@@ -16,6 +16,9 @@ import java.util.Scanner;
 
 public class Utilities {
 	
+	public static int SCREEN_CHANGE_TIMEOUT = 1000;
+	public static int NORMAL_TIMEOUT = 1000;
+	
 	public static int quesSeqNo = 1231241;
 	// Constants
 	public static final int MAX_BUFFER_SIZE = 1024;

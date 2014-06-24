@@ -30,7 +30,7 @@ public class Non_leader_question extends ActionBarActivity {
 	@Override
     protected void onPause() {
         super.onPause();
-        finish();
+//        finish();
     }
 
 
@@ -45,7 +45,7 @@ public class Non_leader_question extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.back:
-			finish();
+//			finish();
 			break;
 		case R.id.reset:
 			com.carouseldemo.main.BrushView.reset_flag=true;
