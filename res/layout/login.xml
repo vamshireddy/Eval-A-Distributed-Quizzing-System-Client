@@ -31,9 +31,8 @@
         android:hint="Username"
         android:singleLine="true"
         android:textColor="#ffffff"
-        
         />
-        <requestFocus />
+
     <TextView
         android:id="@+id/errorText"
         android:layout_width="wrap_content"
@@ -48,7 +47,7 @@
         android:textSize="15sp" />
 
     <Button
-        android:id="@+id/sadf"
+        android:id="@+id/login"
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:layout_above="@+id/errorText"
@@ -58,15 +57,17 @@
         android:textColor="#FFffff" />
 
     <EditText
-        android:id="@+id/passwordField123"
+        android:id="@+id/passwordField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/sadf"
+        android:layout_alignLeft="@+id/login"
         android:layout_below="@+id/username"
         android:ems="10"
         android:inputType="textPassword" 
         android:hint="Password"
         android:textColor="#ffffff">
+
+        <requestFocus />
     </EditText>
 
 </RelativeLayout>

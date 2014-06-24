@@ -4,6 +4,7 @@ package com.carouseldemo.main;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -35,8 +36,11 @@ import android.support.v4.app.Fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
 import android.graphics.Color;
+import android.location.GpsStatus.Listener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -87,252 +91,251 @@ class persistentQuestions implements Serializable
 	}
 }
 
-//
-//class questionThread extends Thread
-//{
-//	Displayquestions obj;
-//	SparseArray<Group> groups;
-//	String subject;
-//	String fileName = "questions.ser";
-//	
-//	
-//	public questionThread(Displayquestions obj, String subject)
-//	{
-//		this.obj = obj;
-//		this.subject = subject;
-//	}
-//
-//	
-//	private Map<String,String> mergeMaps(Map<String,String> map1, Map<String,String> map2 )
-//	{
-//		/*
-//		 * Map1 is old
-//		 * Map2 is new
-//		 */
-//		Map<String,String> map3 = new HashMap<String, String>();
-//		if( map2 != null )
-//		{
-//			map3.putAll(map2);
-//		}
-//		if( map1 != null )
-//		{
-//			map3.putAll(map1);
-//		}
-//		return map3;
-//	}
-//	
-//	private void serialize(persistentQuestions ques)
-//	{
-//		 try
-//	     {
-//	         FileOutputStream fileOut = new FileOutputStream(fileName);
-//	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
-//	         out.writeObject(ques);
-//	         out.close();
-//	         fileOut.close();
-//	         System.out.printf("Serialized data is saved in /tmp/employee.ser");
-//	      }
-//		  catch(IOException i)
-//	      {
-//	          i.printStackTrace();
-//	      }
-//	}
-//	
-//	public void run()
-//	{
-//		/*
-//		 * Open the file and Deserialize the object.
-//		 * If exception is caught, then file might be empty. So directly query without any date.
-//		 * If not, Get the last fetched date and use this to send a query to the server
-//		 */
-//		persistentQuestions existingQuestions = deserializeExistingQuestions();
-//		
-//		/*
-//		 * If returns NULL, then the file is created for the first time
-//		 */
-//		
-//		Map<String,String> mergedMap = null;
-//		
-//		if( existingQuestions == null )
-//		{
-//			/*
-//			 * Use the existing hashMap and the new hashmap and write it to the front end
-//			 */
-//			mergedMap = getHashMap(new java.util.Date(0));
-//			/*
-//			 * Get the hashmap by querying the server with the current date
-//			 */
-//		}
-//		else
-//		{
-//			/*
-//			 * Get the existing MAP object.
-//			 */
-//			Map<String,String> existingMap = null;
-//			/*
-//			 * Get the last fetched date, so that we could use it in the query to get only the questions 
-//			 * formed after that time.
-//			 */
-//			java.util.Date lastFetchedDate = null;
-//			
-//			if( subject.equals("English") )
-//			{
-//				existingMap = existingQuestions.englishQues;
-//				lastFetchedDate = existingQuestions.lastFetchedDateEng;
-//			}
-//			else if( subject.equals("Hindi"))
-//			{
-//				existingMap = existingQuestions.hindiQues;
-//				lastFetchedDate = existingQuestions.lastFetchedDateHin;
-//			}
-//			else if( subject.equals("Maths"))
-//			{
-//				existingMap = existingQuestions.mathsQues;
-//				lastFetchedDate = existingQuestions.lastFetchedDateMat;
-//			}
-//			else if( subject.equals("Science"))
-//			{
-//				existingMap = existingQuestions.scienceQues;
-//				lastFetchedDate = existingQuestions.lastFetchedDateSci;
-//			}
-//			else if( subject.equals("Social"))
-//			{
-//				existingMap = existingQuestions.socialQues;
-//				lastFetchedDate = existingQuestions.lastFetchedDateSoc;
-//			}
-//			/*
-//			 * All subjects should be done similarly
-//			 */
-//			Map<String,String> map = getHashMap(lastFetchedDate);
-//			/*
-//			 * Use the existing hashMap and the new hashmap and write it to the front end
-//			 */
-//			mergedMap = mergeMaps(existingMap, map);
-//		}
-//		
-//		groups = createData(mergedMap);
-//		obj.groups = groups;
-//		/*
-//		 * Update the persistent HASHMAP with the old one + existing one
-//		 */
-//		if( existingQuestions == null )
-//		{
-//			persistentQuestions pq = new persistentQuestions();
-//			if( subject.equals("english") )
-//			{
-//				pq.englishQues = mergedMap;
-//				pq.lastFetchedDateEng = new java.util.Date();
-//				serialize(pq);
-//			}
-//		}
-//		obj.wait = false;
-//	}
-//	
-//	public Map<String,String> getHashMap(java.util.Date date)
-//	{
-//		/*
-//		 * Convert the date to SQL format
-//		 */
-//		
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
-//		String dateString = sdf.format(date); 
-//		
-//		Map<String,String> localmap = null;
-//		JSONObject obj = new JSONObject();
-//		obj.put("queryType","Questions");
-//		obj.put("subject",subject);
-//		obj.put("date", dateString);
-//
-//		String jsonString = obj.toJSONString();
-//		
-//		Socket s;
-//		
-//		try {
-//			
-//			s = new Socket(Utilities.serverIP,6711);
-//			
-//			DataOutputStream outToServer = new DataOutputStream(s.getOutputStream());
-//			
-//			outToServer.writeBytes(jsonString+"\n");
-//			
-//			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(s.getInputStream()));
-//			String sentence = inFromServer.readLine();
-//			
-//			localmap = new HashMap<String,String>();
-//			
-//			
-//			ObjectMapper mapper = new ObjectMapper();
-//			 
-//			try {
-//		 
-//				//convert JSON string to Map
-//				localmap = mapper.readValue(sentence, new TypeReference<HashMap<String,String>>(){});
-//				return localmap;
-//			}
-//			catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//			
-//			//System.out.println(sentence);
-//			
-//		} catch (UnknownHostException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return localmap;
-//	}
-//	
-//	public String[] splitJSONString(String jsonStr)
-//	{
-//		String[] strings = new String[3];
-//		char c;
-//		int strIndex = 0;
-//		
-//		strings[0] = new String();
-//		for(int i=0;i<jsonStr.length();i++)
-//		{
-//			char curChar = jsonStr.charAt(i);
-//			if( curChar=='$')
-//			{
-//				System.out.println(strings[strIndex]);
-//				strIndex++;
-//				strings[strIndex] = new String();
-//			}
-//			else
-//			{
-//				strings[strIndex] = strings[strIndex] + curChar;
-//			}
-//		}
-//		return strings;
-//	}
-//	
-//    public SparseArray<Group> createData(Map<String,String> map)
-//    {
-//    		SparseArray<Group> groups = new SparseArray<Group>();
-//    		
-//    		Set<String> set = map.keySet();
-//
-//    		//populate set
-//    		int index = 0;
-//    		for (String s : set) {
-//    			
-//    			String value = map.get(s);
-//    			System.out.println("JSON String :  "+value);
-//    			String[] values = splitJSONString(value);
-//    			
-//    		    Group group = new Group((index+1)+"."+s);
-//    		    
-//    		    group.children.add("Level : "+values[0]);
-//    		    group.children.add("Date : "+values[1]);
-// 	 			group.children.add("Answer: "+values[2]);
-//            	groups.append(index++, group);
-//    		}
-//    		return groups;
-//     }
-//}
+
+class questionThread extends Thread
+{
+	Displayquestions obj;
+	persistentQuestions questionsStored;
+	
+	/*
+	 * Current subject hashmap and date
+	 */
+	Map<String, String> subjectHashMap;
+	java.util.Date subjectLastFetchedDate;
+	
+	String subject;
+	String fileName = "questions.ser";
+	
+	
+	public questionThread(Displayquestions obj, String subject, persistentQuestions ques )
+	{
+		this.obj = obj;
+		this.subject = subject;
+		if( subject.equals("English") )
+		{
+			subjectHashMap = ques.englishQues;
+			subjectLastFetchedDate = ques.lastFetchedDateEng;
+		}
+		else if( subject.equals("Hindi") )
+		{
+			subjectHashMap = ques.hindiQues;
+			subjectLastFetchedDate = ques.lastFetchedDateHin;
+		}
+		else if( subject.equals("Maths") )
+		{
+			subjectHashMap = ques.mathsQues;
+			subjectLastFetchedDate = ques.lastFetchedDateMat;
+		}
+		else if( subject.equals("Science") )
+		{
+			subjectHashMap = ques.scienceQues;
+			subjectLastFetchedDate = ques.lastFetchedDateSci;
+		}
+		else if( subject.equals("Social") )
+		{
+			subjectHashMap = ques.socialQues;
+			subjectLastFetchedDate = ques.lastFetchedDateSoc;
+		}
+		else if( subject.equals("Marathi") )
+		{
+			subjectHashMap = ques.marathiQues;
+			subjectLastFetchedDate = ques.lastFetchedDateMar;
+		}
+		questionsStored = ques;
+	}
+
+	
+	private Map<String,String> mergeMaps(Map<String,String> map1, Map<String,String> map2 )
+	{
+		/*
+		 * Map1 is old
+		 * Map2 is new
+		 */
+		Map<String,String> map3 = new HashMap<String, String>();
+		if( map2 != null )
+		{
+			map3.putAll(map2);
+		}
+		if( map1 != null )
+		{
+			map3.putAll(map1);
+		}
+		return map3;
+	}
+	
+	private void serialize(persistentQuestions ques)
+	{
+		 try
+	     {
+	         FileOutputStream fileOut = new FileOutputStream(fileName);
+	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+	         out.writeObject(ques);
+	         out.close();
+	         fileOut.close();
+	         System.out.printf("Serialized data is saved in /tmp/employee.ser");
+	      }
+		  catch(IOException i)
+	      {
+	          i.printStackTrace();
+	      }
+	}
+	
+	public void run()
+	{	
+		/*
+		 * Create a new JSON query packet with the last updated date and send it to the server.
+		 */
+		
+		Map<String,String> newMap = getHashMap(subjectLastFetchedDate);
+		
+		/*
+		 * Now merge the maps
+		 */
+		Map<String, String> mergedMap = mergeMaps(subjectHashMap, newMap);
+		
+		
+		/*
+		 * Display it to the front end and store update in the record
+		 */
+		if( subject.equals("English"))
+		{
+			questionsStored.englishQues = mergedMap;
+			questionsStored.lastFetchedDateEng = new java.util.Date();
+		}
+		else if( subject.equals("Maths"))
+		{
+			questionsStored.mathsQues = mergedMap;
+			questionsStored.lastFetchedDateMat = new java.util.Date();
+		}
+		else if( subject.equals("Science"))
+		{
+			questionsStored.scienceQues = mergedMap;
+			questionsStored.lastFetchedDateSci = new java.util.Date();
+		}
+		else if( subject.equals("Social"))
+		{
+			questionsStored.socialQues = mergedMap;
+			questionsStored.lastFetchedDateSoc = new java.util.Date();
+		}
+		else if( subject.equals("Hindi"))
+		{
+			questionsStored.hindiQues = mergedMap;
+			questionsStored.lastFetchedDateHin = new java.util.Date();
+		}
+		else if( subject.equals("Marathi"))
+		{
+			questionsStored.marathiQues = mergedMap;
+			questionsStored.lastFetchedDateMar = new java.util.Date();
+		}
+		obj.groups = createData(mergedMap);	
+		obj.wait = false;
+	}
+	
+	public Map<String,String> getHashMap(java.util.Date date)
+	{
+		/*
+		 * Convert the date to SQL format
+		 */
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String dateString = sdf.format(date); 
+		
+		Map<String,String> localmap = null;
+		JSONObject obj = new JSONObject();
+		obj.put("queryType","Questions");
+		obj.put("subject",subject);
+		obj.put("date", dateString);
+
+		String jsonString = obj.toJSONString();
+		
+		Socket s;
+		
+		try {
+			
+			s = new Socket(Utilities.serverIP,6711);
+			
+			DataOutputStream outToServer = new DataOutputStream(s.getOutputStream());
+			
+			outToServer.writeBytes(jsonString+"\n");
+			
+			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(s.getInputStream()));
+			String sentence = inFromServer.readLine();
+			
+			localmap = new HashMap<String,String>();
+			
+			
+			ObjectMapper mapper = new ObjectMapper();
+			 
+			try {
+		 
+				//convert JSON string to Map
+				localmap = mapper.readValue(sentence, new TypeReference<HashMap<String,String>>(){});
+				return localmap;
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			//System.out.println(sentence);
+			
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new HashMap<String, String>();
+		}
+		return localmap;
+	}
+	
+	public String[] splitJSONString(String jsonStr)
+	{
+		String[] strings = new String[3];
+		char c;
+		int strIndex = 0;
+		
+		strings[0] = new String();
+		for(int i=0;i<jsonStr.length();i++)
+		{
+			char curChar = jsonStr.charAt(i);
+			if( curChar=='$')
+			{
+				System.out.println(strings[strIndex]);
+				strIndex++;
+				strings[strIndex] = new String();
+			}
+			else
+			{
+				strings[strIndex] = strings[strIndex] + curChar;
+			}
+		}
+		return strings;
+	}
+	
+    public SparseArray<Group> createData(Map<String,String> map)
+    {
+    		SparseArray<Group> groups = new SparseArray<Group>();
+    		
+    		Set<String> set = map.keySet();
+
+    		//populate set
+    		int index = 0;
+    		for (String s : set) {
+    			
+    			String value = map.get(s);
+    			System.out.println("JSON String :  "+value);
+    			String[] values = splitJSONString(value);
+    			
+    		    Group group = new Group((index+1)+"."+s);
+    		    
+    		    group.children.add("Level : "+values[0]);
+    		    group.children.add("Date : "+values[1]);
+ 	 			group.children.add("Answer: "+values[2]);
+            	groups.append(index++, group);
+    		}
+    		return groups;
+     }
+}
 
 
 class displayThread extends Thread
@@ -353,13 +356,31 @@ class displayThread extends Thread
 	{
 		Map<String, String> hmap = null;
 		
-		if( subject.equals("english"))
+		System.out.println(subject);
+		
+		if( subject.equals("English"))
 		{
 			hmap = storedQuestions.englishQues;
 		}
-		else if( subject.equals("maths"))
+		else if( subject.equals("Maths"))
 		{
 			hmap = storedQuestions.mathsQues;
+		}
+		else if( subject.equals("Science"))
+		{
+			hmap = storedQuestions.scienceQues;
+		}
+		else if( subject.equals("Social"))
+		{
+			hmap = storedQuestions.socialQues;
+		}
+		else if( subject.equals("Hindi"))
+		{
+			hmap = storedQuestions.hindiQues;
+		}
+		else if( subject.equals("Marathi"))
+		{
+			hmap = storedQuestions.marathiQues;
 		}
 		/*
 		 * If hashMap is still null
@@ -434,9 +455,8 @@ class displayThread extends Thread
      }
 }
 
- 
 
-public class Displayquestions extends Activity {
+public class Displayquestions extends Activity implements android.view.View.OnClickListener {
 	
 	persistentQuestions questionsStored;
 	String fileName = "questions.ser";
@@ -444,7 +464,9 @@ public class Displayquestions extends Activity {
 	MyExpandableListAdapter adapter;
 	ProgressDialog pd1;
 	Handler h1;
+	Button but;
 	boolean wait = true;
+	String subject;
 	public static Displayquestions staticVar;
 	
     @Override
@@ -454,8 +476,11 @@ public class Displayquestions extends Activity {
         setContentView(R.layout.displayquestion);
         staticVar = this;
         
+        but = (Button)findViewById(R.id.refreshButton);
+        but.setOnClickListener((android.view.View.OnClickListener) this);
+        
         Intent i = getIntent();
-        String subject = i.getExtras().getString("subject");
+        subject = i.getExtras().getString("subject");
         /*
          * Deserialize the existing questions
          */
@@ -504,63 +529,11 @@ public class Displayquestions extends Activity {
 	    	
 	    };
 	    pd1.setTitle("Please wait!");
-	    pd1.setMessage("After this, a new quiz will start");
+	    pd1.setMessage("Questions are being fetched from database");
 	    h1.sendEmptyMessage(0);
 	    pd1.show();
     }
     
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.questions_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.item1:
-                openhome();
-                return true;
-            case R.id.item2:
-                 openlogout();
-                return true;
-            case R.id.item3:
-            	finish();
-            	startActivity(getIntent());
-               return true;
-          
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    
-	private void openhome() {
-		// TODO Auto-generated method stub
-		Intent i;
-		i= new Intent(this,MainActivity.class);
-		startActivity(i);
-		
-		
-	}
-
-
-	private void openlogout() {
-		// TODO Auto-generated method stub
-		Intent intent;
-		intent= new Intent(this,Login.class);
-		 intent.putExtra("finish", true); // if you are checking for this in your other Activities
-		    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | 
-		                    Intent.FLAG_ACTIVITY_CLEAR_TASK |
-		                    Intent.FLAG_ACTIVITY_NEW_TASK);
-		    startActivity(intent);
-		    finish();
-		
-		
-	}
-
 	private persistentQuestions deserializeExistingQuestions()
 	{
 		  try
@@ -608,5 +581,48 @@ public class Displayquestions extends Activity {
 			e.printStackTrace();
 	      }
 		  return null;
+	}
+
+	public void onClick(View v) {
+		
+		wait = true;
+		
+		questionThread qt = new questionThread(this, subject, questionsStored );
+		qt.start();
+		
+		pd1.setTitle("Please wait!");
+	    pd1.setMessage("Downloading questions from the server");
+	    h1.sendEmptyMessage(0);
+	    pd1.show();
+	}
+	
+	public void onPause()
+	{
+		super.onPause();
+		if(questionsStored != null)
+		{
+			FileOutputStream fos;
+			try {
+				File file = new File(fileName);
+				System.out.println("File deleted : "+file.delete()+"\nQuestions:");
+				Set<String> set = questionsStored.englishQues.keySet();
+				for(String s: set)
+				{
+					System.out.println(s);
+				}
+				fos = openFileOutput(fileName, MODE_PRIVATE);
+				ObjectOutputStream out = new ObjectOutputStream(fos);
+		        out.writeObject(questionsStored);
+		        out.close();
+		        fos.close();
+		        System.out.println("serialized the questions object");
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }

@@ -23,7 +23,7 @@ public class Questions extends ListActivity
 {
 	
 	ArrayAdapter<String> subjects;
-	String subject[] = {"Maths", "English", "Science", "Marathi", "Social Science","Hindi"};
+	String subject[] = {"Maths", "English", "Science", "Marathi", "Social","Hindi"};
 	
 	
     /** Called when the activity is first created. */
@@ -33,14 +33,8 @@ public class Questions extends ListActivity
         super.onCreate(savedInstanceState);
      
         subjects = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, subject);
-		setListAdapter(subjects);
-		
-      
+		setListAdapter(subjects);    
     }
-   
-	
-
-
     protected void onListItemClick(ListView l, View v, int position, long id) 
 	{
 		super.onListItemClick(l, v, position, id);
@@ -52,9 +46,6 @@ public class Questions extends ListActivity
 			startActivity(i);                                    
 	
 	}
-	
-	
-    
 	
 }
 
