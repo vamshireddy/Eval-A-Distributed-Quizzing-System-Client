@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import com.example.peerbased.*;
 
 import StaticAttributes.QuizAttributes;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.app.ListActivity;
 import android.content.Intent;

@@ -56,6 +56,7 @@ public class Answer_one_word extends Activity implements OnClickListener
     }
 	public void onClick(View v)     //actions performed after change password button is clicked.
 	{
+		error.setText("Please wait!");
 		thread.running = false;
 		/*
 		 * Sleep for 500ms so that the above  listening thread gets killed

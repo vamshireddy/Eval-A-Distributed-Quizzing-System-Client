@@ -40,6 +40,14 @@
               android:label="@string/app_name" >
           </activity>
           <activity
+              android:name="com.carouseldemo.main.Perf"
+              android:label="@string/app_name" >
+          </activity>
+          <activity
+              android:name="com.carouseldemo.main.QuizPerformance"
+              android:label="@string/app_name" >
+          </activity>
+          <activity
               android:name="com.carouseldemo.main.Performance1"
               android:label="@string/app_name" >
           </activity>

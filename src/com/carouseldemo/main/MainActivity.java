@@ -127,7 +127,7 @@ public class MainActivity extends Activity {
 	public static MainActivity staticAct;
 	DatagramSocket sock;
 	
-	String Performance[] = {"Your individual Performance", "Your Overall Performance"};
+	String Performance[] = {"Last Test Performance", "Overall Performance"};
 	
     /** Called when the activity is first created. */
     @Override
@@ -188,19 +188,19 @@ public class MainActivity extends Activity {
     					      AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
     					      ad.setTitle("Choose the performance");
     					      ad.setSingleChoiceItems(Performance, -1, new DialogInterface.OnClickListener() 
-    					       {
+    					      {
     						
     						     public void onClick(DialogInterface dialog, int which) 
     						     {
     							 final Intent j;
     							 Toast t = Toast.makeText(getBaseContext(), "You selected "+Performance[which], 2000);
     							 t.show();
-    							 if(Performance[which].equals("Your individual Performance"))
+    							 if(Performance[which].equals("Last Test Performance"))
     							 {
     								    j = new Intent(MainActivity.this,Performance1.class);
     									startActivity(j);
     							 }
-    							else if(Performance[which].equals("Your Overall Performance"))
+    							 else if(Performance[which].equals("Overall Performance"))
     							 { 
     								    j = new Intent(MainActivity.this,Performance2.class);
     									startActivity(j);
@@ -208,7 +208,7 @@ public class MainActivity extends Activity {
     							
     							dialog.dismiss();					
     						   }
-    					       });
+    					     });
     			    
     					      ad.show();
     			              break;

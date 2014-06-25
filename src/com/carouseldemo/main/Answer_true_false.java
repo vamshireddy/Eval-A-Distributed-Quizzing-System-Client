@@ -51,6 +51,7 @@ public class Answer_true_false extends Activity implements OnClickListener
          * This will be stopped when the button is pressed ( Question is answered )
          * Else he will be redirected to the appropriate page on the next turn
          */
+        
         thread = new QuizStartPacketListener(this);
         thread.start();
     }

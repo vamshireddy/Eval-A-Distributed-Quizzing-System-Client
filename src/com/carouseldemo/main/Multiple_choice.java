@@ -17,13 +17,17 @@ import StaticAttributes.QuizAttributes;
 import StaticAttributes.Utilities;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -38,7 +42,7 @@ class QuestionListener extends Thread
 	}
 	public void run()
 	{
-		try {
+		try{
 			sock.setSoTimeout(Utilities.SCREEN_CHANGE_TIMEOUT);
 		} catch (SocketException e1) {
 			// TODO Auto-generated catch block
@@ -149,10 +153,14 @@ class QuestionListener extends Thread
 	}
 }
 
+
 public class Multiple_choice extends Activity implements android.view.View.OnClickListener
 {
 	EditText c1,c2,c3,c4,question;
 	Button btn;
+	boolean wait;
+	ProgressDialog pd1;
+	Handler h1;
 	String options[] = {"option1", "option2", "option3", "option4"};
 	boolean status[] = new boolean[options.length];
     String correctoption;
@@ -164,6 +172,7 @@ public class Multiple_choice extends Activity implements android.view.View.OnCli
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.multiple_choice);
+        wait = true;
         c1=(EditText)findViewById(R.id.option1);
         c2=(EditText)findViewById(R.id.option2);
         c3=(EditText)findViewById(R.id.option3);
@@ -172,11 +181,39 @@ public class Multiple_choice extends Activity implements android.view.View.OnCli
         sock = StaticAttributes.SocketHandler.normalSocket;
         question=(EditText)findViewById(R.id.question);
         btn.setOnClickListener(this);
-        
+	    
+	    h1 = new Handler()
+	    {
+
+			@Override
+			public void handleMessage(Message msg) 
+			{
+				super.handleMessage(msg);
+				if( wait == false )
+				{
+					pd1.dismiss();
+				}
+				else
+				{
+					pd1.incrementProgressBy(1);
+					h1.sendEmptyMessageDelayed(0, 200);
+				}
+				
+			}
+	    	
+	    };
     }
 	public void onClick(View v)     //actions performed after change password button is clicked.
 	{   
-		final String question1,choice1,choice2,choice3,choice4;
+		wait = true;
+        pd1 = new ProgressDialog(this);
+	    pd1.setProgress(0);
+		pd1.setTitle("Please wait!");
+	    pd1.setMessage("Contacting Server");
+	    h1.sendEmptyMessage(0);
+	    pd1.show();
+		
+		 final String question1,choice1,choice2,choice3,choice4;
 		 
 		
 		 
@@ -242,13 +279,14 @@ public class Multiple_choice extends Activity implements android.view.View.OnCli
 			}
 			catch( SocketTimeoutException e )
 			{
-				btn.setText("try");
+				wait = false;
+				btn.setText("TRY");
+				btn.setBackgroundColor(Color.GREEN);
 				return;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 			/*
 			 * ACK received
 			 */
@@ -263,7 +301,10 @@ public class Multiple_choice extends Activity implements android.view.View.OnCli
 			}
 			else
 			{
-				btn.setText("try");
+				wait = false;
+				btn.setText("TRY");
+				btn.setBackgroundColor(Color.GREEN);
 			}
+			wait = false;
 	}
 }

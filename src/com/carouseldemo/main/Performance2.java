@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -25,21 +26,24 @@ import StaticAttributes.QuizAttributes;
 import StaticAttributes.Utilities;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.ExpandableListView;
 
+import com.androidplot.ui.AnchorPosition;
+import com.androidplot.ui.DynamicTableModel;
+import com.androidplot.ui.SizeLayoutType;
+import com.androidplot.ui.SizeMetrics;
+import com.androidplot.ui.XLayoutStyle;
+import com.androidplot.ui.YLayoutStyle;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.XYStepMode;
+
 
 
 class performanceFetchThread extends Thread
@@ -145,9 +149,7 @@ class performanceFetchThread extends Thread
 		String jsonString = obj.toJSONString();
 		
 		Map<String, String> hashMap = fetchHashMap(jsonString);
-		
-		
-		
+
 		perfObj.subjectLists = fetchArrayList(hashMap);
 		perfObj.wait = false;
 	}
@@ -163,9 +165,7 @@ public class Performance2  extends Activity
 		Handler h1;
 		public boolean wait;
 		
-		final String[] tests = new String[] {
-	        	"test1","test2","test3"
-	        };
+		String[] tests;
 		
 		/*
 		 * The following variable will be set by the thread.
@@ -177,16 +177,13 @@ public class Performance2  extends Activity
 	    {
 	 
 	        super.onCreate(savedInstanceState);
-	        setContentView(R.layout.performance2);
 	        wait = true;
-	        
 	        /*
 	         * Start the thread which forms the graph
 	         */
 	        
 	        performanceFetchThread thread = new performanceFetchThread(this);
 	        thread.start();
-	        
 	        /*
 	         * Spin the thing
 	         */
@@ -202,8 +199,9 @@ public class Performance2  extends Activity
 					super.handleMessage(msg);
 					if( wait == false )
 					{
-						pd1.dismiss();
+						setContentView(R.layout.performance2);
 						plotGraph();
+						pd1.dismiss();
 					}
 					else
 					{
@@ -215,22 +213,13 @@ public class Performance2  extends Activity
 		    	
 		    };
 		    pd1.setTitle("Please wait!");
-		    pd1.setMessage("Questions are being fetched from database");
+		    pd1.setMessage("Contacting Teacher...");
 		    h1.sendEmptyMessage(0);
 		    pd1.show();
-	        
-
 	    }
 	    
 	    public void plotGraph()
 	    {
-	    	
-//	    	// tests = new String[subjectLists.size()];
-//		        
-//		        for(int i=0;i<tests.length;i++)
-//		        {
-//		        	tests[i] = "Test"+(i+1);
-//		        }
 	    	System.out.println(".............!!!!");
 	    	
 	        // initialize our XYPlot reference:
@@ -241,6 +230,8 @@ public class Performance2  extends Activity
 	        
 	        ArrayList<Number[]> tempList = new ArrayList<Number[]>();
 	        ArrayList<String> subjecStrings = new ArrayList<String>();
+	        
+	        int maxSize = 0;
 	        
 	        for(int i=0;i<subjectLists.size();i++)
 	        {
@@ -262,6 +253,15 @@ public class Performance2  extends Activity
 	        	 */
 	        	
 	        	Number[] marksList = map.get(subject);
+	        	
+	        	/*
+	        	 * Find the max size
+	        	 */
+	        	if( marksList.length > maxSize )
+	        	{
+	        		maxSize = marksList.length;
+	        	}
+	        	
 	        	System.out.println("MARKS LIST IS : "+marksList);
 	        	
 	        	for(int j=0;j<marksList.length;j++)
@@ -271,6 +271,13 @@ public class Performance2  extends Activity
 	        	System.out.println("------------------------------------");
 	        	tempList.add(marksList);
 	        	subjecStrings.add(subject);
+	        }
+	        
+	        tests = new String[maxSize+2];
+	        
+	        for(int i=0;i<maxSize+2;i++)
+	        {
+	        	tests[i] = "Test"+(i+1);
 	        }
 	        
 	        ArrayList<XYSeries> xyList = new ArrayList<XYSeries>();
@@ -283,9 +290,8 @@ public class Performance2  extends Activity
 	        	
 	        	XYSeries series = new SimpleXYSeries(
 		                Arrays.asList(numList),          		 // array => list
-		                SimpleXYSeries.ArrayFormat.Y_VALS_ONLY , // Y_VALS_ONLY means use the element index as the x value
+		                SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, // Y_VALS_ONLY means use the element index as the x value
 		                subject);                             	 // Title of this series
-	        	
 	        	xyList.add(series);
 	        }
 	        
@@ -293,8 +299,12 @@ public class Performance2  extends Activity
 	        for(int i=0;i<tempList.size();i++)
 	        {
 	        	// Create a formatter to format Line and Point of income series
+	        	int r = 0 + (int)(Math.random() * ((255 - 0) + 1));
+	        	int g = 0 + (int)(Math.random() * ((255 - 0) + 1));
+	        	int b = 0 + (int)(Math.random() * ((255 - 0) + 1));
+	        	
 		        LineAndPointFormatter lf = new LineAndPointFormatter(
-		                Color.rgb(0, 0, ((i+1)*20)),                   // line color
+		                Color.rgb(r,g,b),                   // line color
 		                Color.rgb(200, 200, 200),               // point color
 		                null, null );                					// fill color (none)
 		        lpList.add(lf);
@@ -358,6 +368,33 @@ public class Performance2  extends Activity
 	        xyPlot.setDomainStep(XYStepMode.INCREMENT_BY_VAL, 1);
 	        
 	        xyPlot.getGraphWidget().setRangeLabelWidth(50);               
+	        
+	        xyPlot.getLegendWidget().setTableModel(new DynamicTableModel(3, 3));
+	        
+	        // adjust the legend size so there is enough room
+	        // to draw the new legend grid:
+	        xyPlot.getLegendWidget().setSize(new SizeMetrics(100, SizeLayoutType.ABSOLUTE, 200, SizeLayoutType.ABSOLUTE));
+	 
+	        // add a semi-transparent black background to the legend
+	        // so it's easier to see overlaid on top of our plot:
+	        Paint bgPaint = new Paint();
+	        bgPaint.setColor(Color.BLACK);
+	        bgPaint.setStyle(Paint.Style.FILL);
+	        bgPaint.setAlpha(140);
+	        xyPlot.getLegendWidget().setBackgroundPaint(bgPaint);
+	 
+	        // adjust the padding of the legend widget to look a little nicer:
+	        xyPlot.getLegendWidget().setPadding(10, 1, 1, 1);      
+	 
+	        // reposition the grid so that it rests above the bottom-left
+	        // edge of the graph widget:
+	       /* xyPlot.position(
+	                xyPlot.getLegendWidget(),
+	                20,
+	                XLayoutStyle.ABSOLUTE_FROM_RIGHT,
+	                35,
+	                YLayoutStyle.ABSOLUTE_FROM_BOTTOM,
+	                AnchorPosition.RIGHT_BOTTOM);*/
 	        
 	        // Reduce the number of range labels
 	        xyPlot.setTicksPerRangeLabel(1);

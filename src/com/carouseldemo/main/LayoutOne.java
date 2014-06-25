@@ -17,7 +17,6 @@ public class LayoutOne extends Fragment {
         return f;
     }
  
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.layout_one, null);
         return root;

@@ -76,16 +76,19 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
     }
 	public void onClick(View v)     //actions performed after change password button is clicked.
 	{   
-		thread.running = false; 
+		if( thread.running == true )
+		{
+			thread.running = false; 
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 		/*
 		 * Sleep for 500ms so that the above  listening thread gets killed
 		 */
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		String answer = null;
 		RadioGroup g = (RadioGroup)findViewById(R.id.radioGroup1);
 		

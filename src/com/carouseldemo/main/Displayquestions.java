@@ -2,6 +2,8 @@ package com.carouseldemo.main;
 
 
 
+
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -182,14 +184,20 @@ class questionThread extends Thread
 	
 	public void run()
 	{	
+		boolean newRecordsUpdated = true;
 		/*
 		 * Create a new JSON query packet with the last updated date and send it to the server.
 		 */
 		
 		Map<String,String> newMap = getHashMap(subjectLastFetchedDate);
 		
+		if( newMap.size() == 0 )
+		{
+			newRecordsUpdated = false;
+		}
+		
 		/*
-		 * Now merge the maps
+		 * Now merge the maps if server replies with any new entries
 		 */
 		Map<String, String> mergedMap = mergeMaps(subjectHashMap, newMap);
 		
@@ -200,32 +208,38 @@ class questionThread extends Thread
 		if( subject.equals("English"))
 		{
 			questionsStored.englishQues = mergedMap;
-			questionsStored.lastFetchedDateEng = new java.util.Date();
+			if( newRecordsUpdated == true )
+				questionsStored.lastFetchedDateEng = new java.util.Date();
 		}
 		else if( subject.equals("Maths"))
 		{
 			questionsStored.mathsQues = mergedMap;
-			questionsStored.lastFetchedDateMat = new java.util.Date();
+			if( newRecordsUpdated == true )
+				questionsStored.lastFetchedDateMat = new java.util.Date();
 		}
 		else if( subject.equals("Science"))
 		{
 			questionsStored.scienceQues = mergedMap;
-			questionsStored.lastFetchedDateSci = new java.util.Date();
+			if( newRecordsUpdated == true )
+				questionsStored.lastFetchedDateSci = new java.util.Date();
 		}
 		else if( subject.equals("Social"))
 		{
 			questionsStored.socialQues = mergedMap;
-			questionsStored.lastFetchedDateSoc = new java.util.Date();
+			if( newRecordsUpdated == true )
+				questionsStored.lastFetchedDateSoc = new java.util.Date();
 		}
 		else if( subject.equals("Hindi"))
 		{
 			questionsStored.hindiQues = mergedMap;
-			questionsStored.lastFetchedDateHin = new java.util.Date();
+			if( newRecordsUpdated == true )
+				questionsStored.lastFetchedDateHin = new java.util.Date();
 		}
 		else if( subject.equals("Marathi"))
 		{
 			questionsStored.marathiQues = mergedMap;
-			questionsStored.lastFetchedDateMar = new java.util.Date();
+			if( newRecordsUpdated == true )
+				questionsStored.lastFetchedDateMar = new java.util.Date();
 		}
 		obj.groups = createData(mergedMap);	
 		obj.wait = false;
@@ -548,10 +562,13 @@ public class Displayquestions extends Activity implements android.view.View.OnCl
 		  catch(FileNotFoundException i)
 	      {
 			  	System.out.println("file not found.. Creating a file now");
+			  	
 			  	/*
 			  	 * Create a new empty file
 			  	 */
-			    try {
+			    
+			  	try {
+			    	
 			    	FileOutputStream fos = openFileOutput(fileName, MODE_PRIVATE);
 					System.out.println("File is created!");
 			    	/*
@@ -563,13 +580,16 @@ public class Displayquestions extends Activity implements android.view.View.OnCl
 			        out.close();
 			        fos.close();
 			        System.out.println("A new object is created and saved at "+fileName);
-			        return null;
+			        return pques;
+			        
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					return null;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					return null;
 				}
 	      }
 		  catch(ClassNotFoundException c)

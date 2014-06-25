@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+     <TextView
+        android:id="@+id/tt1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:background="#000000cc" 
+        android:textColor="#ffffff"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:hint="Download Files"/>
+
+     <ListView
+         android:id="@android:id/list"
+         android:layout_width="fill_parent"
+         android:layout_height="300dp"
+         android:choiceMode="multipleChoice"
+         android:drawSelectorOnTop="false" >
+
+     </ListView>
+
+     <Button
+         android:id="@+id/button1"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:gravity="center"
+         android:layout_gravity="center"
+         android:text="Get New Files" />
+
+</LinearLayout>
