@@ -16,6 +16,7 @@ import StaticAttributes.QuizAttributes;
 import StaticAttributes.Utilities;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -57,16 +58,20 @@ public class Answer_one_word extends Activity implements OnClickListener
 	public void onClick(View v)     //actions performed after change password button is clicked.
 	{
 		error.setText("Please wait!");
-		thread.running = false;
-		/*
-		 * Sleep for 500ms so that the above  listening thread gets killed
-		 */
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		if( thread.running == true )
+		{
+			thread.running = false; 
+			/*
+			 * Sleep for 500ms so that the above  listening thread gets killed
+			 */
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
+
 		/*
 		 * Disable the button in the start and enable it at the end of this function
 		 */
@@ -79,11 +84,11 @@ public class Answer_one_word extends Activity implements OnClickListener
 			/*
 			 * None of the options are selected
 			 */
-			error.setText("Please select an Option");
+			error.setText("Invalid answer field");
 			/*
 			 * Make the button enabled
 			 */
-			btn.setEnabled(false);
+			btn.setEnabled(true);
 			return;
 		}
 		
@@ -122,15 +127,17 @@ public class Answer_one_word extends Activity implements OnClickListener
 			catch( SocketTimeoutException e )
 			{
 				System.out.println("Timeout!~");
-				error.setText("Please try again!");
-				
+				error.setText("Please try again after 2 seconds!");
 				/*
 				 * Enable the button
 				 */
-				btn.setEnabled(false);
+				btn.setEnabled(true);
+				/*
+				 * Start the thread again, so that it will listen for the screen changing packet
+				 */
 				thread = new QuizStartPacketListener(this);
 			    thread.start();
-				break;
+				return;
 			}
 			catch (IOException e)
 			{
@@ -174,15 +181,18 @@ public class Answer_one_word extends Activity implements OnClickListener
 					    break;
 					}
 					btn.setEnabled(false);
+					btn.setBackgroundColor(Color.CYAN);
 				}
 				else
 				{
 					System.out.println("Error!!");
+					error.setText("Aberrant packet received");
 					continue;
 				}
 			}
 			else
 			{
+				error.setText("NON QUIZ PACKET RECVD.. OMGGGG!");
 				continue;
 			}
 		}

@@ -15,6 +15,7 @@ public class QuizAttributes {
 	public static String studentName;
 	public static ArrayList<Leader> selectedLeaders;
 	public static ArrayList<Student> groupMembers;
+	public static String standard;
 	public static Student leader;
 	public static String groupName;
 	static
