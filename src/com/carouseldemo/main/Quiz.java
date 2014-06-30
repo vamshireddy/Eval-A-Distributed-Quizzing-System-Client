@@ -184,13 +184,24 @@ public class Quiz extends Activity implements OnClickListener {
 		 * This is for handling the leader button
 		 */
 		errorMsg.setText("Please wait!");
-		// TODO Clear the socket timeout before going to the next activity
+		
+		/*
+		 * Create a leader packet and send request to the server
+		 */
 		LeaderPacket lp = new LeaderPacket();
 		lp.uID = QuizAttributes.studentID;
 		lp.uName = QuizAttributes.studentName;
 		lp.granted  = false;
-		Packet p = new Packet(PacketSequenceNos.LEADER_REQ_CLIENT_SEND, false, false, false,Utilities.serialize(lp),false, true);
+		
+		int currentSeqNo = Utilities.seqNo++;
+		System.out.println("Sedning with seq no : "+currentSeqNo);
+		/*
+		 * Create a packet and encapsulate leader packet
+		 */
+		Packet p = new Packet(currentSeqNo, PacketTypes.LEADER_REQUEST, false, Utilities.serialize(lp));
+		
 		byte[] packet_bytes = Utilities.serialize(p);
+		
 		DatagramPacket leader_pack = new DatagramPacket(packet_bytes, packet_bytes.length,Utilities.serverIP, Utilities.servPort);
 		
 		try {
@@ -199,7 +210,7 @@ public class Quiz extends Activity implements OnClickListener {
 			e.printStackTrace();
 		}
 		
-		Packet pyy = null;
+		Packet recvd_packet = null;
 		while( true )
 		{
 			byte[] by = new byte[Utilities.MAX_BUFFER_SIZE];
@@ -210,16 +221,16 @@ public class Quiz extends Activity implements OnClickListener {
 			}
 			catch( SocketTimeoutException e1)
 			{
-				errorMsg.setText("Your request has been timed out! Try again");
+				errorMsg.setText("Your request has been timed out! Try again after 3 seconds");
 				errorMsg.setVisibility(View.VISIBLE);
 				return;
 			}
 			catch (IOException e) {
 				e.printStackTrace();
-				return;
+				System.exit(0);
 			}
-			pyy = (Packet)Utilities.deserialize(by);
-			if( pyy.leader_req_packet == true && pyy.seq_no == PacketSequenceNos.LEADER_REQ_SERVER_SEND )
+			recvd_packet = (Packet)Utilities.deserialize(by);
+			if( recvd_packet.ack == true && recvd_packet.seq_no == currentSeqNo && recvd_packet.type == PacketTypes.LEADER_REQUEST )
 			{
 				break;
 			}
@@ -229,7 +240,7 @@ public class Quiz extends Activity implements OnClickListener {
 			}
 		}
 		
-		LeaderPacket lpp = (LeaderPacket)Utilities.deserialize(pyy.data);
+		LeaderPacket lpp = (LeaderPacket)Utilities.deserialize(recvd_packet.data);
 
 		if( lpp.granted == true )
 		{
@@ -249,7 +260,7 @@ public class Quiz extends Activity implements OnClickListener {
 		}
 		QuizListen1 q = new QuizListen1();
 		q.start();
-		System.out.println("---------------- I am after the function!!!-------------------");
+		System.out.println("---------------- I am after the function leader session!!!-------------------");
 	}
 	
 	public void setInstructions()

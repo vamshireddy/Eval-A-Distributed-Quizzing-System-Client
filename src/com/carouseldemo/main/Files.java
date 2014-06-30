@@ -84,6 +84,8 @@ class fileFetcher extends Thread
 			s = null;
 			outToServer = null;
 			inFromServer = null;
+			obj.wait = false;
+			obj.fileFetchError = true;
 		}
 
 	}
@@ -94,12 +96,16 @@ class fileFetcher extends Thread
 			/*
 			 * No server running
 			 */
+			obj.wait = false;
+			obj.fileFetchError = true;
 			return;
 		}
 		
 		JSONObject jobj = new JSONObject();
 		jobj.put("queryType", "Files");
-		jobj.put("standard", "standard6");
+		jobj.put("standard", "standard"+QuizAttributes.standard);
+		
+		System.out.println("I AM SENDING "+"standard"+QuizAttributes.standard);
 		
 		try {
 			/*
@@ -255,6 +261,7 @@ public class Files  extends ListActivity implements android.view.View.OnClickLis
 	boolean wait;
 	String fileToDownload;
 	boolean filesReady;
+	boolean fileFetchError;
 	
     /** Called when the activity is first created. */
     @Override
@@ -353,21 +360,28 @@ public class Files  extends ListActivity implements android.view.View.OnClickLis
 			}
 	    }
 	    
-	    //get the new uploaded files from server
-	
-		AlertDialog.Builder ad = new AlertDialog.Builder(this);
-		ad.setTitle("Select the files to download");
-		ad.setSingleChoiceItems(downloadedFileNames, -1, new OnClickListener() 
-		{
-			public void onClick(DialogInterface dialog, int which) 
+	    if( fileFetchError == true )
+	    {
+	    	AlertDialog.Builder ad = new AlertDialog.Builder(this);
+			ad.setTitle("Unable to contact Teacher for Notes");
+			ad.show();
+	    }
+	    else
+	    {
+	    	AlertDialog.Builder ad = new AlertDialog.Builder(this);
+			ad.setTitle("Select the files to download");
+			ad.setSingleChoiceItems(downloadedFileNames, -1, new OnClickListener() 
 			{
-				fileToDownload = downloadedFileNames[which];
-				filesReady = true;
-				dialog.dismiss();
-				
-			}
-		});
-		ad.show();
+				public void onClick(DialogInterface dialog, int which) 
+				{
+					fileToDownload = downloadedFileNames[which];
+					filesReady = true;
+					dialog.dismiss();
+					
+				}
+			});
+			ad.show();
+	    }
 	}
 }
  

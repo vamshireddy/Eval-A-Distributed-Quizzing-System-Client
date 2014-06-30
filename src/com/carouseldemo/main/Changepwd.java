@@ -71,17 +71,19 @@ public class Changepwd extends Activity implements OnClickListener
 			 ap.password = old_pass;
 			 ap.new_password = new_pass;
 			 
-			 Packet packy = new Packet(0, true, false, false, Utilities.serialize(ap));
-			 packy.type = PacketTypes.PASSWORD_CHANGE;
+			 int currentSeqNo = Utilities.seqNo;
+			 
+			 Packet packy = new Packet(currentSeqNo,PacketTypes.AUTHENTICATION_CHANGE_PASS, false, Utilities.serialize(ap));
 			 
 			 byte[] bytes = Utilities.serialize(packy);
+			 
 			 DatagramPacket sendPacket = new DatagramPacket(bytes, bytes.length, Utilities.serverIP, Utilities.authServerPort);
 			 try {
 				sock.send(sendPacket);
-			} catch (IOException e) {
+			 } catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			 }
 			 
 			 /*
 			  * Now wait for the reply
@@ -101,11 +103,15 @@ public class Changepwd extends Activity implements OnClickListener
 				// TODO Auto-generated catch block
 				  e.printStackTrace();
 			  }
+			  
 			  System.out.println("Recvd packet PASS CHANGE");
+			  
 			  Packet recvdPacket = (Packet)Utilities.deserialize(by);
-			  if( recvdPacket.type == PacketTypes.PASSWORD_CHANGE )
+			  
+			  if(recvdPacket.seq_no == currentSeqNo && recvdPacket.type == PacketTypes.AUTHENTICATION_CHANGE_PASS && recvdPacket.ack == true )
 			  {
 				  AuthPacket recvdAp = (AuthPacket)Utilities.deserialize(recvdPacket.data);
+				  
 				  if( recvdAp.grantAccess == true )
 				  {
 					  Toast.makeText(this, "Password changed succesfully", 2000).show();

@@ -3,11 +3,12 @@ package com.example.peerbased;
 import java.io.Serializable;
 
 
-public class Packet implements Serializable{
+public class Packet implements Serializable {
+	
 	public static final long serialVersionUID = 42L;
 	public int seq_no; 			// This will be the packet identifier
 	public byte type;			// This will be the type of the packet
-	public boolean auth_packet;	// This flag will be set, if the packet is used for authentication of student or teacher
+	//public boolean auth_packet;	// This flag will be set, if the packet is used for authentication of student or teacher
 	public boolean bcast;			// This flag will be set, if the packet is a broadcast packet . Usually set by the sender
 	public boolean probe_packet;	// Used when the packet is used for probing the status of the android devices (students)
 	public boolean param_packet;
@@ -22,7 +23,7 @@ public class Packet implements Serializable{
 	{
 		// Initialize the fields to defaults
 		seq_no = 0;
-		auth_packet = false;
+		//auth_packet = false;
 		bcast = false;
 		probe_packet = false;
 		data = null;
@@ -37,7 +38,7 @@ public class Packet implements Serializable{
 	public Packet(int seq_no, boolean auth, boolean bcast, boolean probe, byte[] data) {
 		this();
 		this.seq_no = seq_no;
-		this.auth_packet = auth;
+		//this.auth_packet = auth;
 		this.bcast = bcast;
 		this.probe_packet = probe;
 		this.data = data;
@@ -49,5 +50,13 @@ public class Packet implements Serializable{
 	public Packet(int seq_no, boolean auth, boolean bcast, boolean probe, byte[] data, boolean param_pack, boolean leader_r) {
 		this(seq_no, auth, bcast, probe, data, param_pack);
 		this.leader_req_packet = leader_r;
+	}
+	
+	public Packet(int seq_no, byte type, boolean ack, byte[] data)
+	{
+		this.seq_no = seq_no;
+		this.type = type;
+		this.ack = ack;
+		this.data = data;
 	}
 }

@@ -2,11 +2,13 @@ package com.carouseldemo.main;
 import StaticAttributes.*;
 
 import com.example.peerbased.*;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +25,9 @@ import android.app.Activity;
 import android.view.View.OnClickListener;
 import StaticAttributes.*;
 @SuppressLint("NewApi")
+
 public class Login extends Activity implements OnClickListener {
+	
 	private Button login;
 	private EditText passwordBox,userID;
 	private TextView errorText;
@@ -38,22 +42,31 @@ public class Login extends Activity implements OnClickListener {
 		setContentView(R.layout.login);
 		StrictMode.enableDefaults();
 		
-		// Create a thread to listen for the server's error messages;
-		
 		/*
-		 * Inititlaize the socket timeout to 1000
+		 *  Create a thread to listen for the server's error messages;
 		 */
-		
+
+		/*
+		 * Initialize the socket timeout to 1000
+		 */
+
     	userID=(EditText)findViewById(R.id.username);
-    	// Set the student name in static attribute class, so that every other class can access it
+    	/*
+    	 * Set the student name in static attribute class, so that every other class can access it
+    	 */
 		passwordBox=(EditText)findViewById(R.id.passwordField);
 		login=(Button)findViewById(R.id.login);
 		login.setOnClickListener(this);
 		errorText = (TextView)findViewById(R.id.errorText);
 		// Set the Visibility of errorBox to false
-		errorText.setVisibility(View.INVISIBLE);
+		errorText.setText("");
 		socket = SocketHandler.authSocket;
-		
+		try {
+			socket.setSoTimeout(500);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 	
 
@@ -121,12 +134,7 @@ public class Login extends Activity implements OnClickListener {
 	
 	public void onClick(View v) 
 	{
-		try {
-			socket.setSoTimeout(1000);
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		  uID = userID.getText().toString();
 		  /*
 		   * Initialize the Quiz attribute, so that every class could access it
@@ -148,70 +156,118 @@ public class Login extends Activity implements OnClickListener {
 		  /*
 		   * Send out the request
 		   */
-		  sendAuthPacket();
+		  Utilities.seqNo++;
+		  
+		  int currentSeqNo = Utilities.seqNo;
+		  
+		  sendAuthPacket(currentSeqNo);
+		  
+		  /*
+		   * Wait for the reply
+		   */
 		  
 		  Packet recvd_pack = null;
 			  
 		  byte[] by = new byte[Utilities.MAX_BUFFER_SIZE];
-		  DatagramPacket packy = new DatagramPacket(by, by.length);
-		  try
-		  {
-			  socket.receive(packy);
-		  }
-		  catch (IOException e) 
-		  {
-			  errorText.setText("Your request couldn't be processed at this moment. Please try again!");
-			  errorText.setVisibility(View.VISIBLE);
-			  return;
-		  }
-			  
-		  recvd_pack = (Packet)Utilities.deserialize(by);
 		  
-		 if( recvd_pack.auth_packet == true && recvd_pack.seq_no == PacketSequenceNos.AUTHENTICATION_SEND_SERVER )
-		 {
-	    	  AuthPacket auth_pack = (AuthPacket) Utilities.deserialize(recvd_pack.data);
-	    	  
-	    	  if( auth_pack.grantAccess == true )
-	    	  {
-	    		    QuizAttributes.studentID = uID; 	// Fetch uid from textBox
-	    		    QuizAttributes.studentName = auth_pack.studentName;	// Fetch name from the received packet
-	    		    errorText.setText("");
-	    		    Intent i = new Intent(this, MainActivity.class);
-	    			startActivity(i);	
-	    			finish();
-	    	  }
-	    	  else
-	    	  {
-	    		  	errorText.setVisibility(View.VISIBLE);
-	    		  	if( auth_pack.errorCode == Utilities.ALREADY_LOGGED )
-	    		  	{
-	    		  		errorText.setText("You are already logged in");
-	    		  	}
-	    		  	else if( auth_pack.errorCode == Utilities.INVALID_FIELDS )
-	    		  	{
-	    		  		errorText.setText("The entered fields are invalid");
-	    		  	}
-	    		  	else if( auth_pack.errorCode == Utilities.INVALID_USER_PASS )
-	    		  	{
-	    		  		errorText.setText("Please check your username and password");
-	    		  	}
-	    	  }
-	      }
-	      else
-	      {
-	    	  errorText.setVisibility(View.VISIBLE);
-	    	  errorText.setText("Invalid request format");
-	      }
+		  DatagramPacket packy = new DatagramPacket(by, by.length);
+		  
+		  while( true )
+		  {
+			  try
+			  {
+				  socket.receive(packy);
+			  }
+			  catch (SocketTimeoutException e)
+			  {
+				  errorText.setText("Server is busy at the moment!");
+				  return;
+			  }
+			  catch (IOException e) 
+			  {
+				  errorText.setText("Your request couldn't be processed at this moment. Please try again!");
+				  return;
+			  }
+			  
+				  
+			  recvd_pack = (Packet)Utilities.deserialize(by);
+			  
+			  System.out.println("The seq no is "+recvd_pack.seq_no+" and expected is "+currentSeqNo);
+			  
+			  if( recvd_pack.type == PacketTypes.AUTHENTICATION_LOGIN && recvd_pack.ack == true && recvd_pack.seq_no == currentSeqNo )
+			  {
+				  /*
+				   * Response from server
+				   */
+				  
+		    	  AuthPacket auth_pack = (AuthPacket) Utilities.deserialize(recvd_pack.data);
+		    	  
+		    	  if( auth_pack.grantAccess == true )
+		    	  {
+		    		  	System.out.println("I am granted access");
+		    		    QuizAttributes.studentID = uID; 	// Fetch uid from textBox
+		    		    
+		    		    QuizAttributes.standard = auth_pack.standard;
+		    		    
+		    		    System.out.println("THE STANDARD IS "+QuizAttributes.standard);
+		    		    
+		    		    QuizAttributes.studentName = auth_pack.studentName;	// Fetch name from the received packet
+		    		    
+		    		    errorText.setText("");
+		    		    
+		    		    Intent i = new Intent(this, MainActivity.class);
+		    		    startActivity(i);
+		    		    break;
+		    	  }
+		    	  else
+		    	  {
+		    		  	System.out.println("I am not granted access");
+		    		  	if( auth_pack.errorCode == Utilities.ALREADY_LOGGED )
+		    		  	{
+		    		  		System.out.println("You are already logged in");
+		    		  		errorText.setText("You are already logged in");
+		    		  	}
+		    		  	else if( auth_pack.errorCode == Utilities.INVALID_FIELDS )
+		    		  	{
+		    		  		System.out.println("Invalid fields");
+		    		  		errorText.setText("The entered fields are invalid");
+		    		  	}
+		    		  	else if( auth_pack.errorCode == Utilities.INVALID_USER_PASS )
+		    		  	{
+		    		  		System.out.println("Invalid pass");
+		    		  		errorText.setText("Please check your username and password");
+		    		  	}
+		    		  	break;
+		    	  }
+		      }
+		      else
+		      {
+		    	  errorText.setText("Invalid request format");
+		    	  continue;
+		      }
+		  }
+		  
 	}
-	private void sendAuthPacket()
+	
+	private void sendAuthPacket(int seq_no)
 	{
 		AuthPacket ap = new AuthPacket(uID,password,false,false);
-	    Packet p = new Packet(PacketSequenceNos.AUTHENTICATION_SEND_CLIENT,true,false,false,Utilities.serialize(ap));
-		try
+		
+		System.out.println("Ap is"+ap);
+		/*
+		 * Create a packet and send it with the current seqNo and Ack = false
+		 */
+		Packet p = new Packet(seq_no,PacketTypes.AUTHENTICATION_LOGIN, false, Utilities.serialize(ap));
+		
+		System.out.println("data is "+p.data);
+		
+	    try
 		{
 			byte[] packet_buf = Utilities.serialize(p);
-		    DatagramPacket packet = new DatagramPacket(packet_buf, packet_buf.length, Utilities.serverIP, Utilities.authServerPort); 
+			DatagramPacket packet = new DatagramPacket(packet_buf, packet_buf.length, Utilities.serverIP, Utilities.authServerPort); 
 		    socket.send(packet);
+		    
+		    System.out.println("\n\nSENT PACKET\n\n");
 		}
 		catch (Exception e)
 		{

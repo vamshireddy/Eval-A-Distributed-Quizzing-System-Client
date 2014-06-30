@@ -172,7 +172,7 @@ class QuizStartPacketListener extends Thread
 					rcvd = true;
 				}	
 				/*
-				 * Now send ack back
+				 * Now send ACK back
 				 */
 				packetRcvd.data = null;
 				packetRcvd.ack = true;

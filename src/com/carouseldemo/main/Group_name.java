@@ -196,16 +196,20 @@ public class Group_name extends Activity implements View.OnClickListener
 		// Send the group name request packet to the server.*/
 		
 		System.out.println("CLICKED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		
+		int currentSeqNo = Utilities.seqNo++;
+		
 		GroupNameSelectionPacket gnsp = new GroupNameSelectionPacket(name.getText().toString(), QuizAttributes.studentID, QuizAttributes.studentName);
 		
-		Packet p = new Packet(PacketSequenceNos.GROUP_REQ_CLIENT_SEND, false, false, false, Utilities.serialize(gnsp),false, true);
-		p.group_name_selection_packet = true;
+		Packet p = new Packet(currentSeqNo, PacketTypes.GROUP_NAME_SELECTION, false, Utilities.serialize(gnsp));
 		
 		byte[] bytes = Utilities.serialize(p);
 		
 		DatagramPacket pack = new DatagramPacket(bytes, bytes.length,Utilities.serverIP, Utilities.servPort);
 		
-	
+		/*
+		 * Send requests
+		 */
 		
 		try {
 			sock.send(pack);
@@ -214,11 +218,16 @@ public class Group_name extends Activity implements View.OnClickListener
 			e.printStackTrace();
 		}	
 		
+		/*
+		 * Receive Requests
+		 */
+		
 		while( true )	
 		{
 			byte[] b = new byte[Utilities.MAX_BUFFER_SIZE];
 			DatagramPacket packy  =  new DatagramPacket(b, b.length);
-			try {
+			try
+			{
 					sock.receive(packy);
 			}
 			catch( SocketTimeoutException e1 )
@@ -230,6 +239,7 @@ public class Group_name extends Activity implements View.OnClickListener
 				 */
 				btn.setEnabled(true);
 				return;
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -237,9 +247,7 @@ public class Group_name extends Activity implements View.OnClickListener
 			
 			Packet packet = (Packet)Utilities.deserialize(b);
 			
-			error.setText(""+packet.seq_no+" "+packet.group_name_selection_packet);
-			
-			if( packet.seq_no == PacketSequenceNos.GROUP_REQ_SERVER_ACK && packet.group_name_selection_packet == true )
+			if( packet.ack == true && packet.type == PacketTypes.GROUP_NAME_SELECTION )
 			{
 				gnsp = (GroupNameSelectionPacket)Utilities.deserialize(packet.data);
 				if( gnsp.accepted == true )

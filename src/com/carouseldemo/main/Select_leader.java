@@ -89,11 +89,12 @@ class Select_leader_listener extends Thread
 			/*
 			 * Packet is received!
 			 */
-			
+			System.out.println("I got packet");
 			Packet packetRcvd = (Packet)Utilities.deserialize(b);
 			
 			if( packetRcvd.type == PacketTypes.GROUP_DETAILS_MESSAGE && packetRcvd.ack == false )
 			{
+				System.out.println("Hey .. I got man!");
 				if( rcvd == false )
 				{
 					SelectedGroupPacket sgp = (SelectedGroupPacket)Utilities.deserialize(packetRcvd.data);
@@ -105,6 +106,7 @@ class Select_leader_listener extends Thread
 					QuizAttributes.groupMembers = sgp.team;
 					QuizAttributes.groupName = sgp.groupName;
 					rcvd = true;
+					System.out.println("Heyyyy.. Its correct wordkin");
 				}
 				/*
 				 * Now send the ACK back
@@ -234,15 +236,14 @@ public class Select_leader extends ListActivity  implements OnClickListener {
 				}
 				
 			}
-	    	
 	    };*/
-      
     }
  
 	protected void onListItemClick(ListView l, View v, int position, long id) 
 	{
 		super.onListItemClick(l, v, position, id);
-		String selectedLeaderName =(String) l.getItemAtPosition(position);
+		
+		String selectedLeaderName =(String)l.getItemAtPosition(position);
 		
 		String selectedLeaderID = null;
 		
@@ -257,11 +258,12 @@ public class Select_leader extends ListActivity  implements OnClickListener {
 			}
 		}
 		
+		int currentSeqNo = Utilities.seqNo++;
+		
 		TeamSelectPacket tsp = new TeamSelectPacket(selectedLeaderID, QuizAttributes.studentName, QuizAttributes.studentID);
 		
-		Packet pack = new Packet(PacketSequenceNos.TEAM_REQ_CLIENT_SEND, false, false, false, Utilities.serialize(tsp), false, true);
-		pack.team_selection_packet = true;
-		
+		Packet pack = new Packet(currentSeqNo,PacketTypes.TEAM_SELECTION, false,Utilities.serialize(tsp));
+
 		byte[] bytes = Utilities.serialize(pack);
 		
 		DatagramPacket dp = new DatagramPacket(bytes, bytes.length,Utilities.serverIP, Utilities.servPort);
@@ -283,6 +285,8 @@ public class Select_leader extends ListActivity  implements OnClickListener {
 			}
 			catch( SocketTimeoutException e1 )
 			{
+				error.setText("Please try again after 2 seconds.");
+				System.out.println("TImeput");
 				return;
 			}
 			catch (IOException e) {
@@ -290,19 +294,22 @@ public class Select_leader extends ListActivity  implements OnClickListener {
 				e.printStackTrace();
 				System.exit(0);
 			}
+			System.out.println("Packet recvd");
 			
 			Packet packet = (Packet)Utilities.deserialize(b);
 			
-			System.out.println("PACCCCCKKKKKKKYYYY IS HERE!!!");
-			
-			if( packet.seq_no == PacketSequenceNos.TEAM_REQ_SERVER_ACK && packet.team_selection_packet == true )
+			if( packet.ack == true && packet.type == PacketTypes.TEAM_SELECTION )
 			{
+				System.out.println("Packet is good");
 				TeamSelectPacket tspReply = (TeamSelectPacket)Utilities.deserialize(packet.data);
 				if( tspReply.accepted == true )
 				{
-					error.setText("Your request is accepted. Please wait!");
+					System.out.println("Your request is accepted. Please wait!");
 					new Select_leader_listener(sock).start();
 					System.out.println("Getting team!!!");
+					error.setText("Your request is accepted. Please be patient!");
+					error.setVisibility(View.VISIBLE);
+					setListAdapter(null);
 					return;
 				}
 				else if( tsp.accepted == false )
@@ -314,6 +321,7 @@ public class Select_leader extends ListActivity  implements OnClickListener {
 			}
 			else
 			{
+				System.out.println("Bad luck bro!");
 				continue;
 			}
 		}

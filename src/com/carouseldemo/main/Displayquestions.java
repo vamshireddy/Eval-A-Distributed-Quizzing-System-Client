@@ -33,6 +33,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.simple.JSONObject;
 
+import StaticAttributes.QuizAttributes;
 import StaticAttributes.Utilities;
 import android.support.v4.app.Fragment;
 import android.app.Activity;
@@ -259,6 +260,7 @@ class questionThread extends Thread
 		obj.put("queryType","Questions");
 		obj.put("subject",subject);
 		obj.put("date", dateString);
+		obj.put("standard", QuizAttributes.standard+"");
 
 		String jsonString = obj.toJSONString();
 		

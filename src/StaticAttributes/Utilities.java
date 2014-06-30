@@ -20,8 +20,9 @@ public class Utilities {
 	public static int NORMAL_TIMEOUT = 1000;
 	
 	public static int quesSeqNo = 1231241;
+	public static int seqNo = 12;
 	// Constants
-	public static final int MAX_BUFFER_SIZE = 1024;
+	public static final int MAX_BUFFER_SIZE = 1500;
 	public static final int MAX_LENGTH_OF_DATA = 100;
 	private static ByteArrayInputStream bais;
 	private static ObjectInputStream ois;

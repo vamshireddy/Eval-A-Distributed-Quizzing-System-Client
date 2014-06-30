@@ -36,7 +36,7 @@ class QuizListen extends Thread
 		 * InitialiZe the socket timeout
 		 */
 		try {
-			sock.setSoTimeout(1000);
+			sock.setSoTimeout(2000);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,7 +61,6 @@ class QuizListen extends Thread
 			{
 				if( rcvd == true )
 				{
-					System.out.println("I am going to HELLLL!!");
 					Intent i = new Intent(MainActivity.staticAct, Quiz.class);
 					MainActivity.staticAct.startActivity(i);
 					break;
@@ -83,7 +82,6 @@ class QuizListen extends Thread
 			{
 				if( rcvd == false )
 				{
-					System.out.println("GOTCHAAA!");
 					ParameterPacket pp = (ParameterPacket)Utilities.deserialize(p.data);
 					QuizAttributes.noOfLeaders = pp.noOfLeaders;
 					QuizAttributes.noOfOnlineStudents = pp.noOfOnlineStudents;
@@ -93,12 +91,15 @@ class QuizListen extends Thread
 					rcvd = true;
 				}
 				/*
-				 * Send the Ack back
+				 * Send the ACK back
 				 */
 				p.ack = true;
 				p.data = null;
+				
 				byte[] ackPackbytes = Utilities.serialize(p);
+				
 				DatagramPacket ackPack = new DatagramPacket(ackPackbytes, ackPackbytes.length, Utilities.serverIP, Utilities.servPort);
+				
 				try {
 					sock.send(ackPack);
 				} catch (IOException e) {
