@@ -254,8 +254,11 @@ public class Multiple_choice extends Activity implements android.view.View.OnCli
 		 qp.options = options;
 		 qp.question = question1;
 		 
-		 Packet p = new Packet(PacketSequenceNos.QUIZ_QUESTION_PACKET_CLIENT_SEND, false, false, false, Utilities.serialize(qp));
-		 p.quizPacket = true;
+		 int currentSeqNo = Utilities.seqNo++;
+		 
+		 Packet p = new Packet(currentSeqNo, PacketTypes.QUESTION_SEND , false, Utilities.serialize(qp));
+
+		 System.out.println("The packet param are : "+currentSeqNo+" : "+p.type+" ack : "+p.ack);
 		 
 		 byte[] bytes = Utilities.serialize(p);
 			
@@ -291,13 +294,14 @@ public class Multiple_choice extends Activity implements android.view.View.OnCli
 			 * ACK received
 			 */
 			Packet ackPack = (Packet)Utilities.deserialize(b);
-			if( ackPack.ack == true && ackPack.type == PacketTypes.QUESTION_ACK)
+			if( ackPack.seq_no == currentSeqNo && ackPack.ack == true && ackPack.type == PacketTypes.QUESTION_SEND )
 			{
 				btn.setEnabled(false);
 				btn.setBackgroundColor(Color.RED);
 				btn.setText("Sent!");
 				QuestionListener ql = new QuestionListener(this);
 				ql.start();
+				return;
 			}
 			else
 			{

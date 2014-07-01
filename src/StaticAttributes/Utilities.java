@@ -16,6 +16,8 @@ import java.util.Scanner;
 
 public class Utilities {
 	
+	public static byte MARKS_FOR_RESPONSE = 2;
+	
 	public static int SCREEN_CHANGE_TIMEOUT = 1000;
 	public static int NORMAL_TIMEOUT = 1000;
 	

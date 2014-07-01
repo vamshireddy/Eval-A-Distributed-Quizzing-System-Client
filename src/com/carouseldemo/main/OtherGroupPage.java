@@ -84,7 +84,10 @@ class OtherGroupListener extends Thread
 			/*
 			 * Packet is received!
 			 */
+			
 			Packet packetRcvd = (Packet)Utilities.deserialize(b);
+			
+			System.out.println("Packet revd "+packetRcvd.seq_no+" "+" : ack  :"+packetRcvd.ack+" "+packetRcvd.type);
 			
 			if( packetRcvd.type == PacketTypes.QUESTION_BROADCAST && packetRcvd.ack == false )
 			{

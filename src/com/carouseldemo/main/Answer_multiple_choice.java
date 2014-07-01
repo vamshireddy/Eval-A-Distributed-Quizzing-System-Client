@@ -16,6 +16,7 @@ import QuizPackets.ResponsePacket;
 import StaticAttributes.*;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -61,7 +62,7 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
         option2.setText(QuestionAttributes.options[1]);
         option3.setText(QuestionAttributes.options[2]);
         option4.setText(QuestionAttributes.options[3]);
-        marks.setText("You will get "+QuestionAttributes.level+" marks for the correct answer");
+        marks.setText("You will get "+Utilities.MARKS_FOR_RESPONSE+" marks for the correct answer");
         /*
          * Add level too!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO
          */
@@ -74,21 +75,28 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
         thread = new QuizStartPacketListener(this);
         thread.start();
     }
+    
+    
+    
 	public void onClick(View v)     //actions performed after change password button is clicked.
 	{   
-		if( thread.running == true )
-		{
-			thread.running = false; 
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
 		/*
-		 * Sleep for 500ms so that the above  listening thread gets killed
+		 * Stop the listening thread
 		 */
+		
+		thread.Suspend();
+		
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		/*
+		 * Get the values
+		 */
+		
 		String answer = null;
 		RadioGroup g = (RadioGroup)findViewById(R.id.radioGroup1);
 		
@@ -117,11 +125,13 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
 			return;
 		}
 		
+		int currentSeqNo = Utilities.seqNo++;
+		
+		
 		ResponsePacket rp = new ResponsePacket(QuestionAttributes.questionSeqNo, QuizAttributes.studentID,
 				 answer, false, false);
 		
-		Packet p = new Packet(PacketSequenceNos.QUIZ_RESPONSE_CLIENT_SEND, false, false, false, Utilities.serialize(rp));
-		p.quizPacket = true;
+		Packet p = new Packet(currentSeqNo, PacketTypes.QUESTION_RESPONSE,false, Utilities.serialize(rp));
 		
 		System.out.println("qp is "+p.quizPacket+" p.seq : "+p.seq_no+" rp.ans "+rp.answer);
 		
@@ -153,8 +163,7 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
 			{
 				System.out.println("Timeout!~");
 				error.setText("Please try again!");
-				thread = new QuizStartPacketListener(this);
-			    thread.start();
+				thread.Resume();
 				break;
 			}
 			catch (IOException e)
@@ -169,38 +178,16 @@ public class Answer_multiple_choice extends Activity implements OnClickListener
 			 */
 			error.setText("RECVD");
 			Packet rcvPack = (Packet)Utilities.deserialize(byR);
-			if( rcvPack.seq_no == PacketSequenceNos.QUIZ_RESPONSE_SERVER_ACK && rcvPack.quizPacket == true )
+			if( rcvPack.seq_no == currentSeqNo && rcvPack.type == PacketTypes.QUESTION_RESPONSE && rcvPack.ack == true )
 			{
 				ResponsePacket rpack = (ResponsePacket)Utilities.deserialize(rcvPack.data);
 				if( rpack.ack == true )
 				{
-					if( rpack.result == true )
-					{
-						/*
-						 * Correct answer
-						 */
-						Intent i=new Intent(this,AnswerResultPage.class);
-						i.putExtra("result", "correct");
-					    startActivity(i);
-					    //finish();
-					    Toast t1 = Toast.makeText(this, "Your Answer is right!", 2000);
-						t1.show();
-					    break;
-					}
-					else if( rpack.result == false )
-					{
-						/*
-						 * Wrong answer
-						 */
-						Intent i=new Intent(this,AnswerResultPage.class);
-						i.putExtra("result", "wrong");
-					    startActivity(i);
-					    //finish();
-					    Toast t1 = Toast.makeText(this, "Your Answer is wrong!", 2000);
-						t1.show();
-					    break;
-					}
+					thread.Resume();
+					error.setText("You response is recorded. Please wait!");
 					btn.setEnabled(false);
+					btn.setBackgroundColor(Color.RED);
+				    break;
 				}
 				else
 				{

@@ -16,9 +16,12 @@ import StaticAttributes.PacketSequenceNos;
 import StaticAttributes.PacketTypes;
 import StaticAttributes.Utilities;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -33,25 +36,58 @@ public class True_false extends Activity  implements OnClickListener
 	RadioButton t1,f1;
 	EditText question_tf;
 	DatagramSocket sock;
+	ProgressDialog pd1;
+	Handler h1;
+	boolean wait;
 	TextView error;
-	public static True_false staticVar;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.true_false);
-        staticVar = this;
+        wait = true;
         t1=(RadioButton)findViewById(R.id.radioButton1);
         f1=(RadioButton)findViewById(R.id.radioButton2);
         error = (TextView)findViewById(R.id.errorTextinTrueAndFalse);
         question_tf = (EditText)findViewById(R.id.questiontf);
         sock = StaticAttributes.SocketHandler.normalSocket;
         t1.setOnClickListener(this);
-        f1.setOnClickListener(this);     
+        f1.setOnClickListener(this);
+        /*
+         * Add a handler for the dialog
+         */
+        h1 = new Handler()
+	    {
+
+			@Override
+			public void handleMessage(Message msg) 
+			{
+				super.handleMessage(msg);
+				if( wait == false )
+				{
+					pd1.dismiss();
+				}
+				else
+				{
+					pd1.incrementProgressBy(1);
+					h1.sendEmptyMessageDelayed(0, 200);
+				}
+				
+			}
+	    	
+	    };
     }
 	public void onClick(View v)     //actions performed after change password button is clicked.
 	{
+		wait = true;
+        pd1 = new ProgressDialog(this);
+	    pd1.setProgress(0);
+		pd1.setTitle("Please wait!");
+	    pd1.setMessage("Contacting Server");
+	    h1.sendEmptyMessage(0);
+	    pd1.show();
+		
 		 String ques = "";
 		 String ans = "";
 		 String[] options = {"true","false"};
@@ -85,8 +121,10 @@ public class True_false extends Activity  implements OnClickListener
 		 qp.questionSeqNo = Utilities.quesSeqNo;
 		 qp.question = ques;
 		 
-		 Packet p = new Packet(PacketSequenceNos.QUIZ_QUESTION_PACKET_CLIENT_SEND, false, false, false, Utilities.serialize(qp));
-		 p.quizPacket = true;
+		 int currentSeqNo = Utilities.seqNo++;
+		 
+
+		 Packet p = new Packet(currentSeqNo, PacketTypes.QUESTION_SEND , false, Utilities.serialize(qp));
 		 
 		 byte[] bytes = Utilities.serialize(p);
 			
@@ -109,6 +147,7 @@ public class True_false extends Activity  implements OnClickListener
 			}
 			catch( SocketTimeoutException e )
 			{
+				wait = false;
 				error.setText("Try again!");
 				return;
 			} catch (IOException e) {
@@ -120,28 +159,24 @@ public class True_false extends Activity  implements OnClickListener
 			 * ACK received
 			 */
 			Packet ackPack = (Packet)Utilities.deserialize(b);
-			if( ackPack.ack == true && ackPack.type == PacketTypes.QUESTION_ACK)
+			if( ackPack.seq_no == currentSeqNo && ackPack.ack == true && ackPack.type == PacketTypes.QUESTION_SEND)
 			{
 				QuestionPacket qprecvd = (QuestionPacket)Utilities.deserialize(ackPack.data);
 				
-				if( qprecvd.questionSeqNo == Utilities.quesSeqNo )
-				{
-					/*
-					 * Check is the sequence number is same
-					 */
-					t1.setEnabled(false);
-					f1.setEnabled(false);
-					t1.setBackgroundColor(Color.RED);
-					f1.setBackgroundColor(Color.RED);
-					error.setText("sent!");
-					QuestionListener ql = new QuestionListener(this);
-					ql.start();
-					return;	
-				}
+				t1.setEnabled(false);
+				f1.setEnabled(false);
+				t1.setBackgroundColor(Color.RED);
+				f1.setBackgroundColor(Color.RED);
+				error.setText("sent!");
+				QuestionListener ql = new QuestionListener(this);
+				ql.start();
+				return;	
 			}
 			else
-			{
-				error.setText("Try again!");
+			{	
+				wait = false;
+				error.setText("TRY");
 			}
+			wait = false;
 	}
 }

@@ -26,6 +26,7 @@ class QuizStartPacketListener extends Thread
 	DatagramSocket sock;
 	boolean running;
 	Activity act;
+	boolean suspended;
 	/*
 	 * Running will be set only by the answer pages to migrate to next question, on not answering
 	 */
@@ -38,6 +39,18 @@ class QuizStartPacketListener extends Thread
 	{
 		listenQuizStartPacket();
 	}
+	
+	public void Suspend()
+	{
+	      suspended = true;
+	}
+	
+	synchronized void Resume()
+	{
+	      suspended = false;
+	      notify();
+	}
+	
     public void listenQuizStartPacket()
     {
 		boolean rcvd = false;
@@ -50,6 +63,24 @@ class QuizStartPacketListener extends Thread
 		}
     	while( running )
 		{
+    		
+    		/*
+    		 * Check if the thread is suspended or not
+    		 * If it is then wait
+    		 */
+    		
+    		synchronized(this) {
+    			while(suspended)
+    			{
+    				try {
+    					wait();
+    				} catch (InterruptedException e) {
+    					// TODO Auto-generated catch block
+    					System.out.println("YYYYAYAYAYAY !! i am awake!!");
+    				}
+    			}
+    		}
+    		
 			System.out.println("Listening for screen changing packet!!!!!");
 			
 			byte[] b = new byte[Utilities.MAX_BUFFER_SIZE];
@@ -108,14 +139,14 @@ class QuizStartPacketListener extends Thread
 			 * Packet is received!
 			 */
 			
-			System.out.println("I am outside!!!!!!!!!!!!!!!11");
+			System.out.println("I am outside!!!!!!!!!!!!!!! and i got a pakcet");
 			
 			Packet packetRcvd = (Packet)Utilities.deserialize(b);
 			
 			if( packetRcvd.type == PacketTypes.QUIZ_INTERFACE_START_PACKET && packetRcvd.ack == false )
 			{
 
-				System.out.println("I am quiz interface packet and my ack is false!!!!!!!!!!!!!!!!!11");
+				System.out.println("I am quiz interface packet and my ack is false!!!!!!!!!!!!!!!!!");
 				if( rcvd == false )
 				{
 
@@ -126,6 +157,7 @@ class QuizStartPacketListener extends Thread
 						/*
 						 * leader
 						 */
+						System.out.println("I am setting activity!");
 						activityFlag = 1;
 					}
 					else if( qip.activeGroupName.equals(QuizAttributes.groupName) )
@@ -133,10 +165,12 @@ class QuizStartPacketListener extends Thread
 						/*
 						 * team mates
 						 */
+						System.out.println("I am setting activity!");
 						activityFlag = 2;
 					}
 					else
 					{
+						System.out.println("I am setting activity!");
 						activityFlag = 3;
 					}
 					rcvd = true;
