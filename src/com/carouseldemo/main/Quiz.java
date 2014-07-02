@@ -8,6 +8,7 @@ import java.net.SocketTimeoutException;
 import StaticAttributes.*;
 
 import com.example.peerbased.LeaderPacket;
+import com.example.peerbased.OnlineLeadersPacket;
 import com.example.peerbased.Packet;
 import com.example.peerbased.ParameterPacket;
 
@@ -83,24 +84,26 @@ class QuizListen1 extends Thread
 			
 			Packet packetRcvd = (Packet)Utilities.deserialize(b);
 			
-			if( packetRcvd.type == PacketTypes.LEADER_SCREEN_CHANGE && packetRcvd.ack == false )
+			if( packetRcvd.ack == false )
 			{
-				if( rcvd == false )
+				if( rcvd == false && packetRcvd.type == PacketTypes.LEADER_SCREEN_CHANGE )
 				{
-					LeaderPacket lpRecvd = (LeaderPacket)Utilities.deserialize(packetRcvd.data);
+					System.out.println("Its a grp name");
 					
-					if( lpRecvd.grpNameRequest == true )
-					{
-						System.out.println("Its a grp name");
-						activityFlag = 1;
-					}
-					else if( lpRecvd.LeadersListBroadcast == true )
-					{
-						QuizAttributes.selectedLeaders = lpRecvd.leaders;
-						activityFlag = 2;
-					}
+					activityFlag = 1;
+					
 					rcvd = true;
-				}	
+				}
+				else if( rcvd == false && packetRcvd.type == PacketTypes.ONLINE_LEADERS )
+				{
+					OnlineLeadersPacket olp = (OnlineLeadersPacket)Utilities.deserialize(packetRcvd.data);
+					
+					QuizAttributes.selectedLeaders = olp.leaders;
+	
+					activityFlag = 2;
+					
+				    rcvd = true;
+				}
 				/*
 				 * Now send the ACK back
 				 */

@@ -32,9 +32,11 @@ class QuizStartPacketListener extends Thread
 	 */
 	public QuizStartPacketListener(Activity act) {
 		this.act = act;
+		suspended = false;
 		running = true;
 		sock = StaticAttributes.SocketHandler.normalSocket;
 	}
+	
 	public void run()
 	{
 		listenQuizStartPacket();

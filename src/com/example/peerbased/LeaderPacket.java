@@ -8,21 +8,11 @@ public class LeaderPacket implements Serializable {
 	public String uID;
 	public String uName;
 	public boolean granted;
-	public boolean grpNameRequest;
-	public boolean leaderSelection;
-	public boolean LeadersListBroadcast;
-	public ArrayList<Leader> leaders;
-	public String groupName;
 	
 	public LeaderPacket() {
 		granted = false;
-		grpNameRequest = false;
-		LeadersListBroadcast = false;
-		leaderSelection = false;
-		leaders = null;
-		uID = "";
-		uName = "";
-		groupName = "";
+		uID = null;
+        uName = null;
 	}
 	public LeaderPacket(boolean t)
 	{

@@ -13,8 +13,8 @@ public class QuizAttributes {
 	public static String subject;
 	public static String studentID;
 	public static String studentName;
-	public static ArrayList<Leader> selectedLeaders;
-	public static ArrayList<Student> groupMembers;
+	public static String[] selectedLeaders;
+	//public static ArrayList<Student> groupMembers;
 	public static byte standard;
 	public static Student leader;
 	public static String groupName;
@@ -27,7 +27,7 @@ public class QuizAttributes {
 		subject = "";
 		studentID = "";
 		selectedLeaders = null;
-		groupMembers = null;
+		//groupMembers = null;
 		leader = null;
 	}
 }

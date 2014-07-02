@@ -55,7 +55,7 @@ class GroupNameListener extends Thread
 					/*
 					 * Go to next activity
 					 */
-					Intent i = new Intent(grpActivity,Team_details.class);
+					Intent i = new Intent(grpActivity,GroupWelcome.class);
 					grpActivity.startActivity(i);
 //					grpActivity.finish();
 					break;
@@ -81,14 +81,7 @@ class GroupNameListener extends Thread
 			{
 				if( rcvd == false )
 				{
-					SelectedGroupPacket sgp = (SelectedGroupPacket)Utilities.deserialize(packetRcvd.data);
-					if( sgp.leader == null || sgp.team == null || sgp.groupName == null )
-					{
-						System.exit(0);
-					}
-					QuizAttributes.leader = sgp.leader;
-					QuizAttributes.groupMembers = sgp.team;
-					QuizAttributes.groupName = sgp.groupName;
+					QuizAttributes.groupName = new String(packetRcvd.data);
 					rcvd = true;
 				}
 				/*

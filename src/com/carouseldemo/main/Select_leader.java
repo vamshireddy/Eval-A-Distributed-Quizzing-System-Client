@@ -70,7 +70,7 @@ class Select_leader_listener extends Thread
 					/*
 					 * Go to next activity
 					 */
-					Intent i = new Intent(sel_leader_Act,Team_details.class);
+					Intent i = new Intent(sel_leader_Act,GroupWelcome.class);
 					sel_leader_Act.startActivity(i);
 //					sel_leader_Act.finish();
 					break;
@@ -97,16 +97,8 @@ class Select_leader_listener extends Thread
 				System.out.println("Hey .. I got man!");
 				if( rcvd == false )
 				{
-					SelectedGroupPacket sgp = (SelectedGroupPacket)Utilities.deserialize(packetRcvd.data);
-					if( sgp.leader == null || sgp.team == null || sgp.groupName == null )
-					{
-						System.exit(0);
-					}
-					QuizAttributes.leader = sgp.leader;
-					QuizAttributes.groupMembers = sgp.team;
-					QuizAttributes.groupName = sgp.groupName;
+					QuizAttributes.groupName = new String(packetRcvd.data);
 					rcvd = true;
-					System.out.println("Heyyyy.. Its correct wordkin");
 				}
 				/*
 				 * Now send the ACK back
@@ -133,53 +125,12 @@ class Select_leader_listener extends Thread
 			}
 		}
 	}
-//		while( true )
-//		{
-//			System.out.println("LISTENNNNNNNNNNNN");
-//			byte[] by = new byte[Utilities.MAX_BUFFER_SIZE];
-//			DatagramPacket packy = new DatagramPacket(by, by.length);
-//			try
-//			{
-//				sock.receive(packy);
-//			}
-//			catch( SocketTimeoutException e1)
-//			{
-//				continue;
-//			}
-//			catch (IOException e) {
-//				e.printStackTrace();
-//				return;
-//			}
-//			System.out.println("RECEIVED!~!~~~~~~~!!!!");
-//			Packet pyy = (Packet)Utilities.deserialize(by);
-//
-//			if( pyy.team_selection_packet == true && pyy.seq_no == PacketSequenceNos.FORMED_GROUP_SERVER_SEND )
-//			{
-//				SelectedGroupPacket sgp = (SelectedGroupPacket)Utilities.deserialize(pyy.data);
-//				System.out.println("teammem : "+sgp.team.size());
-//				System.out.println("grpname : "+sgp.groupName);
-//				System.out.println("leadername : "+sgp.leader.name);
-//				QuizAttributes.leader = sgp.leader;
-//				QuizAttributes.groupMembers = sgp.team;
-//				QuizAttributes.groupName = sgp.groupName;
-//				Intent i = new Intent(sel_leader_Act,Team_details.class);
-//				sel_leader_Act.startActivity(i);
-//				sel_leader_Act.finish();
-//				break;
-//			}
-//			else
-//			{
-//				continue;
-//			}
-//		}
 }
 
 public class Select_leader extends ListActivity  implements OnClickListener {
 	
 	public static Select_leader staticAct;
 	ArrayAdapter<String> leaderAdapter;
-	ArrayList<Leader> leaders;
-	//ArrayList<String> selectedLeaders;
 	TextView selection;
 	TextView error;
 	String subject[];
@@ -196,19 +147,18 @@ public class Select_leader extends ListActivity  implements OnClickListener {
         setContentView(R.layout.selectleader);
         // Get the leaders list from the static class
         staticAct = this;
-        leaders = QuizAttributes.selectedLeaders;
         selection=(TextView)findViewById(R.id.selection);
         error = (TextView)findViewById(R.id.errorMsg);
   		selection.setText("Select your Team");
   		error.setVisibility(View.INVISIBLE);
-  		
-        subject = new String[leaders.size()];
         sock = SocketHandler.normalSocket;
-        // Iterate through the leader list and make a String array of leader names
-        for(int i=0;i<subject.length;i++)
-        {
-        	subject[i] = new String(leaders.get(i).name);
-        }
+
+        /*
+         * Add String list to the GUI
+         */
+        
+        subject = QuizAttributes.selectedLeaders;
+        
         leaderAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, subject);
 		setListAdapter(leaderAdapter);
 		
@@ -243,20 +193,7 @@ public class Select_leader extends ListActivity  implements OnClickListener {
 	{
 		super.onListItemClick(l, v, position, id);
 		
-		String selectedLeaderName =(String)l.getItemAtPosition(position);
-		
-		String selectedLeaderID = null;
-		
-
-		
-		for(int i=0;i<leaders.size();i++)
-		{
-			Leader lead = leaders.get(i);
-			if( lead.name.equals(selectedLeaderName) )
-			{
-				selectedLeaderID = lead.id;
-			}
-		}
+		String selectedLeaderID =(String)l.getItemAtPosition(position);
 		
 		int currentSeqNo = Utilities.seqNo++;
 		
