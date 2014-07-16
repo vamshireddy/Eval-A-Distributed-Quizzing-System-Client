@@ -1,8 +1,8 @@
-Distributed-Quizing-System-Client
+Eval - A Distributed Quizzing System.
 =================================
 
 ### Welcome to this Repository. This is the project repo for my Summer Internship at [IIT-Bombay](http://www.iitb.ac.in/)
-##### It has 2 branches - master, serverWithGUI. Later one is same as the former one with GUI features and fixed bugs.
+##### This is the Android code for this Application
 Feel free to access and modify the code.
 
 ## Introduction
